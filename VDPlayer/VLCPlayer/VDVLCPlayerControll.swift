@@ -8,40 +8,40 @@
 
 import UIKit
 
-class VDVLCPlayerControl: NSObject, VDPlayerControlProtocol {
+class VDVLCPlayerControl: NSObject, VDPlayerControl {
     
-    var option: [String : Any] = [kVLCSettingPasscodeAllowFaceID : 1,
-                                  kVLCSettingPasscodeAllowTouchID : 1,
-                                  kVLCSettingContinueAudioInBackgroundKey : true,
-                                  kVLCSettingStretchAudio : false,
-                                  kVLCSettingTextEncoding : kVLCSettingTextEncodingDefaultValue,
-                                  kVLCSettingSkipLoopFilter : 1,
-                                  kVLCSettingSubtitlesFont : kVLCSettingSubtitlesFontDefaultValue,
-                                  kVLCSettingSubtitlesFontColor : kVLCSettingSubtitlesFontColorDefaultValue,
-                                  kVLCSettingSubtitlesFontSize : kVLCSettingSubtitlesFontSizeDefaultValue,
-                                  kVLCSettingSubtitlesBoldFont: false,
-                                  kVLCSettingDeinterlace : 0,
-                                  kVLCSettingHardwareDecoding : kVLCSettingHardwareDecodingDefault,
-                                  kVLCSettingNetworkCaching : 999,
-                                  kVLCSettingVolumeGesture : true,
-                                  kVLCSettingPlayPauseGesture : true,
-                                  kVLCSettingBrightnessGesture : true,
-                                  kVLCSettingSeekGesture : true,
-                                  kVLCSettingCloseGesture : true,
-                                  kVLCSettingVariableJumpDuration : false,
-                                  kVLCSettingVideoFullscreenPlayback : true,
-                                  kVLCSettingContinuePlayback : 1,
-                                  kVLCSettingContinueAudioPlayback : 1,
-                                  kVLCSettingFTPTextEncoding : 5,
-                                  kVLCSettingWiFiSharingIPv6 : false,
-                                  kVLCSettingEqualizerProfile : 0,
-                                  kVLCSettingPlaybackForwardSkipLength : 60,
-                                  kVLCSettingPlaybackBackwardSkipLength : 60,
-                                  kVLCSettingOpenAppForPlayback : true,
-                                  kVLCAutomaticallyPlayNextItem : true]
+//    var option: [String : Any] = [kVLCSettingPasscodeAllowFaceID : 1,
+//                                  kVLCSettingPasscodeAllowTouchID : 1,
+//                                  kVLCSettingContinueAudioInBackgroundKey : true,
+//                                  kVLCSettingStretchAudio : false,
+//                                  kVLCSettingTextEncoding : kVLCSettingTextEncodingDefaultValue,
+//                                  kVLCSettingSkipLoopFilter : 1,
+//                                  kVLCSettingSubtitlesFont : kVLCSettingSubtitlesFontDefaultValue,
+//                                  kVLCSettingSubtitlesFontColor : kVLCSettingSubtitlesFontColorDefaultValue,
+//                                  kVLCSettingSubtitlesFontSize : kVLCSettingSubtitlesFontSizeDefaultValue,
+//                                  kVLCSettingSubtitlesBoldFont: false,
+//                                  kVLCSettingDeinterlace : 0,
+//                                  kVLCSettingHardwareDecoding : kVLCSettingHardwareDecodingDefault,
+//                                  kVLCSettingNetworkCaching : 999,
+//                                  kVLCSettingVolumeGesture : true,
+//                                  kVLCSettingPlayPauseGesture : true,
+//                                  kVLCSettingBrightnessGesture : true,
+//                                  kVLCSettingSeekGesture : true,
+//                                  kVLCSettingCloseGesture : true,
+//                                  kVLCSettingVariableJumpDuration : false,
+//                                  kVLCSettingVideoFullscreenPlayback : true,
+//                                  kVLCSettingContinuePlayback : 1,
+//                                  kVLCSettingContinueAudioPlayback : 1,
+//                                  kVLCSettingFTPTextEncoding : 5,
+//                                  kVLCSettingWiFiSharingIPv6 : false,
+//                                  kVLCSettingEqualizerProfile : 0,
+//                                  kVLCSettingPlaybackForwardSkipLength : 60,
+//                                  kVLCSettingPlaybackBackwardSkipLength : 60,
+//                                  kVLCSettingOpenAppForPlayback : true,
+//                                  kVLCAutomaticallyPlayNextItem : true]
     
     var player      : VLCMediaPlayer?
-    var playerView  : VDPlayerView
+    var playerView  : VDPlayerView          = VDPlayerView()
     
     var currentTime : TimeInterval          = 0.0
     var totalTime   : TimeInterval          = 0.0
@@ -64,7 +64,6 @@ class VDVLCPlayerControl: NSObject, VDPlayerControlProtocol {
     }
     
     override init() {
-        playerView = VDPlayerView()
         super.init()
     }
     
@@ -74,6 +73,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerControlProtocol {
         media.delegate = self
         player = VLCMediaPlayer()
         player?.media = media
+        player?.drawable = self.playerView
     }
     
     func prepareToPlay() {

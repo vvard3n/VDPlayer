@@ -1,5 +1,5 @@
 //
-//  VDPlayerControlProtocol.swift
+//  VDPlayerControl.swift
 //  VDPlayer
 //
 //  Created by Harwyn T'an on 2019/4/2.
@@ -27,7 +27,7 @@ enum VDPlayerScalingMode {
     case fill
 }
 
-protocol VDPlayerControlProtocol: NSObjectProtocol {
+protocol VDPlayerControl: NSObjectProtocol {
     var playerView: VDPlayerView { get set }
     
     /// time
@@ -44,7 +44,7 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
     
     /// info
     var scalingMode: VDPlayerScalingMode { get }
-    var assetURL: URL? { get }
+    var assetURL: URL? { get set }
     
     /// funcs
     

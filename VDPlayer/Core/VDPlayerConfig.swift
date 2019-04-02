@@ -16,6 +16,8 @@ enum VDPlayerType {
 
 class VDPlayerConfig: NSObject {
     var playerType: VDPlayerType = .VLCPlayer
+    var assetURLs: [URL]?
+    var container: UIView?
     
     override init() {
         super.init()
