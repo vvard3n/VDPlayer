@@ -7,14 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		397E6B7B4732978FCD8FC630 /* Pods_VDPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */; };
 		76B3BF1F22539DEC0043F8FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */; };
 		76B3BF2122539DEC0043F8FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF2022539DEC0043F8FB /* ViewController.swift */; };
 		76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2222539DEC0043F8FB /* Main.storyboard */; };
 		76B3BF2622539DEC0043F8FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2522539DEC0043F8FB /* Assets.xcassets */; };
 		76B3BF2922539DEC0043F8FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2722539DEC0043F8FB /* LaunchScreen.storyboard */; };
+		76B3BF3222539F840043F8FB /* VDPlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */; };
+		76B3BF3422539F8C0043F8FB /* VDPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */; };
+		76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3522539FF20043F8FB /* VDPlayerView.swift */; };
+		76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */; };
+		76B3BF3A2253A1160043F8FB /* VDPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF392253A1160043F8FB /* VDPlayer.bundle */; };
+		76B3BF3D2253A2880043F8FB /* VDPlayerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3C2253A2880043F8FB /* VDPlayerExtensions.swift */; };
+		76B3BF3F2253A3180043F8FB /* VDUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3E2253A3180043F8FB /* VDUIManager.swift */; };
+		76B3BF412253A4AA0043F8FB /* VDPlayerControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF402253A4AA0043F8FB /* VDPlayerControlProtocol.swift */; };
+		76B3BF432253ADD30043F8FB /* VDVLCPlayerControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF422253ADD30043F8FB /* VDVLCPlayerControll.swift */; };
+		76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF522253C2810043F8FB /* VDPlayer.swift */; };
+		76B3BF552253C3560043F8FB /* VDPlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF542253C3560043F8FB /* VDPlayerControlView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VDPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B3BF1B22539DEC0043F8FB /* VDPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VDPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B3BF2022539DEC0043F8FB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +35,21 @@
 		76B3BF2522539DEC0043F8FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		76B3BF2822539DEC0043F8FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		76B3BF2A22539DEC0043F8FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerConfig.swift; sourceTree = "<group>"; };
+		76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerManager.swift; sourceTree = "<group>"; };
+		76B3BF3522539FF20043F8FB /* VDPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerView.swift; sourceTree = "<group>"; };
+		76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerGestureControl.swift; sourceTree = "<group>"; };
+		76B3BF392253A1160043F8FB /* VDPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VDPlayer.bundle; sourceTree = "<group>"; };
+		76B3BF3C2253A2880043F8FB /* VDPlayerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerExtensions.swift; sourceTree = "<group>"; };
+		76B3BF3E2253A3180043F8FB /* VDUIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VDUIManager.swift; sourceTree = "<group>"; };
+		76B3BF402253A4AA0043F8FB /* VDPlayerControlProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControlProtocol.swift; sourceTree = "<group>"; };
+		76B3BF422253ADD30043F8FB /* VDVLCPlayerControll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDVLCPlayerControll.swift; sourceTree = "<group>"; };
+		76B3BF442253B1EC0043F8FB /* VDPlayer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VDPlayer-Bridging-Header.h"; sourceTree = "<group>"; };
+		76B3BF4A2253BC780043F8FB /* VLCConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VLCConstants.h; sourceTree = "<group>"; };
+		76B3BF522253C2810043F8FB /* VDPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayer.swift; sourceTree = "<group>"; };
+		76B3BF542253C3560043F8FB /* VDPlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControlView.swift; sourceTree = "<group>"; };
+		AE5556DCD3845A92098471FD /* Pods-VDPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.debug.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		EE0B3015BC3E3596FF3D6656 /* Pods-VDPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.release.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				397E6B7B4732978FCD8FC630 /* Pods_VDPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,8 +67,11 @@
 		76B3BF1222539DEC0043F8FB = {
 			isa = PBXGroup;
 			children = (
+				76B3BF3022539E4F0043F8FB /* VDPlayer */,
 				76B3BF1D22539DEC0043F8FB /* Demo */,
 				76B3BF1C22539DEC0043F8FB /* Products */,
+				E20A83AC72209A96C8A5252B /* Pods */,
+				9F41180C8A3E84ACFCCD7EED /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +96,75 @@
 			path = Demo;
 			sourceTree = "<group>";
 		};
+		76B3BF3022539E4F0043F8FB /* VDPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				76B3BF4E2253BF290043F8FB /* Core */,
+				76B3BF4D2253BF1E0043F8FB /* Other */,
+				76B3BF4C2253BF120043F8FB /* ControllPannel */,
+				76B3BF4B2253BEF70043F8FB /* VLCPlayer */,
+				76B3BF402253A4AA0043F8FB /* VDPlayerControlProtocol.swift */,
+				76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */,
+				76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */,
+				76B3BF3522539FF20043F8FB /* VDPlayerView.swift */,
+				76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */,
+				76B3BF522253C2810043F8FB /* VDPlayer.swift */,
+			);
+			path = VDPlayer;
+			sourceTree = "<group>";
+		};
+		76B3BF4B2253BEF70043F8FB /* VLCPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				76B3BF422253ADD30043F8FB /* VDVLCPlayerControll.swift */,
+				76B3BF4A2253BC780043F8FB /* VLCConstants.h */,
+			);
+			path = VLCPlayer;
+			sourceTree = "<group>";
+		};
+		76B3BF4C2253BF120043F8FB /* ControllPannel */ = {
+			isa = PBXGroup;
+			children = (
+				76B3BF392253A1160043F8FB /* VDPlayer.bundle */,
+				76B3BF542253C3560043F8FB /* VDPlayerControlView.swift */,
+			);
+			path = ControllPannel;
+			sourceTree = "<group>";
+		};
+		76B3BF4D2253BF1E0043F8FB /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				76B3BF442253B1EC0043F8FB /* VDPlayer-Bridging-Header.h */,
+				76B3BF3E2253A3180043F8FB /* VDUIManager.swift */,
+				76B3BF3C2253A2880043F8FB /* VDPlayerExtensions.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		76B3BF4E2253BF290043F8FB /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		9F41180C8A3E84ACFCCD7EED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E20A83AC72209A96C8A5252B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AE5556DCD3845A92098471FD /* Pods-VDPlayer.debug.xcconfig */,
+				EE0B3015BC3E3596FF3D6656 /* Pods-VDPlayer.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,6 +172,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 76B3BF2D22539DEC0043F8FB /* Build configuration list for PBXNativeTarget "VDPlayer" */;
 			buildPhases = (
+				9156B90F2989731FC84BCF4D /* [CP] Check Pods Manifest.lock */,
 				76B3BF1722539DEC0043F8FB /* Sources */,
 				76B3BF1822539DEC0043F8FB /* Frameworks */,
 				76B3BF1922539DEC0043F8FB /* Resources */,
@@ -90,12 +192,14 @@
 		76B3BF1322539DEC0043F8FB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = VD;
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = vvard3n;
 				TargetAttributes = {
 					76B3BF1A22539DEC0043F8FB = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -124,11 +228,37 @@
 			files = (
 				76B3BF2922539DEC0043F8FB /* LaunchScreen.storyboard in Resources */,
 				76B3BF2622539DEC0043F8FB /* Assets.xcassets in Resources */,
+				76B3BF3A2253A1160043F8FB /* VDPlayer.bundle in Resources */,
 				76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9156B90F2989731FC84BCF4D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VDPlayer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		76B3BF1722539DEC0043F8FB /* Sources */ = {
@@ -136,7 +266,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				76B3BF2122539DEC0043F8FB /* ViewController.swift in Sources */,
+				76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */,
+				76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */,
+				76B3BF552253C3560043F8FB /* VDPlayerControlView.swift in Sources */,
+				76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */,
+				76B3BF3D2253A2880043F8FB /* VDPlayerExtensions.swift in Sources */,
+				76B3BF432253ADD30043F8FB /* VDVLCPlayerControll.swift in Sources */,
+				76B3BF3222539F840043F8FB /* VDPlayerConfig.swift in Sources */,
+				76B3BF3422539F8C0043F8FB /* VDPlayerManager.swift in Sources */,
 				76B3BF1F22539DEC0043F8FB /* AppDelegate.swift in Sources */,
+				76B3BF412253A4AA0043F8FB /* VDPlayerControlProtocol.swift in Sources */,
+				76B3BF3F2253A3180043F8FB /* VDUIManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,16 +420,21 @@
 		};
 		76B3BF2E22539DEC0043F8FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE5556DCD3845A92098471FD /* Pods-VDPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = VDPlayer/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nvar.VDPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "VDPlayer/Other/VDPlayer-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -297,16 +442,20 @@
 		};
 		76B3BF2F22539DEC0043F8FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE0B3015BC3E3596FF3D6656 /* Pods-VDPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = VDPlayer/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nvar.VDPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "VDPlayer/Other/VDPlayer-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
