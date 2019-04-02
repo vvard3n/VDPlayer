@@ -7,106 +7,73 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		76B3BEFC22539A790043F8FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BEFB22539A790043F8FB /* AppDelegate.m */; };
-		76B3BEFF22539A790043F8FB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BEFE22539A790043F8FB /* ViewController.m */; };
-		76B3BF0222539A790043F8FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF0022539A790043F8FB /* Main.storyboard */; };
-		76B3BF0422539A790043F8FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF0322539A790043F8FB /* Assets.xcassets */; };
-		76B3BF0722539A790043F8FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF0522539A790043F8FB /* LaunchScreen.storyboard */; };
-		76B3BF0A22539A790043F8FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF0922539A790043F8FB /* main.m */; };
-		76BAAB7FA79AAAA093DD1B46 /* Pods_VDPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7875643275CEB69271D8F6FB /* Pods_VDPlayer.framework */; };
+		76B3BF1F22539DEC0043F8FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */; };
+		76B3BF2122539DEC0043F8FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF2022539DEC0043F8FB /* ViewController.swift */; };
+		76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2222539DEC0043F8FB /* Main.storyboard */; };
+		76B3BF2622539DEC0043F8FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2522539DEC0043F8FB /* Assets.xcassets */; };
+		76B3BF2922539DEC0043F8FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2722539DEC0043F8FB /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		76B3BEF722539A790043F8FB /* VDPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VDPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		76B3BEFA22539A790043F8FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		76B3BEFB22539A790043F8FB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		76B3BEFD22539A790043F8FB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		76B3BEFE22539A790043F8FB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		76B3BF0122539A790043F8FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		76B3BF0322539A790043F8FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		76B3BF0622539A790043F8FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		76B3BF0822539A790043F8FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		76B3BF0922539A790043F8FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		7875643275CEB69271D8F6FB /* Pods_VDPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VDPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B1460F1CECA7529E3A3F5B9A /* Pods-VDPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.debug.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.debug.xcconfig"; sourceTree = "<group>"; };
-		CFC52EEF0A755D1827D66738 /* Pods-VDPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.release.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		76B3BF1B22539DEC0043F8FB /* VDPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VDPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		76B3BF2022539DEC0043F8FB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		76B3BF2322539DEC0043F8FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		76B3BF2522539DEC0043F8FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		76B3BF2822539DEC0043F8FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		76B3BF2A22539DEC0043F8FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		76B3BEF422539A790043F8FB /* Frameworks */ = {
+		76B3BF1822539DEC0043F8FB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76BAAB7FA79AAAA093DD1B46 /* Pods_VDPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		76B3BEEE22539A790043F8FB = {
+		76B3BF1222539DEC0043F8FB = {
 			isa = PBXGroup;
 			children = (
-				76B3BEF922539A790043F8FB /* VDPlayer */,
-				76B3BEF822539A790043F8FB /* Products */,
-				B4151A6CEFFE5230AB27F3DA /* Pods */,
-				954492B0E515B5480F2CA0DA /* Frameworks */,
+				76B3BF1D22539DEC0043F8FB /* Demo */,
+				76B3BF1C22539DEC0043F8FB /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		76B3BEF822539A790043F8FB /* Products */ = {
+		76B3BF1C22539DEC0043F8FB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				76B3BEF722539A790043F8FB /* VDPlayer.app */,
+				76B3BF1B22539DEC0043F8FB /* VDPlayer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		76B3BEF922539A790043F8FB /* VDPlayer */ = {
+		76B3BF1D22539DEC0043F8FB /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				76B3BEFA22539A790043F8FB /* AppDelegate.h */,
-				76B3BEFB22539A790043F8FB /* AppDelegate.m */,
-				76B3BEFD22539A790043F8FB /* ViewController.h */,
-				76B3BEFE22539A790043F8FB /* ViewController.m */,
-				76B3BF0022539A790043F8FB /* Main.storyboard */,
-				76B3BF0322539A790043F8FB /* Assets.xcassets */,
-				76B3BF0522539A790043F8FB /* LaunchScreen.storyboard */,
-				76B3BF0822539A790043F8FB /* Info.plist */,
-				76B3BF0922539A790043F8FB /* main.m */,
+				76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */,
+				76B3BF2022539DEC0043F8FB /* ViewController.swift */,
+				76B3BF2222539DEC0043F8FB /* Main.storyboard */,
+				76B3BF2522539DEC0043F8FB /* Assets.xcassets */,
+				76B3BF2722539DEC0043F8FB /* LaunchScreen.storyboard */,
+				76B3BF2A22539DEC0043F8FB /* Info.plist */,
 			);
-			path = VDPlayer;
-			sourceTree = "<group>";
-		};
-		954492B0E515B5480F2CA0DA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7875643275CEB69271D8F6FB /* Pods_VDPlayer.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B4151A6CEFFE5230AB27F3DA /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B1460F1CECA7529E3A3F5B9A /* Pods-VDPlayer.debug.xcconfig */,
-				CFC52EEF0A755D1827D66738 /* Pods-VDPlayer.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
+			path = Demo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		76B3BEF622539A790043F8FB /* VDPlayer */ = {
+		76B3BF1A22539DEC0043F8FB /* VDPlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 76B3BF0D22539A790043F8FB /* Build configuration list for PBXNativeTarget "VDPlayer" */;
+			buildConfigurationList = 76B3BF2D22539DEC0043F8FB /* Build configuration list for PBXNativeTarget "VDPlayer" */;
 			buildPhases = (
-				E571396A29403E8EFCE72778 /* [CP] Check Pods Manifest.lock */,
-				76B3BEF322539A790043F8FB /* Sources */,
-				76B3BEF422539A790043F8FB /* Frameworks */,
-				76B3BEF522539A790043F8FB /* Resources */,
+				76B3BF1722539DEC0043F8FB /* Sources */,
+				76B3BF1822539DEC0043F8FB /* Frameworks */,
+				76B3BF1922539DEC0043F8FB /* Resources */,
 			);
 			buildRules = (
 			);
@@ -114,24 +81,25 @@
 			);
 			name = VDPlayer;
 			productName = VDPlayer;
-			productReference = 76B3BEF722539A790043F8FB /* VDPlayer.app */;
+			productReference = 76B3BF1B22539DEC0043F8FB /* VDPlayer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		76B3BEEF22539A790043F8FB /* Project object */ = {
+		76B3BF1322539DEC0043F8FB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = vvard3n;
 				TargetAttributes = {
-					76B3BEF622539A790043F8FB = {
+					76B3BF1A22539DEC0043F8FB = {
 						CreatedOnToolsVersion = 10.1;
 					};
 				};
 			};
-			buildConfigurationList = 76B3BEF222539A790043F8FB /* Build configuration list for PBXProject "VDPlayer" */;
+			buildConfigurationList = 76B3BF1622539DEC0043F8FB /* Build configuration list for PBXProject "VDPlayer" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -139,80 +107,54 @@
 				en,
 				Base,
 			);
-			mainGroup = 76B3BEEE22539A790043F8FB;
-			productRefGroup = 76B3BEF822539A790043F8FB /* Products */;
+			mainGroup = 76B3BF1222539DEC0043F8FB;
+			productRefGroup = 76B3BF1C22539DEC0043F8FB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				76B3BEF622539A790043F8FB /* VDPlayer */,
+				76B3BF1A22539DEC0043F8FB /* VDPlayer */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		76B3BEF522539A790043F8FB /* Resources */ = {
+		76B3BF1922539DEC0043F8FB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76B3BF0722539A790043F8FB /* LaunchScreen.storyboard in Resources */,
-				76B3BF0422539A790043F8FB /* Assets.xcassets in Resources */,
-				76B3BF0222539A790043F8FB /* Main.storyboard in Resources */,
+				76B3BF2922539DEC0043F8FB /* LaunchScreen.storyboard in Resources */,
+				76B3BF2622539DEC0043F8FB /* Assets.xcassets in Resources */,
+				76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		E571396A29403E8EFCE72778 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-VDPlayer-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		76B3BEF322539A790043F8FB /* Sources */ = {
+		76B3BF1722539DEC0043F8FB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76B3BEFF22539A790043F8FB /* ViewController.m in Sources */,
-				76B3BF0A22539A790043F8FB /* main.m in Sources */,
-				76B3BEFC22539A790043F8FB /* AppDelegate.m in Sources */,
+				76B3BF2122539DEC0043F8FB /* ViewController.swift in Sources */,
+				76B3BF1F22539DEC0043F8FB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		76B3BF0022539A790043F8FB /* Main.storyboard */ = {
+		76B3BF2222539DEC0043F8FB /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				76B3BF0122539A790043F8FB /* Base */,
+				76B3BF2322539DEC0043F8FB /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		76B3BF0522539A790043F8FB /* LaunchScreen.storyboard */ = {
+		76B3BF2722539DEC0043F8FB /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				76B3BF0622539A790043F8FB /* Base */,
+				76B3BF2822539DEC0043F8FB /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -220,7 +162,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		76B3BF0B22539A790043F8FB /* Debug */ = {
+		76B3BF2B22539DEC0043F8FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -276,10 +218,12 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		76B3BF0C22539A790043F8FB /* Release */ = {
+		76B3BF2C22539DEC0043F8FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -328,17 +272,17 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		76B3BF0E22539A790043F8FB /* Debug */ = {
+		76B3BF2E22539DEC0043F8FB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B1460F1CECA7529E3A3F5B9A /* Pods-VDPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NNBDF3Y47L;
 				INFOPLIST_FILE = VDPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -346,17 +290,16 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nvar.VDPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		76B3BF0F22539A790043F8FB /* Release */ = {
+		76B3BF2F22539DEC0043F8FB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CFC52EEF0A755D1827D66738 /* Pods-VDPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NNBDF3Y47L;
 				INFOPLIST_FILE = VDPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -364,6 +307,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nvar.VDPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -371,25 +315,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		76B3BEF222539A790043F8FB /* Build configuration list for PBXProject "VDPlayer" */ = {
+		76B3BF1622539DEC0043F8FB /* Build configuration list for PBXProject "VDPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				76B3BF0B22539A790043F8FB /* Debug */,
-				76B3BF0C22539A790043F8FB /* Release */,
+				76B3BF2B22539DEC0043F8FB /* Debug */,
+				76B3BF2C22539DEC0043F8FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		76B3BF0D22539A790043F8FB /* Build configuration list for PBXNativeTarget "VDPlayer" */ = {
+		76B3BF2D22539DEC0043F8FB /* Build configuration list for PBXNativeTarget "VDPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				76B3BF0E22539A790043F8FB /* Debug */,
-				76B3BF0F22539A790043F8FB /* Release */,
+				76B3BF2E22539DEC0043F8FB /* Debug */,
+				76B3BF2F22539DEC0043F8FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 76B3BEEF22539A790043F8FB /* Project object */;
+	rootObject = 76B3BF1322539DEC0043F8FB /* Project object */;
 }
