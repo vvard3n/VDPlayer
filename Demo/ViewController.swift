@@ -28,7 +28,9 @@ class ViewController: UIViewController {
         config.assetURLs = assetURLs
         config.container = videoContainer
         
-        player = VDPlayer(config: config)
+        let playerControl = VDVLCPlayerControl()
+        player = VDPlayer(playerControl: playerControl, container: videoContainer)
+        player.assetURLs = assetURLs
     }
 
 

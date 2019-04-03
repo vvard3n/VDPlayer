@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		397E6B7B4732978FCD8FC630 /* Pods_VDPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */; };
+		76AE064622544950005081D5 /* VDPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76AE064522544950005081D5 /* VDPlayer.bundle */; };
 		76B3BF1F22539DEC0043F8FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */; };
 		76B3BF2122539DEC0043F8FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF2022539DEC0043F8FB /* ViewController.swift */; };
 		76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF2222539DEC0043F8FB /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VDPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76AE064522544950005081D5 /* VDPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VDPlayer.bundle; sourceTree = "<group>"; };
 		76B3BF1B22539DEC0043F8FB /* VDPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VDPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B3BF2022539DEC0043F8FB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				76B3BF542253C3560043F8FB /* VDPlayerControlView.swift */,
+				76AE064522544950005081D5 /* VDPlayer.bundle */,
 			);
 			path = ControllPannel;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 			files = (
 				76B3BF2922539DEC0043F8FB /* LaunchScreen.storyboard in Resources */,
 				76B3BF2622539DEC0043F8FB /* Assets.xcassets in Resources */,
+				76AE064622544950005081D5 /* VDPlayer.bundle in Resources */,
 				76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
