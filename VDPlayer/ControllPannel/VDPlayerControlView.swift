@@ -9,15 +9,26 @@
 import UIKit
 
 class VDPlayerControlView: UIView, VDPlayerControlProtocol {
-    var player: VDPlayer!
+    var player: VDPlayer! {
+        didSet {
+            portraitControlView.player = self.player
+            landScapeControlView.player = self.player
+        }
+    }
     /// 竖屏播放器控制面板
-    var portraitControlView: VDPortraitControlView!
+    var portraitControlView: VDPortraitControlView = VDPortraitControlView()
     /// 横屏播放器控制面板
-    var landScapeControlView: VDLandScapeControlView!
+    var landScapeControlView: VDLandScapeControlView = VDLandScapeControlView()
     /// 底部进度条
-    var bottomProgress: UIView!
+    var bottomProgress: UIView = {
+        let bottomProgress = UIView()
+        return bottomProgress
+    }()
     /// Loading视图
-    var activity: UIActivityIndicatorView!
+    var activity: UIActivityIndicatorView = {
+        let activityView = UIActivityIndicatorView()
+        return activityView
+    }()
     /// 展示控制面板后隐藏时间，default is 3
     var autoHiddenTimeInterval: TimeInterval = 3
     /// 隐藏和展示控制面板Fade动画的时间，default is 0.2
@@ -27,6 +38,10 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         super.init(frame: frame)
         addSubviews()
         addNotifications()
+        
+//        portraitControlView.isHidden = player.isFullScreen;
+//        landScapeControlView.isHidden = !player.isFullScreen;
+        landScapeControlView.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {

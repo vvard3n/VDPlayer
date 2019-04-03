@@ -35,7 +35,7 @@ class VDPlayer: NSObject {
                     
                 }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
-                    self.controlView = VDLandScapeControlView(frame: containerView.bounds)
+                    self.controlView = VDPlayerControlView(frame: containerView.bounds)
                     self.controlView.player = self
                     currentPlayerControl.playerView.addSubview(self.controlView)
                 }
@@ -62,7 +62,7 @@ class VDPlayer: NSObject {
     
     convenience init(playerControl: VDPlayerPlayBackControl, container: UIView) {
         self.init()
-        self.controlView = VDLandScapeControlView()
+//        self.controlView = VDPlayerControlView()
         self.containerView = container
         self.currentPlayerControl = playerControl
         if let containerView = self.containerView {
@@ -71,7 +71,7 @@ class VDPlayer: NSObject {
             currentPlayerControl.playerView.frame = containerView.bounds
             currentPlayerControl.playbackStateDidChanged = { player, state in
                 if state == .playing {
-                    self.controlView = VDLandScapeControlView(frame: containerView.bounds)
+                    self.controlView = VDPlayerControlView(frame: containerView.bounds)
                     self.controlView.player = self
                     self.currentPlayerControl.playerView.addSubview(self.controlView)
                 }

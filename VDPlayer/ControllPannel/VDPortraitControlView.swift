@@ -54,11 +54,18 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
         return progressSlider
     }()
     
+    /// 全屏按钮
+    var fullScreenBtn: UIButton = {
+        let fullScreenBtn = UIButton()
+        fullScreenBtn.backgroundColor = .random
+        return fullScreenBtn
+    }()
+    
     /// 隐藏控制面板的进度条
-    var progressView: UIView = {
-        let progressSlider = UIView()
-        progressSlider.backgroundColor = .random
-        return progressSlider
+    var bottomProgressView: UIView = {
+        let bottomProgressView = UIView()
+        bottomProgressView.backgroundColor = .random
+        return bottomProgressView
     }()
     
     /// 当前播放时间
@@ -87,8 +94,9 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
         bottomView.addSubview(currentTimeLabel)
         bottomView.addSubview(progressSlider)
         bottomView.addSubview(totalTimeLabel)
+        bottomView.addSubview(fullScreenBtn)
         
-        addSubview(progressView)
+        addSubview(bottomProgressView)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -114,23 +122,56 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
         h = kTopViewHeight + SAFE_AREA_TOP
         topView.frame = CGRect(x: x, y: y, width: w, height: h)
         
-        x = player.isFullScreen ? SAFE_AREA_LEFT + 15 : 15
-        y = player.isFullScreen ? SAFE_AREA_TOP + 20 : 15
+        x = 15
+        y = 15
         w = 44
-        h = 44
+        h = w
         backBtn.frame = CGRect(x: x, y: y, width: w, height: h)
         
         x = backBtn.frame.maxX + 5
-        y = (backBtn.bounds.maxY - 30) / 2
+        y = 15
         w = maxWidth - x - 15
         h = 30
         titleLabel.frame = CGRect(x: x, y: y, width: w, height: h)
         
         x = 0
-        y = maxHeight - (kBottomViewHeight + SAFE_AREA_BOTTOM)
+        y = maxHeight - kBottomViewHeight
         w = maxWidth
-        h = kBottomViewHeight + SAFE_AREA_BOTTOM
+        h = kBottomViewHeight
         bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
+        
+        x = 10
+        w = 62
+        h = 28
+        y = (kBottomViewHeight - h) / 2
+        currentTimeLabel.frame = CGRect(x: x, y: y, width: w, height: h)
+        
+        w = 44
+        h = w
+        x = maxWidth - 10 - w
+        y = 0
+        fullScreenBtn.frame = CGRect(x: x, y: y, width: w, height: h)
+        fullScreenBtn.center.y = currentTimeLabel.center.y
+        
+        w = 62
+        x = fullScreenBtn.frame.minX - 5 - w
+        h = 28
+        y = (kBottomViewHeight - h) / 2
+        totalTimeLabel.frame = CGRect(x: x, y: y, width: w, height: h)
+        totalTimeLabel.center.y = currentTimeLabel.center.y
+        
+        x = currentTimeLabel.frame.maxX + 5
+        y = 0
+        w = totalTimeLabel.frame.minX - 5 - x
+        h = 30
+        progressSlider.frame = CGRect(x: x, y: y, width: w, height: h)
+        progressSlider.center.y = currentTimeLabel.center.y
+        
+        x = 0
+        y = maxHeight - 2
+        w = maxWidth
+        h = 2
+        bottomProgressView.frame = CGRect(x: x, y: y, width: w, height: h)
     }
 }
     
