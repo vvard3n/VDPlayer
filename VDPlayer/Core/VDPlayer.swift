@@ -10,6 +10,8 @@ import UIKit
 
 class VDPlayer: NSObject {
     
+    var isFullScreen: Bool = false
+    
     var containerView: UIView? {
         didSet {
             guard let containerView = containerView else { return }
@@ -17,9 +19,30 @@ class VDPlayer: NSObject {
         }
     }
     
-    var controlView: VDPlayerControlView?
-//    var config: VDPlayerConfig!
-    var currentPlayerControl: VDPlayerControl!
+    var controlView: (UIView & VDPlayerControlProtocol)!
+    
+    var currentPlayerControl: VDPlayerPlayBackControl! {
+        didSet {
+            if oldValue?.isPreparedToPlay ?? false {
+                oldValue?.stop()
+                oldValue?.playerView.removeFromSuperview()
+            }
+            guard let currentPlayerControl = currentPlayerControl else { return }
+            if let containerView = self.containerView {
+                containerView.insertSubview(currentPlayerControl.playerView, at: 1)
+                currentPlayerControl.playerView.frame = containerView.bounds
+                currentPlayerControl.playbackStateDidChanged = { player, state in
+                    
+                }
+                currentPlayerControl.playerPrepareToPlay = { player, assetURL in
+                    self.controlView = VDLandScapeControlView(frame: containerView.bounds)
+                    self.controlView.player = self
+                    currentPlayerControl.playerView.addSubview(self.controlView)
+                }
+            }
+            
+        }
+    }
     var assetURLs: [URL]? {
         didSet {
             play()
@@ -37,13 +60,25 @@ class VDPlayer: NSObject {
 //        self.init()
 //    }
     
-    convenience init(playerControl: VDPlayerControl, container: UIView) {
+    convenience init(playerControl: VDPlayerPlayBackControl, container: UIView) {
         self.init()
+        self.controlView = VDLandScapeControlView()
         self.containerView = container
         self.currentPlayerControl = playerControl
         if let containerView = self.containerView {
-            containerView.addSubview(self.currentPlayerControl.playerView)
+//            containerView.addSubview(self.currentPlayerControl.playerView)
+            containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
             currentPlayerControl.playerView.frame = containerView.bounds
+            currentPlayerControl.playbackStateDidChanged = { player, state in
+                if state == .playing {
+                    self.controlView = VDLandScapeControlView(frame: containerView.bounds)
+                    self.controlView.player = self
+                    self.currentPlayerControl.playerView.addSubview(self.controlView)
+                }
+            }
+            currentPlayerControl.playerPrepareToPlay = { player, assetURL in
+                
+            }
         }
     }
 }

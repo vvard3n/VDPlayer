@@ -1,5 +1,5 @@
 //
-//  VDPlayerControl.swift
+//  VDPlayerPlayBackControl.swift
 //  VDPlayer
 //
 //  Created by Harwyn T'an on 2019/4/2.
@@ -13,6 +13,7 @@ enum VDPlayerPlaybackState {
     case playing
     case pause
     case error
+    case faild
 }
 
 enum VDPlayerLoadState {
@@ -27,7 +28,7 @@ enum VDPlayerScalingMode {
     case fill
 }
 
-protocol VDPlayerControl: NSObjectProtocol {
+protocol VDPlayerPlayBackControl: NSObjectProtocol {
     var playerView: VDPlayerView { get set }
     
     /// time
@@ -45,6 +46,10 @@ protocol VDPlayerControl: NSObjectProtocol {
     /// info
     var scalingMode: VDPlayerScalingMode { get }
     var assetURL: URL? { get set }
+    
+    /// Handle
+    var playbackStateDidChanged: ((VDPlayerPlayBackControl, VDPlayerPlaybackState) -> ())? { get set }
+    var playerPrepareToPlay: ((VDPlayerPlayBackControl, URL) -> ())? { get set}
     
     /// funcs
     
@@ -68,4 +73,7 @@ protocol VDPlayerControl: NSObjectProtocol {
     
     /// Seek to a specified time
     func seek(to time: TimeInterval, completionHandler:((_ finished: Bool)->())?)
+}
+
+extension VDPlayerPlayBackControl {
 }

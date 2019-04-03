@@ -37,6 +37,10 @@ var SAFE_AREA_BOTTOM : CGFloat { return VDUIManager.shared().safeAreaInset.botto
 
 var SAFE_AREA_TOP : CGFloat { return max(VDUIManager.shared().safeAreaInset.top - 20, 0) }
 
+var SAFE_AREA_LEFT : CGFloat { return VDUIManager.shared().safeAreaInset.left }
+
+var SAFE_AREA_RIGHT : CGFloat { return VDUIManager.shared().safeAreaInset.right }
+
 /// Get status bar height
 let STATUSBAR_HEIGHT: CGFloat = UIApplication.shared.statusBarFrame.height
 
@@ -121,7 +125,7 @@ extension UIColor {
     }
     
     //返回随机颜色
-    open class var randomColor:UIColor{
+    open class var random:UIColor{
         get
         {
             let red = CGFloat(arc4random()%256)/255.0

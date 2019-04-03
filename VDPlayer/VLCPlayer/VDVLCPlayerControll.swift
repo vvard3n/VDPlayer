@@ -8,7 +8,10 @@
 
 import UIKit
 
-class VDVLCPlayerControl: NSObject, VDPlayerControl {
+class VDVLCPlayerControl: NSObject, VDPlayerPlayBackControl {
+    
+    var playbackStateDidChanged: ((VDPlayerPlayBackControl, VDPlayerPlaybackState) -> ())?
+    var playerPrepareToPlay: ((VDPlayerPlayBackControl, URL) -> ())?
     
 //    var option: [String : Any] = [kVLCSettingPasscodeAllowFaceID : 1,
 //                                  kVLCSettingPasscodeAllowTouchID : 1,
@@ -70,10 +73,11 @@ class VDVLCPlayerControl: NSObject, VDPlayerControl {
     func initPlayer() {
         guard let assetURL = assetURL else { return }
         let media = VLCMedia(url: assetURL)
-        media.delegate = self
+//        media.delegate = self
         player = VLCMediaPlayer()
+        player?.delegate = self
         player?.media = media
-        player?.drawable = self.playerView
+        player?.drawable = self.playerView.mediaContainer
     }
     
     func prepareToPlay() {
@@ -82,6 +86,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerControl {
         initPlayer()
         play()
         loadState = .prepare
+        if let playerPrepareToPlay = playerPrepareToPlay, let assetURL = assetURL { playerPrepareToPlay(self, assetURL) }
     }
     
     func reloadPlayer() {
@@ -111,6 +116,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerControl {
         player?.stop()
         player = nil
         assetURL = nil
+        playState = .stoped
     }
     
     func seek(to time: TimeInterval, completionHandler: ((Bool) -> ())?) {
@@ -121,6 +127,24 @@ class VDVLCPlayerControl: NSObject, VDPlayerControl {
     }
 }
 
-extension VDVLCPlayerControl: VLCMediaDelegate {
+extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
+    func mediaPlayerStateChanged(_ aNotification: Notification!) {
+        print("\(player!.state.rawValue)")
+        guard let player = aNotification.object as? VLCMediaPlayer else { return }
+        switch player.state {
+        case .opening, .buffering, .stopped, .ended:
+            playState = .stoped
+        case .playing:
+            playState = .playing
+        case .error:
+            playState = .error
+        case .paused:
+            playState = .pause
+        case .esAdded:///< Elementary Stream added
+            playState = .unknow
+        }
+        if let playbackStateDidChanged = playbackStateDidChanged { playbackStateDidChanged(self, playState) }
+    }
+    
     
 }
