@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var player: VDPlayer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +28,7 @@ class ViewController: UIViewController {
         config.assetURLs = assetURLs
         config.container = videoContainer
         
-        let player = VDPlayer(config: config)
+        player = VDPlayer(config: config)
     }
 
 

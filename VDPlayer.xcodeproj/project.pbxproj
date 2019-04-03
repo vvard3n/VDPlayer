@@ -17,7 +17,6 @@
 		76B3BF3422539F8C0043F8FB /* VDPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */; };
 		76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3522539FF20043F8FB /* VDPlayerView.swift */; };
 		76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */; };
-		76B3BF3A2253A1160043F8FB /* VDPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76B3BF392253A1160043F8FB /* VDPlayer.bundle */; };
 		76B3BF3D2253A2880043F8FB /* VDPlayerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3C2253A2880043F8FB /* VDPlayerExtensions.swift */; };
 		76B3BF3F2253A3180043F8FB /* VDUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF3E2253A3180043F8FB /* VDUIManager.swift */; };
 		76B3BF412253A4AA0043F8FB /* VDPlayerControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF402253A4AA0043F8FB /* VDPlayerControl.swift */; };
@@ -39,7 +38,6 @@
 		76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerManager.swift; sourceTree = "<group>"; };
 		76B3BF3522539FF20043F8FB /* VDPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerView.swift; sourceTree = "<group>"; };
 		76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerGestureControl.swift; sourceTree = "<group>"; };
-		76B3BF392253A1160043F8FB /* VDPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VDPlayer.bundle; sourceTree = "<group>"; };
 		76B3BF3C2253A2880043F8FB /* VDPlayerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerExtensions.swift; sourceTree = "<group>"; };
 		76B3BF3E2253A3180043F8FB /* VDUIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VDUIManager.swift; sourceTree = "<group>"; };
 		76B3BF402253A4AA0043F8FB /* VDPlayerControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControl.swift; sourceTree = "<group>"; };
@@ -119,7 +117,6 @@
 		76B3BF4C2253BF120043F8FB /* ControllPannel */ = {
 			isa = PBXGroup;
 			children = (
-				76B3BF392253A1160043F8FB /* VDPlayer.bundle */,
 				76B3BF542253C3560043F8FB /* VDPlayerControlView.swift */,
 			);
 			path = ControllPannel;
@@ -228,7 +225,6 @@
 			files = (
 				76B3BF2922539DEC0043F8FB /* LaunchScreen.storyboard in Resources */,
 				76B3BF2622539DEC0043F8FB /* Assets.xcassets in Resources */,
-				76B3BF3A2253A1160043F8FB /* VDPlayer.bundle in Resources */,
 				76B3BF2422539DEC0043F8FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
