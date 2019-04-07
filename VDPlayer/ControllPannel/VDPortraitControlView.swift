@@ -43,7 +43,9 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
     /// 播放暂停按钮
     var playPauseBtn: UIButton = {
         let playPauseBtn = UIButton()
-        playPauseBtn.backgroundColor = .random
+        playPauseBtn.setImage(UIImage(vd_named: "play_red"), for: .normal)
+        playPauseBtn.setImage(UIImage(vd_named: "pause_red"), for: .selected)
+        playPauseBtn.adjustsImageWhenHighlighted = false
         return playPauseBtn
     }()
     
@@ -90,17 +92,24 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
         topView.addSubview(titleLabel)
         
         addSubview(bottomView)
-        bottomView.addSubview(playPauseBtn)
         bottomView.addSubview(currentTimeLabel)
         bottomView.addSubview(progressSlider)
         bottomView.addSubview(totalTimeLabel)
         bottomView.addSubview(fullScreenBtn)
         
         addSubview(bottomProgressView)
+        addSubview(playPauseBtn)
+        
+        addSubviewActions()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addSubviewActions() {
+        playPauseBtn.addTarget(self, action: #selector(playPauseBtnDidClick(_:)), for: .touchUpInside)
+        fullScreenBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
     }
     
     let kTopViewHeight: CGFloat = 80
@@ -119,7 +128,7 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
         x = 0
         y = 0
         w = maxWidth
-        h = kTopViewHeight + SAFE_AREA_TOP
+        h = kTopViewHeight
         topView.frame = CGRect(x: x, y: y, width: w, height: h)
         
         x = 15
@@ -172,17 +181,76 @@ class VDPortraitControlView: UIView, VDPlayerControlProtocol {
         w = maxWidth
         h = 2
         bottomProgressView.frame = CGRect(x: x, y: y, width: w, height: h)
+        
+        x = 0
+        y = 0
+        w = 50
+        h = w
+        playPauseBtn.frame = CGRect(x: x, y: y, width: w, height: h)
+        playPauseBtn.center = center
+//        playPauseBtn.translatesAutoresizingMaskIntoConstraints = false
+//        addConstraints([NSLayoutConstraint(item: playPauseBtn,
+//                                           attribute: .centerX,
+//                                           relatedBy: .equal,
+//                                           toItem: self,
+//                                           attribute: .centerX,
+//                                           multiplier: 1.0,
+//                                           constant: 0),
+//                        NSLayoutConstraint(item: playPauseBtn,
+//                                           attribute: .width,
+//                                           relatedBy: .equal,
+//                                           toItem: nil,
+//                                           attribute: .notAnAttribute,
+//                                           multiplier: 1,
+//                                           constant: 50),
+//                        NSLayoutConstraint(item: playPauseBtn,
+//                                           attribute: .centerY,
+//                                           relatedBy: .equal,
+//                                           toItem: self,
+//                                           attribute: .centerY,
+//                                           multiplier: 1.0,
+//                                           constant: 0),
+//                        NSLayoutConstraint(item: playPauseBtn,
+//                                           attribute: .height,
+//                                           relatedBy: .equal,
+//                                           toItem: playPauseBtn,
+//                                           attribute: .width,
+//                                           multiplier: 1,
+//                                           constant: 0)])
+    }
+}
+
+// MARK: - Actions
+extension VDPortraitControlView {
+    @objc private func playPauseBtnDidClick(_ sender: UIButton) {
+        self.playPauseBtn.isSelected = !self.playPauseBtn.isSelected
+    }
+    
+    @objc private func fullScreenBtnDidClick(_ sender: UIButton) {
+        player.fullScreenStateChange(animated: true)
     }
 }
     
 extension VDPortraitControlView {
     func showControlPanel(){
-        topView.alpha = 1
-        bottomView.alpha = 1
+        UIView.animate(withDuration: 0.5, animations: {
+            self.topView.alpha = 1
+            self.bottomView.alpha = 1
+            self.bottomProgressView.alpha = 0
+            self.playPauseBtn.alpha = 1
+        }) { (complate) in
+            
+        }
     }
     
     func hideControlPanel(){
-        topView.alpha = 0
-        bottomView.alpha = 0
+        UIView.animate(withDuration: 0.5, animations: {
+            self.topView.alpha = 0
+            self.bottomView.alpha = 0
+            self.bottomProgressView.alpha = 1
+            self.playPauseBtn.alpha = 0
+        }) { (complate) in
+            
+        }
     }
 }

@@ -11,5 +11,10 @@ import UIKit
 protocol VDPlayerControlProtocol: NSObjectProtocol {
 
     var player: VDPlayer! { get set }
+    
+    func gestureSingleTapped()
+}
 
+extension VDPlayerControlProtocol {
+    func gestureSingleTapped() {}
 }

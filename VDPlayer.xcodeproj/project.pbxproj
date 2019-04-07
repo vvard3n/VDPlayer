@@ -27,6 +27,7 @@
 		76B3BF432253ADD30043F8FB /* VDVLCPlayerControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF422253ADD30043F8FB /* VDVLCPlayerControll.swift */; };
 		76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF522253C2810043F8FB /* VDPlayer.swift */; };
 		76B3BF552253C3560043F8FB /* VDLandScapeControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF542253C3560043F8FB /* VDLandScapeControlView.swift */; };
+		76E69BA3225A5D4600205D4B /* VDPlayerOrientationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E69BA2225A5D4600205D4B /* VDPlayerOrientationObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		76B3BF4A2253BC780043F8FB /* VLCConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VLCConstants.h; sourceTree = "<group>"; };
 		76B3BF522253C2810043F8FB /* VDPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayer.swift; sourceTree = "<group>"; };
 		76B3BF542253C3560043F8FB /* VDLandScapeControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDLandScapeControlView.swift; sourceTree = "<group>"; };
+		76E69BA2225A5D4600205D4B /* VDPlayerOrientationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerOrientationObserver.swift; sourceTree = "<group>"; };
 		AE5556DCD3845A92098471FD /* Pods-VDPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.debug.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		EE0B3015BC3E3596FF3D6656 /* Pods-VDPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.release.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,6 +151,7 @@
 			children = (
 				76B3BF402253A4AA0043F8FB /* VDPlayerPlayBackControl.swift */,
 				76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */,
+				76E69BA2225A5D4600205D4B /* VDPlayerOrientationObserver.swift */,
 				76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */,
 				76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */,
 				76B3BF522253C2810043F8FB /* VDPlayer.swift */,
@@ -279,6 +282,7 @@
 				76428E69225497260070E5F8 /* VDPortraitControlView.swift in Sources */,
 				76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */,
 				76AE06482254554F005081D5 /* VDPlayerControlProtocol.swift in Sources */,
+				76E69BA3225A5D4600205D4B /* VDPlayerOrientationObserver.swift in Sources */,
 				76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */,
 				76B3BF552253C3560043F8FB /* VDLandScapeControlView.swift in Sources */,
 				76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */,
@@ -437,6 +441,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NNBDF3Y47L;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -459,6 +465,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NNBDF3Y47L;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (

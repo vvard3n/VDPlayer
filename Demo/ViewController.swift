@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var player: VDPlayer!
+    var player: VDPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,18 +21,34 @@ class ViewController: UIViewController {
         let height = (UIScreen.main.bounds.size.width - 20 * 2) / 16.0 * 9.0
         
         let videoContainer = UIView(frame: CGRect(x: 20, y: 100, width:width, height:height))
-        videoContainer.backgroundColor = .black
+        videoContainer.backgroundColor = .red
         view.addSubview(videoContainer)
         
-        let config = VDPlayerConfig(playerType: .VLCPlayer)
-        config.assetURLs = assetURLs
-        config.container = videoContainer
+//        let config = VDPlayerConfig(playerType: .VLCPlayer)
+//        config.assetURLs = assetURLs
+//        config.container = videoContainer
         
         let playerControl = VDVLCPlayerControl()
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
-        player.assetURLs = assetURLs
+        player?.assetURLs = assetURLs
+        player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
+            self?.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if player?.isFullScreen ?? false {
+            return .lightContent
+        }
+        return .default
     }
 
-
+    override var prefersStatusBarHidden: Bool {
+        return player?.isFullScreen ?? false
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .slide
+    }
 }
 

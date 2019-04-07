@@ -54,6 +54,15 @@ class VDLandScapeControlView: UIView, VDPlayerControlProtocol {
         return progressSlider
     }()
     
+    /// 全屏按钮
+    var fullScreenBtn: UIButton = {
+        let fullScreenBtn = UIButton()
+        fullScreenBtn.backgroundColor = .random
+        fullScreenBtn.setTitle("回", for: .normal)
+        fullScreenBtn.setTitleColor(.white, for: .normal)
+        return fullScreenBtn
+    }()
+    
     /// 隐藏控制面板的进度条
     var progressView: UIView = {
         let progressSlider = UIView()
@@ -85,14 +94,22 @@ class VDLandScapeControlView: UIView, VDPlayerControlProtocol {
         addSubview(bottomView)
         bottomView.addSubview(playPauseBtn)
         bottomView.addSubview(currentTimeLabel)
+        bottomView.addSubview(fullScreenBtn)
         bottomView.addSubview(progressSlider)
         bottomView.addSubview(totalTimeLabel)
         
         addSubview(progressView)
+        
+        addSubviewActions()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addSubviewActions() {
+        playPauseBtn.addTarget(self, action: #selector(playPauseBtnDidClick(_:)), for: .touchUpInside)
+        fullScreenBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
     }
     
     let kTopViewHeight: CGFloat = 80
@@ -114,23 +131,74 @@ class VDLandScapeControlView: UIView, VDPlayerControlProtocol {
         h = kTopViewHeight + SAFE_AREA_TOP
         topView.frame = CGRect(x: x, y: y, width: w, height: h)
         
-        x = player.isFullScreen ? SAFE_AREA_LEFT + 15 : 15
-        y = player.isFullScreen ? SAFE_AREA_TOP + 20 : 15
+        x = VDUIManager.shared().safeAreaInset.top
+        y = 15
         w = 44
-        h = 44
+        h = w
         backBtn.frame = CGRect(x: x, y: y, width: w, height: h)
         
         x = backBtn.frame.maxX + 5
-        y = (backBtn.bounds.maxY - 30) / 2
+        y = 15
         w = maxWidth - x - 15
         h = 30
         titleLabel.frame = CGRect(x: x, y: y, width: w, height: h)
         
         x = 0
-        y = maxHeight - (kBottomViewHeight + SAFE_AREA_BOTTOM)
+        y = maxHeight - kBottomViewHeight
         w = maxWidth
         h = kBottomViewHeight + SAFE_AREA_BOTTOM
         bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
+        
+        x = VDUIManager.shared().safeAreaInset.top
+        w = 50
+        h = 50
+        y = (kBottomViewHeight - h) / 2
+        playPauseBtn.frame = CGRect(x: x, y: y, width: w, height: h)
+        
+        x = playPauseBtn.frame.maxX + 5
+        w = 62
+        h = 28
+        y = 0
+        currentTimeLabel.frame = CGRect(x: x, y: y, width: w, height: h)
+        currentTimeLabel.center.y = playPauseBtn.center.y
+        
+        w = 44
+        h = w
+        x = maxWidth - SAFE_AREA_BOTTOM - 10 - w
+        y = 0
+        fullScreenBtn.frame = CGRect(x: x, y: y, width: w, height: h)
+        fullScreenBtn.center.y = playPauseBtn.center.y
+        
+        w = 62
+        x = fullScreenBtn.frame.minX - 5 - w
+        h = 28
+        y = 0
+        totalTimeLabel.frame = CGRect(x: x, y: y, width: w, height: h)
+        totalTimeLabel.center.y = playPauseBtn.center.y
+        
+        x = currentTimeLabel.frame.maxX + 5
+        y = 0
+        w = totalTimeLabel.frame.minX - 5 - x
+        h = 30
+        progressSlider.frame = CGRect(x: x, y: y, width: w, height: h)
+        progressSlider.center.y = playPauseBtn.center.y
+        
+//        x = 0
+//        y = maxHeight - 2
+//        w = maxWidth
+//        h = 2
+//        bottomProgressView.frame = CGRect(x: x, y: y, width: w, height: h)
+    }
+}
+
+// MARK: - Actions
+extension VDLandScapeControlView {
+    @objc private func playPauseBtnDidClick(_ sender: UIButton) {
+        self.playPauseBtn.isSelected = !self.playPauseBtn.isSelected
+    }
+    
+    @objc private func fullScreenBtnDidClick(_ sender: UIButton) {
+        player.fullScreenStateChange(animated: true)
     }
 }
 

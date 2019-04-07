@@ -19,6 +19,8 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     var portraitControlView: VDPortraitControlView = VDPortraitControlView()
     /// 横屏播放器控制面板
     var landScapeControlView: VDLandScapeControlView = VDLandScapeControlView()
+    /// 控制面板显示状态
+    var controlViewAppeared: Bool = true
     /// 底部进度条
     var bottomProgress: UIView = {
         let bottomProgress = UIView()
@@ -42,6 +44,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
 //        portraitControlView.isHidden = player.isFullScreen;
 //        landScapeControlView.isHidden = !player.isFullScreen;
         landScapeControlView.isHidden = true
+        landScapeControlView.hideControlPanel()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -110,7 +113,8 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     }
     
     func reset() {
-        
+        portraitControlView.isHidden = player.isFullScreen
+        landScapeControlView.isHidden = !player.isFullScreen
     }
 }
 
@@ -119,5 +123,21 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
 extension VDPlayerControlView {
     @objc private func systemVolumeChanged(noti: Notification) {
         
+    }
+}
+
+extension VDPlayerControlView {
+    func gestureSingleTapped() {
+//        guard let player == player else { return }
+        if player == nil { return }
+        if controlViewAppeared {
+            hideControlView(animated: true)
+            controlViewAppeared = false
+        }
+        else {
+            hideControlView(animated: false)
+            showControlView(animated: true)
+            controlViewAppeared = true
+        }
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 
 class VDPlayerView: UIView {
 
+    /// 媒体渲染容器
     var mediaContainer: UIView!
     
     override init(frame: CGRect) {
