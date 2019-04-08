@@ -28,6 +28,7 @@
 		76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF522253C2810043F8FB /* VDPlayer.swift */; };
 		76B3BF552253C3560043F8FB /* VDLandScapeControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF542253C3560043F8FB /* VDLandScapeControlView.swift */; };
 		76E69BA3225A5D4600205D4B /* VDPlayerOrientationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E69BA2225A5D4600205D4B /* VDPlayerOrientationObserver.swift */; };
+		76E69BA6225BB19B00205D4B /* VDObjcHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E69BA5225BB19B00205D4B /* VDObjcHandle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,8 @@
 		76B3BF522253C2810043F8FB /* VDPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayer.swift; sourceTree = "<group>"; };
 		76B3BF542253C3560043F8FB /* VDLandScapeControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDLandScapeControlView.swift; sourceTree = "<group>"; };
 		76E69BA2225A5D4600205D4B /* VDPlayerOrientationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerOrientationObserver.swift; sourceTree = "<group>"; };
+		76E69BA4225BB19B00205D4B /* VDObjcHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VDObjcHandle.h; sourceTree = "<group>"; };
+		76E69BA5225BB19B00205D4B /* VDObjcHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VDObjcHandle.m; sourceTree = "<group>"; };
 		AE5556DCD3845A92098471FD /* Pods-VDPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.debug.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		EE0B3015BC3E3596FF3D6656 /* Pods-VDPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VDPlayer.release.xcconfig"; path = "Target Support Files/Pods-VDPlayer/Pods-VDPlayer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -156,6 +159,8 @@
 				76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */,
 				76B3BF522253C2810043F8FB /* VDPlayer.swift */,
 				76B3BF3522539FF20043F8FB /* VDPlayerView.swift */,
+				76E69BA4225BB19B00205D4B /* VDObjcHandle.h */,
+				76E69BA5225BB19B00205D4B /* VDObjcHandle.m */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 				76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */,
 				76AE06482254554F005081D5 /* VDPlayerControlProtocol.swift in Sources */,
 				76E69BA3225A5D4600205D4B /* VDPlayerOrientationObserver.swift in Sources */,
+				76E69BA6225BB19B00205D4B /* VDObjcHandle.m in Sources */,
 				76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */,
 				76B3BF552253C3560043F8FB /* VDLandScapeControlView.swift in Sources */,
 				76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */,
