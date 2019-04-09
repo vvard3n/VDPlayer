@@ -41,7 +41,13 @@ class VDPlayer: NSObject {
     var fullScreenContainerView: UIView?
     
     /// 媒体控制面板
-    var controlView: (UIView & VDPlayerControlProtocol)!
+    var controlView: (UIView & VDPlayerControlProtocol)? {
+        didSet {
+            guard let controlView = controlView else { return }
+            controlView.player = self
+            layoutSubviews()
+        }
+    }
     /// 手势控制器
     var gestureControl: VDPlayerGestureControl?
     
@@ -56,21 +62,12 @@ class VDPlayer: NSObject {
             if let containerView = self.containerView {
                 containerView.insertSubview(currentPlayerControl.playerView, at: 1)
                 currentPlayerControl.playerView.frame = containerView.bounds
+                currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
                 currentPlayerControl.playbackStateDidChanged = { player, state in
                     
                 }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
-                    self.controlView = VDPlayerControlView(frame: containerView.bounds)
-                    self.controlView.player = self
-                    currentPlayerControl.playerView.addSubview(self.controlView)
                     
-                    if self.gestureControl == nil {
-                        self.gestureControl = VDPlayerGestureControl()
-                        guard let gestureControl = self.gestureControl else { return }
-                        gestureControl.delegate = self
-                        gestureControl.addGesture(to: self.controlView)
-                        return
-                    }
                 }
             }
             
@@ -103,7 +100,7 @@ class VDPlayer: NSObject {
         if let containerView = self.containerView {
 //            containerView.addSubview(self.currentPlayerControl.playerView)
             containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
-            currentPlayerControl.playerView.frame = containerView.bounds
+            currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
             currentPlayerControl.playbackStateDidChanged = { player, state in
 //                if state == .playing {
 //                    self.controlView = VDPlayerControlView(frame: containerView.bounds)
@@ -112,23 +109,37 @@ class VDPlayer: NSObject {
 //                }
             }
             currentPlayerControl.playerPrepareToPlay = { player, assetURL in
-                self.controlView = VDPlayerControlView(frame: containerView.bounds)
-                self.controlView.player = self
-                self.currentPlayerControl.playerView.addSubview(self.controlView)
-                
-                if self.gestureControl == nil {
-                    self.gestureControl = VDPlayerGestureControl()
-                    guard let gestureControl = self.gestureControl else { return }
-                    gestureControl.delegate = self
-                    gestureControl.addGesture(to: self.controlView)
-                    return
-                }
+//                self.controlView = VDPlayerControlView(frame: containerView.bounds)
+//                self.controlView.player = self
+//                self.currentPlayerControl.playerView.addSubview(self.controlView)
+//
+//                if self.gestureControl == nil {
+//                    self.gestureControl = VDPlayerGestureControl()
+//                    guard let gestureControl = self.gestureControl else { return }
+//                    gestureControl.delegate = self
+//                    gestureControl.addGesture(to: self.controlView)
+//                    return
+//                }
             }
         }
     }
     
     private func layoutSubviews() {
+        guard let controlView = controlView else { return }
         
+        currentPlayerControl.playerView.addSubview(controlView)
+
+//        currentPlayerControl.playerView.frame = containerView.bounds
+        controlView.frame = currentPlayerControl.playerView.bounds
+        controlView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
+        
+        if self.gestureControl == nil {
+            self.gestureControl = VDPlayerGestureControl()
+            guard let gestureControl = self.gestureControl else { return }
+            gestureControl.delegate = self
+            gestureControl.addGesture(to: controlView)
+            return
+        }
     }
 }
 

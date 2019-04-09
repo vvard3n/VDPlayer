@@ -44,6 +44,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackControl {
 //                                  kVLCAutomaticallyPlayNextItem : true]
     
     var player      : VLCMediaPlayer?
+    /// 播放器容器（VDPlayerView -> 渲染层 -> ControlView）
     var playerView  : VDPlayerView          = VDPlayerView()
     
     var currentTime : TimeInterval          = 0.0
