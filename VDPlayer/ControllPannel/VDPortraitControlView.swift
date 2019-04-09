@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VDPortraitControlView: UIView, VDPlayerControlProtocol {
+class VDPortraitControlView: UIView {
 
     weak var player: VDPlayer!
     

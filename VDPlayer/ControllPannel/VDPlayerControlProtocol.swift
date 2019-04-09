@@ -13,8 +13,12 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
     var player: VDPlayer! { get set }
     
     func gestureSingleTapped()
+    func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
+    func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
 }
 
 extension VDPlayerControlProtocol {
     func gestureSingleTapped() {}
+    func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
+    func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
 }

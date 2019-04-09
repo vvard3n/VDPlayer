@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VDLandScapeControlView: UIView, VDPlayerControlProtocol {
+class VDLandScapeControlView: UIView {
     
     weak var player: VDPlayer!
     

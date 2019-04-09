@@ -16,9 +16,14 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         }
     }
     /// 竖屏播放器控制面板
-    var portraitControlView: VDPortraitControlView = VDPortraitControlView()
+    private lazy var portraitControlView: VDPortraitControlView = VDPortraitControlView()
     /// 横屏播放器控制面板
-    var landScapeControlView: VDLandScapeControlView = VDLandScapeControlView()
+    private lazy var landScapeControlView: VDLandScapeControlView = {
+        let landScapeControlView = VDLandScapeControlView()
+        landScapeControlView.isHidden = true
+        landScapeControlView.hideControlPanel()
+        return landScapeControlView
+    }()
     /// 控制面板显示状态
     var controlViewAppeared: Bool = true
     /// 底部进度条
@@ -41,10 +46,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         addSubviews()
         addNotifications()
         
-//        portraitControlView.isHidden = player.isFullScreen;
-//        landScapeControlView.isHidden = !player.isFullScreen;
-        landScapeControlView.isHidden = true
-        landScapeControlView.hideControlPanel()
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -112,10 +114,10 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         }
     }
     
-    func reset() {
-        portraitControlView.isHidden = player.isFullScreen
-        landScapeControlView.isHidden = !player.isFullScreen
-    }
+//    func reset() {
+//        portraitControlView.isHidden = player.isFullScreen
+//        landScapeControlView.isHidden = !player.isFullScreen
+//    }
 }
 
 
@@ -126,8 +128,9 @@ extension VDPlayerControlView {
     }
 }
 
+// MARK: - Protocol
 extension VDPlayerControlView {
-    func gestureSingleTapped() {
+    internal func gestureSingleTapped() {
 //        guard let player == player else { return }
         if player == nil { return }
         if controlViewAppeared {
@@ -139,5 +142,14 @@ extension VDPlayerControlView {
             showControlView(animated: true)
             controlViewAppeared = true
         }
+    }
+    
+    internal func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {
+        portraitControlView.isHidden = player.isFullScreen;
+        landScapeControlView.isHidden = !player.isFullScreen;
+    }
+    
+    internal func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {
+        
     }
 }

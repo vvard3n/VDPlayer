@@ -36,72 +36,22 @@ class ViewController: UIViewController {
             if #available(iOS 11.0, *) {
                 self?.setNeedsUpdateOfHomeIndicatorAutoHidden()
             }
-            if isFullScreen {
-//                VDObjcHandle().interfaceOrientation(.landscapeRight)
-                self?.hengp()
-            }
-            else {
-//                VDObjcHandle().interfaceOrientation(.portrait)
-                self?.shup()
-            }
+//            if isFullScreen {
+////                VDObjcHandle().interfaceOrientation(.landscapeRight)
+////                self?.hengp()
+//            }
+//            else {
+////                VDObjcHandle().interfaceOrientation(.portrait)
+////                self?.shup()
+//            }
         }
-    }
-    
-    // MARK: - 横屏
-    let appDelegate = UIApplication.shared.delegate!
-    func hengp() {
-//        appDelegate.blockRotation = true
-        
-        let value = UIInterfaceOrientation.landscapeLeft.rawValue
-        
-        UIDevice.current.setValue(value, forKey: "orientation")
-        
-    }
-    
-    // MARK: - 竖屏
-    
-    func shup() {
-        
-//        appDelegate.blockRotation = false
-        
-        let value = UIInterfaceOrientation.portrait.rawValue
-        
-        UIDevice.current.setValue(value, forKey: "orientation")
-        
-    }
-    
-    
-    
-    // 将要发生旋转就触发代理
-    
-    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        
-    }
-    
-    // 旋转完成触发代理。我们需要在这里对必要的界面设置重新布局
-    
-    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-        
-        // 获取当前手机物理状态的屏幕模式，看看是横屏还是竖屏.
-        
-        let interfaceOrientation = UIApplication.shared.statusBarOrientation
-        
-        if(interfaceOrientation == UIInterfaceOrientation.portrait) {
-            //当前是在竖屏模式
-            print("竖屏")
-        }
-        else{
-            //当前是在横屏模式
-//            self.theWebView?.frame = self.view.frame
-        }
-        
     }
     
     /// 状态栏颜色
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        if player?.isFullScreen ?? false {
-//            return .lightContent
-//        }
+        if player?.isFullScreen ?? false {
+            return .lightContent
+        }
         return .default
     }
     
@@ -109,11 +59,18 @@ class ViewController: UIViewController {
     override var prefersHomeIndicatorAutoHidden: Bool {
         return player?.isFullScreen ?? false
     }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if player?.isFullScreen ?? false {
+            return .landscapeRight
+        }
+        return .portrait
+    }
 
     /// 隐藏状态栏
-    override var prefersStatusBarHidden: Bool {
-        return player?.isFullScreen ?? false
-    }
+//    override var prefersStatusBarHidden: Bool {
+//        return player?.isFullScreen ?? false
+//    }
     
     /// 状态栏隐藏动画
 //    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
