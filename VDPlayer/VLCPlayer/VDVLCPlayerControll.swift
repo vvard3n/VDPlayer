@@ -8,10 +8,10 @@
 
 import UIKit
 
-class VDVLCPlayerControl: NSObject, VDPlayerPlayBackControl {
-    
-    var playbackStateDidChanged: ((VDPlayerPlayBackControl, VDPlayerPlaybackState) -> ())?
-    var playerPrepareToPlay: ((VDPlayerPlayBackControl, URL) -> ())?
+class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
+    var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())?
+    var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
+    var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())?
     
 //    var option: [String : Any] = [kVLCSettingPasscodeAllowFaceID : 1,
 //                                  kVLCSettingPasscodeAllowTouchID : 1,
@@ -47,14 +47,14 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackControl {
     /// 播放器容器（VDPlayerView -> 渲染层 -> ControlView）
     var playerView  : VDPlayerView          = VDPlayerView()
     
-    var currentTime : TimeInterval          = 0.0
-    var totalTime   : TimeInterval          = 0.0
+    var currentTime : TimeInterval          { get { return TimeInterval((player?.time.value.doubleValue ?? 0) / 1000) } }
+    var totalTime   : TimeInterval          { get { return TimeInterval(((player?.time.value.doubleValue ?? 0) + fabs(player?.remainingTime.value?.doubleValue ?? 0)) / 1000) } }
     var bufferTime  : TimeInterval          = 0.0
     var seekTime    : TimeInterval          = 0.0
     
     var isPlaying   : Bool                  = false
     var isPreparedToPlay : Bool             = false
-    var playState   : VDPlayerPlaybackState = .stoped
+    var playState   : VDPlayerPlaybackState = .stopped
     var loadState   : VDPlayerLoadState     = .unknow
     var scalingMode : VDPlayerScalingMode   = .aspectFit
     var assetURL    : URL? {
@@ -79,6 +79,10 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackControl {
         player?.delegate = self
         player?.media = media
         player?.drawable = self.playerView.mediaContainer
+    }
+    
+    private func setupPlayerObserver() {
+        
     }
     
     func prepareToPlay() {
@@ -117,11 +121,11 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackControl {
         player?.stop()
         player = nil
         assetURL = nil
-        playState = .stoped
+        playState = .stopped
     }
     
     func seek(to time: TimeInterval, completionHandler: ((Bool) -> ())?) {
-        player?.time = VLCTime(int: Int32(time))
+        player?.time = VLCTime(int: Int32(time * 1000))
         if let completionHandler = completionHandler {
             completionHandler(true)
         }
@@ -133,8 +137,12 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
         print("\(player!.state.rawValue)")
         guard let player = aNotification.object as? VLCMediaPlayer else { return }
         switch player.state {
-        case .opening, .buffering, .stopped, .ended:
-            playState = .stoped
+        case .stopped:
+            playState = .stopped
+        case .opening, .buffering:
+            break
+        case .ended:
+            break
         case .playing:
             playState = .playing
         case .error:
@@ -147,5 +155,12 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
         if let playbackStateDidChanged = playbackStateDidChanged { playbackStateDidChanged(self, playState) }
     }
     
-    
+    func mediaPlayerTimeChanged(_ aNotification: Notification!) {
+        guard let player = aNotification.object as? VLCMediaPlayer else { return }
+//        print("\(player), \(TimeInterval(player.time.value.doubleValue ?? 0)), \(TimeInterval(fabs(player.remainingTime.value?.doubleValue ?? 0)))")
+        if let mediaPlayerTimeChanged = mediaPlayerTimeChanged {
+            mediaPlayerTimeChanged(self, TimeInterval(player.time.value.doubleValue / 1000),
+                                   TimeInterval((player.time.value.doubleValue + fabs(player.remainingTime.value?.doubleValue ?? 1)) / 1000))
+        }
+    }
 }

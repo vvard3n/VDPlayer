@@ -16,7 +16,16 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         }
     }
     /// 竖屏播放器控制面板
-    private lazy var portraitControlView: VDPortraitControlView = VDPortraitControlView()
+    private lazy var portraitControlView: VDPortraitControlView = {
+        let portraitControlView = VDPortraitControlView()
+        portraitControlView.sliderValueChanging = { (time, forward) in
+            self.cancelAutoHiddenControlView()
+        }
+        portraitControlView.didEndSlidingProgressSlider = { (percent) in
+            self.startAutoHiddenControlView()
+        }
+        return portraitControlView
+    }()
     /// 横屏播放器控制面板
     private lazy var landScapeControlView: VDLandScapeControlView = {
         let landScapeControlView = VDLandScapeControlView()
@@ -36,17 +45,18 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         let activityView = UIActivityIndicatorView()
         return activityView
     }()
-    /// 展示控制面板后隐藏时间，default is 3
-    var autoHiddenTimeInterval: TimeInterval = 3
-    /// 隐藏和展示控制面板Fade动画的时间，default is 0.2
-    var autoFadeAnimateTime: TimeInterval = 0.2
+    /// 展示控制面板后隐藏时间，default is 5
+    var autoHiddenTimeInterval: TimeInterval = 5
+    /// 隐藏和展示控制面板Fade动画的时间，default is 0.3
+    var autoFadeAnimateTime: TimeInterval = 0.3
+    private var autoHiddenWorkItem: DispatchWorkItem?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
         addNotifications()
         
-        
+        startAutoHiddenControlView()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +67,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         addSubview(portraitControlView)
         addSubview(landScapeControlView)
         addSubview(activity)
-        addSubview(bottomProgress)
+//        addSubview(bottomProgress)
     }
     
     override func layoutSubviews() {
@@ -86,40 +96,89 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        cancelAutoHiddenControlView()
     }
     
     func showControlView(animated: Bool) {
-        UIView.animate(withDuration: autoFadeAnimateTime, animations: {
+        controlViewAppeared = true
+        startAutoHiddenControlView()
+        if animated {
+            UIView.animate(withDuration: autoFadeAnimateTime, animations: {
+                if self.player.isFullScreen {
+                    self.landScapeControlView.showControlPanel()
+                }
+                else {
+                    self.portraitControlView.showControlPanel()
+                }
+            }) { (finished) in
+                self.bottomProgress.isHidden = true
+            }
+        }
+        else {
             if self.player.isFullScreen {
                 self.landScapeControlView.showControlPanel()
             }
             else {
                 self.portraitControlView.showControlPanel()
             }
-        }) { (finished) in
             self.bottomProgress.isHidden = true
         }
     }
     
     func hideControlView(animated: Bool) {
-        UIView.animate(withDuration: autoFadeAnimateTime, animations: {
+        controlViewAppeared = false
+        if animated {
+            UIView.animate(withDuration: autoFadeAnimateTime, animations: {
+                if self.player.isFullScreen {
+                    self.landScapeControlView.hideControlPanel()
+                }
+                else {
+                    self.portraitControlView.hideControlPanel()
+                }
+            }) { (finished) in
+                self.bottomProgress.isHidden = false
+            }
+        }
+        else {
             if self.player.isFullScreen {
                 self.landScapeControlView.hideControlPanel()
             }
             else {
                 self.portraitControlView.hideControlPanel()
             }
-        }) { (finished) in
             self.bottomProgress.isHidden = false
         }
     }
     
-//    func reset() {
-//        portraitControlView.isHidden = player.isFullScreen
-//        landScapeControlView.isHidden = !player.isFullScreen
-//    }
+    func startAutoHiddenControlView() {
+        cancelAutoHiddenControlView()
+        
+        autoHiddenWorkItem = DispatchWorkItem {
+            self.hideControlView(animated: true)
+        }
+        guard let autoHiddenWorkItem = autoHiddenWorkItem else { return }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + autoHiddenTimeInterval, execute: autoHiddenWorkItem)
+    }
+    
+    func cancelAutoHiddenControlView() {
+        if let autoHiddenWorkItem = autoHiddenWorkItem {
+            autoHiddenWorkItem.cancel()
+            self.autoHiddenWorkItem = nil
+        }
+    }
+    
+    func reset() {
+        portraitControlView.reset()
+        landScapeControlView.reset()
+    }
 }
 
+// MARK: - Time
+extension VDPlayerControlView {
+    func updateTime(current: TimeInterval, total: TimeInterval) {
+        portraitControlView.updateTime(current: current, total: total)
+    }
+}
 
 // MARK: - Private Methon
 extension VDPlayerControlView {
@@ -141,6 +200,30 @@ extension VDPlayerControlView {
             hideControlView(animated: false)
             showControlView(animated: true)
             controlViewAppeared = true
+        }
+    }
+    
+    internal func gestureDoubleTapped() {
+        if player == nil { return }
+        if player.currentPlayerControl.isPlaying {
+            player.currentPlayerControl.pause()
+        }
+        else {
+            player.currentPlayerControl.play()
+        }
+    }
+    
+    internal func gesturePan(panGesture: UIPanGestureRecognizer) {
+        if panGesture.state == .began {
+            
+        }
+        switch panGesture.state {
+        case .began:
+            break
+        case .changed:
+            print(panGesture.location(in: self))
+        default:
+            break
         }
     }
     

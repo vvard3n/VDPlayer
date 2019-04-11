@@ -11,6 +11,13 @@ import UIKit
 class VDPortraitControlView: UIView {
 
     weak var player: VDPlayer!
+    private var progressSliderIsDragging: Bool = false
+    var sliderValueChanging: ((_ percent: Float, _ forward: Bool) -> ())?
+    var didEndSlidingProgressSlider: ((_ percent: Float) -> ())?
+    
+    private var startTouchMovePoint :CGPoint = .zero
+    private var allowPanGesture: Bool = false
+    private var sliderStartValue: Float = 0
     
     /// 顶部View
     var topView: UIView = {
@@ -46,6 +53,7 @@ class VDPortraitControlView: UIView {
         playPauseBtn.setImage(UIImage(vd_named: "play_red"), for: .normal)
         playPauseBtn.setImage(UIImage(vd_named: "pause_red"), for: .selected)
         playPauseBtn.adjustsImageWhenHighlighted = false
+        playPauseBtn.isSelected = true
         return playPauseBtn
     }()
     
@@ -60,6 +68,7 @@ class VDPortraitControlView: UIView {
     var fullScreenBtn: UIButton = {
         let fullScreenBtn = UIButton()
         fullScreenBtn.backgroundColor = .random
+        fullScreenBtn.setTitle("「 」", for: .normal)
         return fullScreenBtn
     }()
     
@@ -74,6 +83,9 @@ class VDPortraitControlView: UIView {
     var currentTimeLabel: UILabel = {
         let currentTimeLabel = UILabel()
         currentTimeLabel.backgroundColor = .random
+        currentTimeLabel.font = .systemFont(ofSize: 10)
+        currentTimeLabel.textAlignment = .center
+        currentTimeLabel.textColor = .white
         return currentTimeLabel
     }()
     
@@ -81,6 +93,9 @@ class VDPortraitControlView: UIView {
     var totalTimeLabel: UILabel = {
         let totalTimeLabel = UILabel()
         totalTimeLabel.backgroundColor = .random
+        totalTimeLabel.font = .systemFont(ofSize: 10)
+        totalTimeLabel.textAlignment = .center
+        totalTimeLabel.textColor = .white
         return totalTimeLabel
     }()
     
@@ -98,6 +113,9 @@ class VDPortraitControlView: UIView {
         bottomView.addSubview(fullScreenBtn)
         
         addSubview(bottomProgressView)
+        
+        bottomProgressView.frame = CGRect(x: 0, y: bounds.height - 2, width: 0, height: 2)
+        
         addSubview(playPauseBtn)
         
         addSubviewActions()
@@ -110,10 +128,16 @@ class VDPortraitControlView: UIView {
     private func addSubviewActions() {
         playPauseBtn.addTarget(self, action: #selector(playPauseBtnDidClick(_:)), for: .touchUpInside)
         fullScreenBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
+        
+        progressSlider.addTarget(self, action: #selector(didSliderTouchDown(_:)), for: .touchDown)
+        progressSlider.addTarget(self, action: #selector(didSliderTouchCancel(_:)), for: .touchCancel)
+        progressSlider.addTarget(self, action: #selector(didSliderTouchUpOutside(_:)), for: .touchUpOutside)
+        progressSlider.addTarget(self, action: #selector(didSliderTouchUpInside(_:)), for: .touchUpInside)
+        progressSlider.addTarget(self, action: #selector(didSliderValueChanged(_:)), for: .valueChanged)
     }
     
-    let kTopViewHeight: CGFloat = 80
-    let kBottomViewHeight: CGFloat = 73
+    private let kTopViewHeight: CGFloat = 80
+    private let kBottomViewHeight: CGFloat = 73
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -177,12 +201,6 @@ class VDPortraitControlView: UIView {
         progressSlider.center.y = currentTimeLabel.center.y
         
         x = 0
-        y = maxHeight - 2
-        w = maxWidth
-        h = 2
-        bottomProgressView.frame = CGRect(x: x, y: y, width: w, height: h)
-        
-        x = 0
         y = 0
         w = 50
         h = w
@@ -218,39 +236,183 @@ class VDPortraitControlView: UIView {
 //                                           multiplier: 1,
 //                                           constant: 0)])
     }
+    
+    func reset() {
+        playPauseBtn.isSelected = false
+        currentTimeLabel.text = "00:00:00"
+        totalTimeLabel.text = "00:00:00"
+        progressSlider.value = 0
+        progressSlider.maximumValue = 0
+        bottomProgressView.frame.size.width = 0
+    }
 }
 
 // MARK: - Actions
 extension VDPortraitControlView {
     @objc private func playPauseBtnDidClick(_ sender: UIButton) {
         self.playPauseBtn.isSelected = !self.playPauseBtn.isSelected
+        if playPauseBtn.isSelected {
+            player.currentPlayerControl.play()
+        }
+        else {
+            player.currentPlayerControl.pause()
+        }
     }
     
     @objc private func fullScreenBtnDidClick(_ sender: UIButton) {
         player.fullScreenStateChange(animated: true)
     }
+    
+    @objc private func didSliderTouchDown(_ sender: UISlider) {
+        progressSliderIsDragging = true
+        
+        sliderStartValue = sender.value
+    }
+    
+    @objc private func didSliderTouchCancel(_ sender: UISlider) {
+        progressSliderIsDragging = false
+        
+        sliderStartValue = 0
+    }
+    
+    @objc private func didSliderTouchUpOutside(_ sender: UISlider) {
+        let percent = sender.value / sender.maximumValue
+        player.seek(to: player.totalTime * Double(percent)) { (success) in
+            if success {
+                self.progressSliderIsDragging = false
+            }
+        }
+        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+    }
+    
+    @objc private func didSliderTouchUpInside(_ sender: UISlider) {
+        sliderStartValue = 0
+        let percent = sender.value / sender.maximumValue
+        player.seek(to: player.totalTime * Double(percent)) { (success) in
+            if success {
+                self.progressSliderIsDragging = false
+            }
+        }
+        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+    }
+    
+    @objc private func didSliderValueChanged(_ sender: UISlider) {
+        let forward = sliderStartValue < sender.value
+        print(forward)
+        sliderStartValue = sender.value
+        let current = Double(progressSlider.value)
+        let total = player.totalTime
+        currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+        totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+        
+        let percent = sender.value / sender.maximumValue
+        if let sliderValueChanging = sliderValueChanging { sliderValueChanging(percent, forward) }
+        
+        UIView.animate(withDuration: 0.25) {
+            self.bottomProgressView.frame = CGRect(x: 0, y: self.bounds.height - 2, width: self.bounds.width * CGFloat(current / total), height: 2)
+        }
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        let point = touches.first?.location(in: self) ?? .zero
+        if point.y < 100 || point.y > SCREEN_HEIGHT - 100 {
+            print("超出滑动区域")
+            allowPanGesture = false
+        }
+        else {
+            allowPanGesture = true
+            progressSliderIsDragging = true
+            startTouchMovePoint = point
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        
+        if !allowPanGesture { return }
+        let point = touches.first?.location(in: self) ?? .zero
+        let progressInSec: Float = 2
+        if abs(point.x - startTouchMovePoint.x) > 10 {
+            if point.x > startTouchMovePoint.x {
+                var current = Double(progressSlider.value + progressInSec)
+                print(current)
+                let total = player.totalTime
+                if current > total { current = total }
+                currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+                totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+                progressSlider.value = Float(current)
+                
+                if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+                
+                UIView.animate(withDuration: 0.25) {
+                    self.bottomProgressView.frame = CGRect(x: 0, y: self.bounds.height - 2, width: self.bounds.width * CGFloat(current / total), height: 2)
+                }
+            }
+            else {
+                var current = Double(progressSlider.value - progressInSec)
+                if current < 0 { current = 0 }
+                print(current)
+                let total = player.totalTime
+                currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+                totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+                progressSlider.value = Float(current)
+                
+                if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+                
+                UIView.animate(withDuration: 0.25) {
+                    self.bottomProgressView.frame = CGRect(x: 0, y: self.bounds.height - 2, width: self.bounds.width * CGFloat(current / total), height: 2)
+                }
+            }
+            startTouchMovePoint = point
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        allowPanGesture = false
+        progressSliderIsDragging = false
+        
+        let seekTime = TimeInterval(progressSlider.value)
+        let percent = progressSlider.value / progressSlider.maximumValue
+        player.seek(to: seekTime) { (success) in
+            if success {
+                self.progressSliderIsDragging = false
+            }
+        }
+        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+    }
+}
+
+extension VDPortraitControlView {
+    func updateTime(current: TimeInterval, total: TimeInterval) {
+        if !progressSliderIsDragging {
+            currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+            totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+            progressSlider.value = Float(player.currentTime)
+            progressSlider.maximumValue = Float(player.totalTime)
+            UIView.animate(withDuration: 0.25) {
+                self.bottomProgressView.frame = CGRect(x: 0, y: self.bounds.height - 2, width: self.bounds.width * CGFloat(current / total), height: 2)
+            }
+        }
+    }
 }
     
 extension VDPortraitControlView {
     func showControlPanel(){
-        UIView.animate(withDuration: 0.5, animations: {
-            self.topView.alpha = 1
-            self.bottomView.alpha = 1
-            self.bottomProgressView.alpha = 0
-            self.playPauseBtn.alpha = 1
-        }) { (complate) in
-            
-        }
+        self.topView.alpha = 1
+        self.bottomView.alpha = 1
+        self.bottomProgressView.alpha = 0
+        self.playPauseBtn.alpha = 1
     }
     
     func hideControlPanel(){
-        UIView.animate(withDuration: 0.5, animations: {
-            self.topView.alpha = 0
-            self.bottomView.alpha = 0
-            self.bottomProgressView.alpha = 1
-            self.playPauseBtn.alpha = 0
-        }) { (complate) in
-            
-        }
+        self.topView.alpha = 0
+        self.bottomView.alpha = 0
+        self.bottomProgressView.alpha = 1
+        self.playPauseBtn.alpha = 0
     }
 }

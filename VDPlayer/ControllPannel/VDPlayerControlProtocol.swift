@@ -13,12 +13,22 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
     var player: VDPlayer! { get set }
     
     func gestureSingleTapped()
+    func gestureDoubleTapped()
+    func gesturePan(_ panGesture: UIPanGestureRecognizer)
     func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
     func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
+    
+    func updateTime(current: TimeInterval, total: TimeInterval)
+    func reset()
 }
 
 extension VDPlayerControlProtocol {
     func gestureSingleTapped() {}
+    func gestureDoubleTapped() {}
+    func gesturePan(_ panGesture: UIPanGestureRecognizer) {}
     func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
     func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
+    
+    func updateTime(current: TimeInterval, total: TimeInterval) {}
+    func reset() {}
 }

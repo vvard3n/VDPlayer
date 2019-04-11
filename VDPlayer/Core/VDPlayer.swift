@@ -29,6 +29,15 @@ class VDPlayer: NSObject {
         return orientationObserver
     }()
     
+    /// state
+    var progress: Double {
+        get {
+            return currentTime / totalTime
+        }
+    }
+    var currentTime: TimeInterval { get { return currentPlayerControl.currentTime } }
+    var totalTime: TimeInterval { get { return currentPlayerControl.totalTime } }
+    
     /// 播放器的容器
     var containerView: UIView? {
         didSet {
@@ -45,14 +54,14 @@ class VDPlayer: NSObject {
         didSet {
             guard let controlView = controlView else { return }
             controlView.player = self
-            layoutSubviews()
+            layoutPlayer()
         }
     }
     /// 手势控制器
     var gestureControl: VDPlayerGestureControl?
     
     /// 当前播放器内核
-    var currentPlayerControl: VDPlayerPlayBackControl! {
+    var currentPlayerControl: VDPlayerPlayBackProtocol! {
         didSet {
             if oldValue?.isPreparedToPlay ?? false {
                 oldValue?.stop()
@@ -67,7 +76,7 @@ class VDPlayer: NSObject {
                     
                 }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
-                    
+                    self.layoutPlayer()
                 }
             }
             
@@ -92,7 +101,7 @@ class VDPlayer: NSObject {
 //        self.init()
 //    }
     
-    convenience init(playerControl: VDPlayerPlayBackControl, container: UIView) {
+    convenience init(playerControl: VDPlayerPlayBackProtocol, container: UIView) {
         self.init()
 //        self.controlView = VDPlayerControlView()
         self.containerView = container
@@ -102,13 +111,15 @@ class VDPlayer: NSObject {
             containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
             currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
             currentPlayerControl.playbackStateDidChanged = { player, state in
-//                if state == .playing {
-//                    self.controlView = VDPlayerControlView(frame: containerView.bounds)
-//                    self.controlView.player = self
-//                    self.currentPlayerControl.playerView.addSubview(self.controlView)
-//                }
+                if state == .playing {
+                    self.layoutPlayer()
+                }
+                if state == .stopped {
+                    self.resetControlView()
+                }
             }
             currentPlayerControl.playerPrepareToPlay = { player, assetURL in
+                self.layoutPlayer()
 //                self.controlView = VDPlayerControlView(frame: containerView.bounds)
 //                self.controlView.player = self
 //                self.currentPlayerControl.playerView.addSubview(self.controlView)
@@ -121,15 +132,19 @@ class VDPlayer: NSObject {
 //                    return
 //                }
             }
+            currentPlayerControl.mediaPlayerTimeChanged = { player, currentTime, totalTime in
+                guard let controlView = self.controlView else { return }
+                controlView.updateTime(current: currentTime, total: totalTime)
+            }
         }
     }
     
-    private func layoutSubviews() {
-        guard let controlView = controlView else { return }
+    private func layoutPlayer() {
+        guard let controlView = controlView, let containerView = containerView else { return }
         
         currentPlayerControl.playerView.addSubview(controlView)
+        currentPlayerControl.playerView.frame = containerView.bounds
 
-//        currentPlayerControl.playerView.frame = containerView.bounds
         controlView.frame = currentPlayerControl.playerView.bounds
         controlView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         
@@ -140,6 +155,11 @@ class VDPlayer: NSObject {
             gestureControl.addGesture(to: controlView)
             return
         }
+    }
+    
+    private func resetControlView() {
+        guard let controlView = controlView else { return }
+        controlView.reset()
     }
 }
 
@@ -305,12 +325,12 @@ extension VDPlayer {
 extension VDPlayer: VDPlayerOrientationObserverDelegate {
     internal func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {
         delegate?.playerOrientationWillChange(player: self, isFullScreen: isFullScreen)
-        controlView.playerOrientationWillChanged(player: self, observer: observer)
+        controlView?.playerOrientationWillChanged(player: self, observer: observer)
     }
     
     internal func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {
         delegate?.playerOrientationDidChange(player: self, isFullScreen: isFullScreen)
-        controlView.playerOrientationDidChanged(player: self, observer: observer)
+        controlView?.playerOrientationDidChanged(player: self, observer: observer)
     }
 }
 
@@ -318,6 +338,24 @@ extension VDPlayer: VDPlayerOrientationObserverDelegate {
 extension VDPlayer: VDPlayerGestureControlDelegate {
     internal func vd_playerGestureControlSingleTaped() {
         print("tap")
-        self.controlView.gestureSingleTapped()
+        self.controlView?.gestureSingleTapped()
+    }
+    
+    internal func vd_playerGestureControlDoubleTaped() {
+        print("tap tap")
+        self.controlView?.gestureDoubleTapped()
+    }
+    
+    internal func vd_playerGestureControlPan(_ pan: UIPanGestureRecognizer) {
+        
+        print("pan")
+        self.controlView?.gesturePan(pan)
+    }
+}
+
+// MARK: - Media Control
+extension VDPlayer {
+    func seek(to time: TimeInterval, completionHandler: ((Bool) -> ())?) {
+        currentPlayerControl.seek(to: time, completionHandler: completionHandler)
     }
 }

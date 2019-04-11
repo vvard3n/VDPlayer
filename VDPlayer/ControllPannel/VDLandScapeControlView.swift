@@ -189,6 +189,14 @@ class VDLandScapeControlView: UIView {
 //        h = 2
 //        bottomProgressView.frame = CGRect(x: x, y: y, width: w, height: h)
     }
+    
+    func reset() {
+        playPauseBtn.isSelected = false
+        currentTimeLabel.text = "00:00:00"
+        totalTimeLabel.text = "00:00:00"
+        progressSlider.value = 0
+        progressSlider.maximumValue = 0
+    }
 }
 
 // MARK: - Actions

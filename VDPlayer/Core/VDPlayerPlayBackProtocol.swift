@@ -1,5 +1,5 @@
 //
-//  VDPlayerPlayBackControl.swift
+//  VDPlayerPlayBackProtocol.swift
 //  VDPlayer
 //
 //  Created by Harwyn T'an on 2019/4/2.
@@ -9,7 +9,7 @@
 import Foundation
 enum VDPlayerPlaybackState {
     case unknow
-    case stoped
+    case stopped
     case playing
     case pause
     case error
@@ -19,6 +19,7 @@ enum VDPlayerPlaybackState {
 enum VDPlayerLoadState {
     case unknow
     case prepare
+    case ended
 }
 
 enum VDPlayerScalingMode {
@@ -28,12 +29,12 @@ enum VDPlayerScalingMode {
     case fill
 }
 
-protocol VDPlayerPlayBackControl: NSObjectProtocol {
+protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     var playerView: VDPlayerView { get set }
     
     /// time
-    var currentTime: TimeInterval { get set }
-    var totalTime: TimeInterval { get set }
+    var currentTime: TimeInterval { get }
+    var totalTime: TimeInterval { get }
     var bufferTime: TimeInterval { get set }
     var seekTime: TimeInterval { get set }
     
@@ -48,8 +49,9 @@ protocol VDPlayerPlayBackControl: NSObjectProtocol {
     var assetURL: URL? { get set }
     
     /// Handle
-    var playbackStateDidChanged: ((VDPlayerPlayBackControl, VDPlayerPlaybackState) -> ())? { get set }
-    var playerPrepareToPlay: ((VDPlayerPlayBackControl, URL) -> ())? { get set}
+    var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())? { get set }
+    var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set}
+    var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())? { get set }
     
     /// funcs
     
@@ -75,5 +77,6 @@ protocol VDPlayerPlayBackControl: NSObjectProtocol {
     func seek(to time: TimeInterval, completionHandler:((_ finished: Bool)->())?)
 }
 
-extension VDPlayerPlayBackControl {
+extension VDPlayerPlayBackProtocol {
+    
 }

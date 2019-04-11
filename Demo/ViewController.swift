@@ -30,20 +30,13 @@ class ViewController: UIViewController {
         
         let playerControl = VDVLCPlayerControl()
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
+        player?.controlView = VDPlayerControlView()
         player?.assetURLs = assetURLs
         player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
             self?.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {
                 self?.setNeedsUpdateOfHomeIndicatorAutoHidden()
             }
-//            if isFullScreen {
-////                VDObjcHandle().interfaceOrientation(.landscapeRight)
-////                self?.hengp()
-//            }
-//            else {
-////                VDObjcHandle().interfaceOrientation(.portrait)
-////                self?.shup()
-//            }
         }
     }
     

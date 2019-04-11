@@ -81,6 +81,98 @@ func vd_topViewController(_ rootVC: UIViewController? = UIApplication.shared.key
     return rootVC
 }
 
+func vd_formateTime(_ second: TimeInterval, customFormateStr: String?) -> String {
+    let date = Date(timeIntervalSince1970: second)
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    if let customFormateStr = customFormateStr {
+        formatter.dateFormat = customFormateStr
+    }
+    else {
+        if (second > 3600) { formatter.dateFormat = "HH:mm:ss" }
+        else { formatter.dateFormat = "HH:mm:ss" }
+    }
+    return formatter.string(from: date)
+}
+
+/*
++ (NSString *)formateTime:(NSTimeInterval)timeStamp showMinutesTitle:(BOOL)showMinutesTitle showDayTitle:(BOOL)showDayTitle notTodayHiddenTime:(BOOL)notTodayHiddenTime formateStr:(NSString *)formateStr {
+    NSDate *time = [NSDate dateWithTimeIntervalSince1970:timeStamp];
+    NSDate *currentTime = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [NSLocale systemLocale];
+    
+    if (formateStr && formateStr.length > 0) {
+        formatter.dateFormat = formateStr;
+        return [formatter stringFromDate:time];
+    }
+    
+    NSInteger year = time.year;
+    NSInteger month = time.month;
+    NSInteger day = time.day;
+    
+    NSInteger currentYear = currentTime.year;
+    NSInteger currentMonth = currentTime.month;
+    NSInteger currentDay = currentTime.day;
+    
+    //未来
+    if ([currentTime timeIntervalSince1970] < timeStamp) {
+        if (year == currentYear) {
+            if (month == currentMonth && day == currentDay) {
+                formatter.dateFormat = @"HH:mm";
+                return [formatter stringFromDate:time];
+            }
+            formatter.dateFormat = notTodayHiddenTime ? @"MM-dd" : @"MM-dd HH:mm";
+            return [formatter stringFromDate:time];
+        }
+        else {
+            formatter.dateFormat = notTodayHiddenTime ? @"yyyy-MM-dd" : @"yyyy-MM-dd HH:mm";
+            return [formatter stringFromDate:time];
+        }
+    }
+    //过去
+    //当年
+    if (year == currentYear) {
+        formatter.dateFormat = notTodayHiddenTime ? @"MM-dd" : @"MM-dd HH:mm";
+        //当月
+        if (month == currentMonth) {
+            //当天
+            if (day == currentDay) {
+                //10分钟内
+                if ([currentTime timeIntervalSince1970] - timeStamp <= 3600 && showMinutesTitle) {
+                    NSInteger second = [currentTime timeIntervalSince1970] - timeStamp;
+                    if (second >= 60) {
+                        return [NSString stringWithFormat:@"%ld分钟前", second / 60];
+                    }
+                    else {
+                        return @"刚刚";
+                    }
+                }
+                else {
+                    formatter.dateFormat = @"HH:mm";
+                    return [NSString stringWithFormat:@"%@", [formatter stringFromDate:time]];
+                }
+            }
+            //昨天
+            if (currentDay - day == 1 && showDayTitle) {
+                formatter.dateFormat = @"HH:mm";
+                return [NSString stringWithFormat:@"昨天 %@", [formatter stringFromDate:time]];
+            }
+            //前天
+            if (currentDay - day == 2 && showDayTitle) {
+                formatter.dateFormat = @"HH:mm";
+                return [NSString stringWithFormat:@"前天 %@", [formatter stringFromDate:time]];
+            }
+            formatter.dateFormat = notTodayHiddenTime ? @"MM-dd" : @"MM-dd HH:mm";
+        }
+    }
+    else {
+        formatter.dateFormat = notTodayHiddenTime ? @"yyyy-MM-dd" : @"yyyy-MM-dd HH:mm";
+    }
+    return [formatter stringFromDate:time];
+}
+ */
+
 extension UIImage {
     public convenience init(color: UIColor, size: CGSize) {
         UIGraphicsBeginImageContextWithOptions(size, false, 1)
