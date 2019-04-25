@@ -11,6 +11,13 @@ import UIKit
 class VDLandScapeControlView: UIView {
     
     weak var player: VDPlayer!
+    private var progressSliderIsDragging: Bool = false
+    var sliderValueChanging: ((_ percent: Float, _ forward: Bool) -> ())?
+    var didEndSlidingProgressSlider: ((_ percent: Float) -> ())?
+    
+    private var startTouchMovePoint :CGPoint = .zero
+    private var allowPanGesture: Bool = false
+    private var sliderStartValue: Float = 0
     
     /// 顶部View
     var topView: UIView = {
@@ -43,7 +50,10 @@ class VDLandScapeControlView: UIView {
     /// 播放暂停按钮
     var playPauseBtn: UIButton = {
         let playPauseBtn = UIButton()
-        playPauseBtn.backgroundColor = .random
+        playPauseBtn.setImage(UIImage(vd_named: "play_red"), for: .normal)
+        playPauseBtn.setImage(UIImage(vd_named: "pause_red"), for: .selected)
+        playPauseBtn.adjustsImageWhenHighlighted = false
+        playPauseBtn.isSelected = true
         return playPauseBtn
     }()
     
@@ -74,6 +84,9 @@ class VDLandScapeControlView: UIView {
     var currentTimeLabel: UILabel = {
         let currentTimeLabel = UILabel()
         currentTimeLabel.backgroundColor = .random
+        currentTimeLabel.font = .systemFont(ofSize: 10)
+        currentTimeLabel.textAlignment = .center
+        currentTimeLabel.textColor = .white
         return currentTimeLabel
     }()
     
@@ -81,6 +94,9 @@ class VDLandScapeControlView: UIView {
     var totalTimeLabel: UILabel = {
         let totalTimeLabel = UILabel()
         totalTimeLabel.backgroundColor = .random
+        totalTimeLabel.font = .systemFont(ofSize: 10)
+        totalTimeLabel.textAlignment = .center
+        totalTimeLabel.textColor = .white
         return totalTimeLabel
     }()
 
@@ -110,6 +126,12 @@ class VDLandScapeControlView: UIView {
     private func addSubviewActions() {
         playPauseBtn.addTarget(self, action: #selector(playPauseBtnDidClick(_:)), for: .touchUpInside)
         fullScreenBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
+        
+        progressSlider.addTarget(self, action: #selector(didSliderTouchDown(_:)), for: .touchDown)
+        progressSlider.addTarget(self, action: #selector(didSliderTouchCancel(_:)), for: .touchCancel)
+        progressSlider.addTarget(self, action: #selector(didSliderTouchUpOutside(_:)), for: .touchUpOutside)
+        progressSlider.addTarget(self, action: #selector(didSliderTouchUpInside(_:)), for: .touchUpInside)
+        progressSlider.addTarget(self, action: #selector(didSliderValueChanged(_:)), for: .valueChanged)
     }
     
     let kTopViewHeight: CGFloat = 80
@@ -128,10 +150,10 @@ class VDLandScapeControlView: UIView {
         x = 0
         y = 0
         w = maxWidth
-        h = kTopViewHeight + SAFE_AREA_TOP
+        h = kTopViewHeight + VDUIManager.shared().safeAreaInset.top
         topView.frame = CGRect(x: x, y: y, width: w, height: h)
         
-        x = VDUIManager.shared().safeAreaInset.top
+        x = VDUIManager.shared().safeAreaInset.left
         y = 15
         w = 44
         h = w
@@ -139,7 +161,7 @@ class VDLandScapeControlView: UIView {
         
         x = backBtn.frame.maxX + 5
         y = 15
-        w = maxWidth - x - 15
+        w = maxWidth - x - VDUIManager.shared().safeAreaInset.right
         h = 30
         titleLabel.frame = CGRect(x: x, y: y, width: w, height: h)
         
@@ -149,7 +171,7 @@ class VDLandScapeControlView: UIView {
         h = kBottomViewHeight + SAFE_AREA_BOTTOM
         bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
         
-        x = VDUIManager.shared().safeAreaInset.top
+        x = VDUIManager.shared().safeAreaInset.left
         w = 50
         h = 50
         y = (kBottomViewHeight - h) / 2
@@ -203,10 +225,138 @@ class VDLandScapeControlView: UIView {
 extension VDLandScapeControlView {
     @objc private func playPauseBtnDidClick(_ sender: UIButton) {
         self.playPauseBtn.isSelected = !self.playPauseBtn.isSelected
+        if playPauseBtn.isSelected {
+            player.currentPlayerControl.play()
+        }
+        else {
+            player.currentPlayerControl.pause()
+        }
     }
     
     @objc private func fullScreenBtnDidClick(_ sender: UIButton) {
         player.fullScreenStateChange(animated: true)
+    }
+    
+    @objc private func didSliderTouchDown(_ sender: UISlider) {
+        progressSliderIsDragging = true
+        
+        sliderStartValue = sender.value
+    }
+    
+    @objc private func didSliderTouchCancel(_ sender: UISlider) {
+        progressSliderIsDragging = false
+        
+        sliderStartValue = 0
+    }
+    
+    @objc private func didSliderTouchUpOutside(_ sender: UISlider) {
+        let percent = sender.value / sender.maximumValue
+        player.seek(to: player.totalTime * Double(percent)) { (success) in
+            if success {
+                self.progressSliderIsDragging = false
+            }
+        }
+        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+    }
+    
+    @objc private func didSliderTouchUpInside(_ sender: UISlider) {
+        sliderStartValue = 0
+        let percent = sender.value / sender.maximumValue
+        player.seek(to: player.totalTime * Double(percent)) { (success) in
+            if success {
+                self.progressSliderIsDragging = false
+            }
+        }
+        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+    }
+    
+    @objc private func didSliderValueChanged(_ sender: UISlider) {
+        let forward = sliderStartValue < sender.value
+        print(forward)
+        sliderStartValue = sender.value
+        let current = Double(progressSlider.value)
+        let total = player.totalTime
+        currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+        totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+        
+        let percent = sender.value / sender.maximumValue
+        if let sliderValueChanging = sliderValueChanging { sliderValueChanging(percent, forward) }
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        let point = touches.first?.location(in: self) ?? .zero
+        if point.y < 100 || point.y > SCREEN_HEIGHT - 100 {
+            print("超出滑动区域")
+            allowPanGesture = false
+        }
+        else {
+            allowPanGesture = true
+            progressSliderIsDragging = true
+            startTouchMovePoint = point
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        
+        if !allowPanGesture { return }
+        let point = touches.first?.location(in: self) ?? .zero
+        let progressInSec: Float = 2
+        if abs(point.x - startTouchMovePoint.x) > 10 {
+            if point.x > startTouchMovePoint.x {
+                var current = Double(progressSlider.value + progressInSec)
+                print(current)
+                let total = player.totalTime
+                if current > total { current = total }
+                currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+                totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+                progressSlider.value = Float(current)
+                
+                if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+            }
+            else {
+                var current = Double(progressSlider.value - progressInSec)
+                if current < 0 { current = 0 }
+                print(current)
+                let total = player.totalTime
+                currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+                totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+                progressSlider.value = Float(current)
+                
+                if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+            }
+            startTouchMovePoint = point
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        allowPanGesture = false
+        progressSliderIsDragging = false
+        
+        let seekTime = TimeInterval(progressSlider.value)
+        let percent = progressSlider.value / progressSlider.maximumValue
+        player.seek(to: seekTime) { (success) in
+            if success {
+                self.progressSliderIsDragging = false
+            }
+        }
+        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+    }
+}
+
+extension VDLandScapeControlView {
+    func updateTime(current: TimeInterval, total: TimeInterval) {
+        if !progressSliderIsDragging {
+            currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+            totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+            progressSlider.value = Float(player.currentTime)
+            progressSlider.maximumValue = Float(player.totalTime)
+        }
     }
 }
 

@@ -23,6 +23,7 @@ class VDPlayerView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         mediaContainer.frame = bounds
+        print(mediaContainer.frame)
     }
     
     required init?(coder aDecoder: NSCoder) {

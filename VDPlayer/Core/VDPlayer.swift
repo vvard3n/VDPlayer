@@ -143,7 +143,12 @@ class VDPlayer: NSObject {
         guard let controlView = controlView, let containerView = containerView else { return }
         
         currentPlayerControl.playerView.addSubview(controlView)
-        currentPlayerControl.playerView.frame = containerView.bounds
+        if isFullScreen {
+            currentPlayerControl.playerView.frame = fullScreenContainerView?.bounds ?? .zero
+        }
+        else {
+            currentPlayerControl.playerView.frame = containerView.bounds
+        }
 
         controlView.frame = currentPlayerControl.playerView.bounds
         controlView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
@@ -198,125 +203,38 @@ extension VDPlayer {
         // --
         
         if isFullScreen {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.currentPlayerControl.playerView.transform = CGAffineTransform.identity
+                self.currentPlayerControl.playerView.frame = self.fullScreenContainerView?.convert(self.containerView?.frame ?? .zero, to: self.fullScreenContainerView) ?? CGRect.zero
+                self.fullScreenContainerView?.layoutIfNeeded()
+            }) { (complate) in
+                self.currentPlayerControl.playerView.removeFromSuperview()
+                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
+                self.currentPlayerControl.playerView.frame = self.containerView?.bounds ?? CGRect.zero
+                self.fullScreenContainerView?.removeFromSuperview()
+            }
             orientationObserver.exitFullScreen(animate: true)
-            /*
-////            var orientation = UIInterfaceOrientation.unknown
-////            orientation = isFullScreen ? UIInterfaceOrientation.landscapeRight : UIInterfaceOrientation.portrait
-//            //        UIApplication.shared.setStatusBarOrientation(orientation, animated: true)
-//
-//            if fullScreenContainerView == nil {
-//                fullScreenContainerView = UIView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
-//            }
-//            guard let fullScreenContainerView = fullScreenContainerView else { return }
-//            currentPlayerControl.playerView.removeFromSuperview()
-//            UIApplication.shared.keyWindow?.addSubview(fullScreenContainerView)
-//            let rect = containerView?.convert(currentPlayerControl.playerView.frame, to: fullScreenContainerView) ?? CGRect.zero
-//            fullScreenContainerView.addSubview(currentPlayerControl.playerView)
-//            currentPlayerControl.playerView.frame = rect
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 90 / 360.0 * 2)
-//                self.currentPlayerControl.playerView.frame = CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
-//                self.controlView.frame = self.currentPlayerControl.playerView.bounds
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                // 切换控制面板
-//                control.portraitControlView.isHidden = self.isFullScreen
-//                control.landScapeControlView.isHidden = !self.isFullScreen
-//            }
-            
-            let value = UIInterfaceOrientation.landscapeRight.rawValue
-            UIDevice.current.setValue(value, forKey: "orientation")
-//            UIApplication.shared.setStatusBarOrientation(UIInterfaceOrientation.landscapeRight, animated: true)
-            UIApplication.shared.statusBarOrientation = UIInterfaceOrientation.landscapeRight
-//            if let block = fullScreenStateWillChange { block(self, isFullScreen) }
-//
-//            if fullScreenContainerView == nil {
-//                fullScreenContainerView = UIView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
-//            }
-//            guard let fullScreenContainerView = fullScreenContainerView else { return }
-//            UIApplication.shared.keyWindow?.addSubview(fullScreenContainerView)
-//
-//            let rectInWindow = currentPlayerControl.playerView.convert(currentPlayerControl.playerView.bounds, to: UIApplication.shared.keyWindow)
-//            currentPlayerControl.playerView.removeFromSuperview()
-//            currentPlayerControl.playerView.frame = rectInWindow
-//            fullScreenContainerView.addSubview(currentPlayerControl.playerView)
-//
-//            UIView.animate(withDuration: 0.3, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 90 / 360.0 * 2)
-//                self.currentPlayerControl.playerView.frame = CGRect(x: 0, y: 0, width: SCREEN_HEIGHT, height: SCREEN_WIDTH)
-//                self.controlView.frame = self.currentPlayerControl.playerView.bounds
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                // 切换控制面板
-//                control.portraitControlView.isHidden = self.isFullScreen
-//                control.landScapeControlView.isHidden = !self.isFullScreen
-//            }
- */
         }
         else {
-            orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
-            /*
-//            UIApplication.shared.setStatusBarOrientation(UIInterfaceOrientation.portrait, animated: true)
-//            if let block = fullScreenStateWillChange { block(self, isFullScreen) }
-//
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform.identity
-//                self.currentPlayerControl.playerView.frame = self.fullScreenContainerView?.convert(self.containerView?.frame ?? .zero, to: self.fullScreenContainerView) ?? CGRect.zero
-//                self.controlView.frame = self.currentPlayerControl.playerView.bounds
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                self.currentPlayerControl.playerView.removeFromSuperview()
-//                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
-//                self.currentPlayerControl.playerView.frame = self.containerView?.bounds ?? CGRect.zero
-//                self.fullScreenContainerView?.removeFromSuperview()
-//
-//                // 切换控制面板
-//                control.portraitControlView.isHidden = self.isFullScreen
-//                control.landScapeControlView.isHidden = !self.isFullScreen
-//            }
-//            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
-//            CGRect frame = [self.originalView convertRect:self.originalFrame toView:[UIApplication sharedApplication].keyWindow];
-//            [UIView animateWithDuration:0.3 animations:^{
-//                self.transform = CGAffineTransformIdentity;
-//                self.frame = frame;
-//                self.mediaContainerView.frame = self.bounds;
-//                self.player.view.frame = self.bounds;
-//                //            self.controllView.frame = self.bounds;
-//                } completion:^(BOOL finished) {
-//                /*
-//                 * 回到小屏位置
-//                 */
-//                [self removeFromSuperview];
-//                self.frame = self.originalFrame;
-//                self.mediaContainerView.frame = self.bounds;
-//                self.player.view.frame = self.bounds;
-//                //            self.controllView.frame = self.bounds;
-//                [self.originalView addSubview:self];
-//                //            self.state = MovieViewStateSmall;
-//                }];
-            guard let containerView = self.containerView else { return }
-            let value = UIInterfaceOrientation.portrait.rawValue
-//            UIApplication.shared.setStatusBarOrientation(UIInterfaceOrientation.portrait, animated: true)
-            UIApplication.shared.statusBarOrientation = UIInterfaceOrientation.portrait
-            if let block = fullScreenStateWillChange { block(self, isFullScreen) }
+            if fullScreenContainerView == nil {
+                fullScreenContainerView = UIView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
+                fullScreenContainerView?.backgroundColor = .green
+            }
+            guard let fullScreenContainerView = fullScreenContainerView else { return }
+            currentPlayerControl.playerView.removeFromSuperview()
+            UIApplication.shared.keyWindow?.addSubview(fullScreenContainerView)
+            let rect = containerView?.convert(currentPlayerControl.playerView.frame, to: fullScreenContainerView) ?? CGRect.zero
+            fullScreenContainerView.addSubview(currentPlayerControl.playerView)
+            currentPlayerControl.playerView.frame = rect
             
-//            let rectInWindow = containerView.convert(containerView.bounds, to: UIApplication.shared.keyWindow)
-//            UIView.animate(withDuration: 0.3, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform.identity
-//                self.currentPlayerControl.playerView.frame = rectInWindow
-//                self.controlView.frame = self.currentPlayerControl.playerView.bounds
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                self.currentPlayerControl.playerView.removeFromSuperview()
-//                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
-//                self.currentPlayerControl.playerView.frame = self.containerView?.bounds ?? CGRect.zero
-//                self.fullScreenContainerView?.removeFromSuperview()
-//
-//                // 切换控制面板
-//                control.portraitControlView.isHidden = self.isFullScreen
-//                control.landScapeControlView.isHidden = !self.isFullScreen
-//            }
-            */
+            UIView.animate(withDuration: 0.5, animations: {
+                self.currentPlayerControl.playerView.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 90 / 360.0 * 2)
+                self.currentPlayerControl.playerView.frame = CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
+                self.fullScreenContainerView?.layoutIfNeeded()
+            }) { (complate) in
+                
+            }
+            orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
         }
     }
 }

@@ -31,6 +31,12 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         let landScapeControlView = VDLandScapeControlView()
         landScapeControlView.isHidden = true
         landScapeControlView.hideControlPanel()
+        landScapeControlView.sliderValueChanging = { (time, forward) in
+            self.cancelAutoHiddenControlView()
+        }
+        landScapeControlView.didEndSlidingProgressSlider = { (percent) in
+            self.startAutoHiddenControlView()
+        }
         return landScapeControlView
     }()
     /// 控制面板显示状态
@@ -177,6 +183,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
 extension VDPlayerControlView {
     func updateTime(current: TimeInterval, total: TimeInterval) {
         portraitControlView.updateTime(current: current, total: total)
+        landScapeControlView.updateTime(current: current, total: total)
     }
 }
 
