@@ -22,36 +22,56 @@ class VDPortraitControlView: UIView {
     /// 顶部View
     var topView: UIView = {
         let topView = UIView()
-        topView.backgroundColor = .random
+        
+        let layer = CAGradientLayer()
+        layer.startPoint = CGPoint(x: 0.5, y: 0)
+        layer.endPoint = CGPoint(x: 0.5, y: 1)
+        layer.colors = [UIColor(white: 0, alpha: 1).cgColor, UIColor.clear.cgColor]
+        layer.locations = [0.0, 1.0]
+        layer.shouldRasterize = true
+        topView.layer.addSublayer(layer)
+        
         return topView
     }()
     
     /// 返回按钮
     var backBtn: UIButton = {
         let backBtn = UIButton(type: .custom)
-        backBtn.backgroundColor = .random
+//        backBtn.backgroundColor = .random
+        backBtn.setImage(UIImage(vd_named: "back_36x36_fff@2x"), for: .normal)
         return backBtn
     }()
     
     /// 标题栏
     var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.backgroundColor = .random
+//        titleLabel.backgroundColor = .random
+        titleLabel.text = "标题标题标题标题标题标题标题标题"
+        titleLabel.font = .systemFont(ofSize: 18)
+        titleLabel.textColor = .white
         return titleLabel
     }()
     
     /// 底部View
     var bottomView: UIView = {
         let bottomView = UIView()
-        bottomView.backgroundColor = .random
+
+        let layer = CAGradientLayer()
+        layer.startPoint = CGPoint(x: 0.5, y: 0)
+        layer.endPoint = CGPoint(x: 0.5, y: 1)
+        layer.colors = [UIColor.clear.cgColor, UIColor(white: 0, alpha: 1).cgColor]
+        layer.locations = [0.0, 1.0]
+        layer.shouldRasterize = true
+        bottomView.layer.addSublayer(layer)
+        
         return bottomView
     }()
     
     /// 播放暂停按钮
     var playPauseBtn: UIButton = {
         let playPauseBtn = UIButton()
-        playPauseBtn.setImage(UIImage(vd_named: "play_red"), for: .normal)
-        playPauseBtn.setImage(UIImage(vd_named: "pause_red"), for: .selected)
+        playPauseBtn.setImage(UIImage(vd_named: "play"), for: .normal)
+        playPauseBtn.setImage(UIImage(vd_named: "pause"), for: .selected)
         playPauseBtn.adjustsImageWhenHighlighted = false
         playPauseBtn.isSelected = true
         return playPauseBtn
@@ -60,29 +80,31 @@ class VDPortraitControlView: UIView {
     /// 可拖动进度条
     var progressSlider: UISlider = {
         let progressSlider = UISlider()
-        progressSlider.backgroundColor = .random
+//        progressSlider.backgroundColor = .random
+        progressSlider.tintColor = UIColor(hex: "E63130")
+        progressSlider.setThumbImage(UIImage(vd_named: "slider_point"), for: .normal)
         return progressSlider
     }()
     
     /// 全屏按钮
     var fullScreenBtn: UIButton = {
         let fullScreenBtn = UIButton()
-        fullScreenBtn.backgroundColor = .random
-        fullScreenBtn.setTitle("「 」", for: .normal)
+        fullScreenBtn.setImage(UIImage(vd_named: "fullscreen"), for: .normal)
+        fullScreenBtn.imageView?.contentMode = .scaleAspectFill
         return fullScreenBtn
     }()
     
     /// 隐藏控制面板的进度条
     var bottomProgressView: UIView = {
         let bottomProgressView = UIView()
-        bottomProgressView.backgroundColor = .random
+        bottomProgressView.backgroundColor = UIColor(hex: "E63130")
         return bottomProgressView
     }()
     
     /// 当前播放时间
     var currentTimeLabel: UILabel = {
         let currentTimeLabel = UILabel()
-        currentTimeLabel.backgroundColor = .random
+//        currentTimeLabel.backgroundColor = .random
         currentTimeLabel.font = .systemFont(ofSize: 10)
         currentTimeLabel.textAlignment = .center
         currentTimeLabel.textColor = .white
@@ -92,7 +114,7 @@ class VDPortraitControlView: UIView {
     /// 媒体总时长
     var totalTimeLabel: UILabel = {
         let totalTimeLabel = UILabel()
-        totalTimeLabel.backgroundColor = .random
+//        totalTimeLabel.backgroundColor = .random
         totalTimeLabel.font = .systemFont(ofSize: 10)
         totalTimeLabel.textAlignment = .center
         totalTimeLabel.textColor = .white
@@ -154,6 +176,7 @@ class VDPortraitControlView: UIView {
         w = maxWidth
         h = kTopViewHeight
         topView.frame = CGRect(x: x, y: y, width: w, height: h)
+        topView.layer.sublayers?.first?.frame = topView.bounds
         
         x = 15
         y = 15
@@ -172,6 +195,7 @@ class VDPortraitControlView: UIView {
         w = maxWidth
         h = kBottomViewHeight
         bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
+        bottomView.layer.sublayers?.first?.frame = bottomView.bounds
         
         x = 10
         w = 62

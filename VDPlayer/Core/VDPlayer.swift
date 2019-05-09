@@ -218,7 +218,7 @@ extension VDPlayer {
         else {
             if fullScreenContainerView == nil {
                 fullScreenContainerView = UIView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
-                fullScreenContainerView?.backgroundColor = .green
+//                fullScreenContainerView?.backgroundColor = .green
             }
             guard let fullScreenContainerView = fullScreenContainerView else { return }
             currentPlayerControl.playerView.removeFromSuperview()

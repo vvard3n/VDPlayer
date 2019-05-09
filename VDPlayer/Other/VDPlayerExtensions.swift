@@ -196,13 +196,13 @@ extension UIImage {
         self.init(color: color, size: CGSize(width: 1, height: 1))
     }
     
-    convenience init(vd_named: String) {
-        if let image = UIImage(named: vd_named) {
-            self.init(cgImage: image.cgImage!)
+    convenience init?(vd_named: String) {
+        if nil != UIImage(named: vd_named) {
+            self.init(named: vd_named)
             return
         }
-        if let image = UIImage(named: "VDPlayer.bundle/\(vd_named).png") {
-            self.init(cgImage: image.cgImage!)
+        if nil != UIImage(named: "VDPlayer.bundle/\(vd_named).png") {
+            self.init(named: "VDPlayer.bundle/\(vd_named).png")
             return
         }
         self.init()

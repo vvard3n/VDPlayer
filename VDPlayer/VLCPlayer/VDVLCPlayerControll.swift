@@ -124,8 +124,8 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         playState = .stopped
     }
     
-    func seek(to time: TimeInterval, completionHandler: ((Bool) -> ())?) {
-        if time == nil { return }
+    func seek(to time: TimeInterval?, completionHandler: ((Bool) -> ())?) {
+        guard let time = time else { return }
         player?.time = VLCTime(int: Int32(time * 1000))
         if let completionHandler = completionHandler {
             completionHandler(true)

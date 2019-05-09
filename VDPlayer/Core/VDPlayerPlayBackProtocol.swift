@@ -74,7 +74,7 @@ protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     func stop()
     
     /// Seek to a specified time
-    func seek(to time: TimeInterval, completionHandler:((_ finished: Bool)->())?)
+    func seek(to time: TimeInterval?, completionHandler:((_ finished: Bool)->())?)
 }
 
 extension VDPlayerPlayBackProtocol {

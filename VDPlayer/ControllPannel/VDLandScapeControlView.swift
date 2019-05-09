@@ -22,36 +22,55 @@ class VDLandScapeControlView: UIView {
     /// 顶部View
     var topView: UIView = {
         let topView = UIView()
-        topView.backgroundColor = .random
+        
+        let layer = CAGradientLayer()
+        layer.startPoint = CGPoint(x: 0.5, y: 0)
+        layer.endPoint = CGPoint(x: 0.5, y: 1)
+        layer.colors = [UIColor(white: 0, alpha: 1).cgColor, UIColor.clear.cgColor]
+        layer.locations = [0.0, 1.0]
+        layer.shouldRasterize = true
+        topView.layer.addSublayer(layer)
+        
         return topView
     }()
     
     /// 返回按钮
     var backBtn: UIButton = {
         let backBtn = UIButton(type: .custom)
-        backBtn.backgroundColor = .random
+        backBtn.setImage(UIImage(vd_named: "back_36x36_fff@2x"), for: .normal)
         return backBtn
     }()
     
     /// 标题栏
     var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.backgroundColor = .random
+//        titleLabel.backgroundColor = .random
+        titleLabel.text = "标题标题标题标题标题标题标题标题"
+        titleLabel.font = .systemFont(ofSize: 18)
+        titleLabel.textColor = .white
         return titleLabel
     }()
     
     /// 底部View
     var bottomView: UIView = {
         let bottomView = UIView()
-        bottomView.backgroundColor = .random
+        
+        let layer = CAGradientLayer()
+        layer.startPoint = CGPoint(x: 0.5, y: 0)
+        layer.endPoint = CGPoint(x: 0.5, y: 1)
+        layer.colors = [UIColor.clear.cgColor, UIColor(white: 0, alpha: 1).cgColor]
+        layer.locations = [0.0, 1.0]
+        layer.shouldRasterize = true
+        bottomView.layer.addSublayer(layer)
+        
         return bottomView
     }()
     
     /// 播放暂停按钮
     var playPauseBtn: UIButton = {
         let playPauseBtn = UIButton()
-        playPauseBtn.setImage(UIImage(vd_named: "play_red"), for: .normal)
-        playPauseBtn.setImage(UIImage(vd_named: "pause_red"), for: .selected)
+        playPauseBtn.setImage(UIImage(vd_named: "play_s"), for: .normal)
+        playPauseBtn.setImage(UIImage(vd_named: "pause_s"), for: .selected)
         playPauseBtn.adjustsImageWhenHighlighted = false
         playPauseBtn.isSelected = true
         return playPauseBtn
@@ -60,30 +79,28 @@ class VDLandScapeControlView: UIView {
     /// 可拖动进度条
     var progressSlider: UISlider = {
         let progressSlider = UISlider()
-        progressSlider.backgroundColor = .random
+        progressSlider.tintColor = UIColor(hex: "E63130")
+        progressSlider.setThumbImage(UIImage(vd_named: "slider_point"), for: .normal)
         return progressSlider
     }()
     
     /// 全屏按钮
     var fullScreenBtn: UIButton = {
         let fullScreenBtn = UIButton()
-        fullScreenBtn.backgroundColor = .random
-        fullScreenBtn.setTitle("回", for: .normal)
-        fullScreenBtn.setTitleColor(.white, for: .normal)
+        fullScreenBtn.setImage(UIImage(vd_named: "fullscreen"), for: .normal)
         return fullScreenBtn
     }()
     
     /// 隐藏控制面板的进度条
     var progressView: UIView = {
         let progressSlider = UIView()
-        progressSlider.backgroundColor = .random
+        progressSlider.backgroundColor = UIColor(hex: "E63130")
         return progressSlider
     }()
     
     /// 当前播放时间
     var currentTimeLabel: UILabel = {
         let currentTimeLabel = UILabel()
-        currentTimeLabel.backgroundColor = .random
         currentTimeLabel.font = .systemFont(ofSize: 10)
         currentTimeLabel.textAlignment = .center
         currentTimeLabel.textColor = .white
@@ -93,7 +110,6 @@ class VDLandScapeControlView: UIView {
     /// 媒体总时长
     var totalTimeLabel: UILabel = {
         let totalTimeLabel = UILabel()
-        totalTimeLabel.backgroundColor = .random
         totalTimeLabel.font = .systemFont(ofSize: 10)
         totalTimeLabel.textAlignment = .center
         totalTimeLabel.textColor = .white
@@ -125,6 +141,7 @@ class VDLandScapeControlView: UIView {
     
     private func addSubviewActions() {
         playPauseBtn.addTarget(self, action: #selector(playPauseBtnDidClick(_:)), for: .touchUpInside)
+        backBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
         fullScreenBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
         
         progressSlider.addTarget(self, action: #selector(didSliderTouchDown(_:)), for: .touchDown)
@@ -152,6 +169,7 @@ class VDLandScapeControlView: UIView {
         w = maxWidth
         h = kTopViewHeight + VDUIManager.shared().safeAreaInset.top
         topView.frame = CGRect(x: x, y: y, width: w, height: h)
+        topView.layer.sublayers?.first?.frame = topView.bounds
         
         x = VDUIManager.shared().safeAreaInset.left
         y = 15
@@ -170,6 +188,7 @@ class VDLandScapeControlView: UIView {
         w = maxWidth
         h = kBottomViewHeight + SAFE_AREA_BOTTOM
         bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
+        bottomView.layer.sublayers?.first?.frame = bottomView.bounds
         
         x = VDUIManager.shared().safeAreaInset.left
         w = 50
