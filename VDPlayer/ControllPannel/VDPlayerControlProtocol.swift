@@ -17,6 +17,7 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
     func gesturePan(_ panGesture: UIPanGestureRecognizer)
     func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
     func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
+    func playerPlayStateChanged(player: VDPlayer, playState: VDPlayerPlaybackState)
     
     func updateTime(current: TimeInterval, total: TimeInterval)
     func reset()
@@ -28,6 +29,7 @@ extension VDPlayerControlProtocol {
     func gesturePan(_ panGesture: UIPanGestureRecognizer) {}
     func playerOrientationWillChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
     func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
+    func playerPlayStateChanged(player: VDPlayer, playState: VDPlayerPlaybackState) {}
     
     func updateTime(current: TimeInterval, total: TimeInterval) {}
     func reset() {}

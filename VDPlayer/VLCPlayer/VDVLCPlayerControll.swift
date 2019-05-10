@@ -10,6 +10,7 @@ import UIKit
 
 class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())?
+    var loadStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerLoadState) -> ())?
     var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
     var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())?
     
@@ -54,8 +55,16 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     
     var isPlaying   : Bool                  = false
     var isPreparedToPlay : Bool             = false
-    var playState   : VDPlayerPlaybackState = .stopped
-    var loadState   : VDPlayerLoadState     = .unknow
+    var playState   : VDPlayerPlaybackState = .stopped {
+        didSet {
+            playbackStateDidChanged?(self, playState)
+        }
+    }
+    var loadState   : VDPlayerLoadState     = .unknow {
+        didSet {
+            loadStateDidChanged?(self, loadState)
+        }
+    }
     var scalingMode : VDPlayerScalingMode   = .aspectFit
     var assetURL    : URL? {
         didSet {

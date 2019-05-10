@@ -32,9 +32,9 @@ class ViewController: UIViewController {
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
         player?.controlView = VDPlayerControlView()
         player?.assetURLs = assetURLs
-        player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
-            
-        }
+//        player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
+//            
+//        }
         player?.fullScreenStateDidChange = { [weak self](player, isFullScreen) in
             self?.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {

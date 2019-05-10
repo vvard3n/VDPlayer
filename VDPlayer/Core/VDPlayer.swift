@@ -24,6 +24,8 @@ class VDPlayer: NSObject {
     var isFullScreen: Bool { get { return orientationObserver.isFullScreen } }
     var fullScreenStateWillChange: ((VDPlayer, Bool) -> ())?
     var fullScreenStateDidChange: ((VDPlayer, Bool) -> ())?
+    var playbackStateDidChanged: ((VDPlayer, VDPlayerPlaybackState) -> ())?
+    var loadStateDidChanged: ((VDPlayer, VDPlayerLoadState) -> ())?
     lazy private var orientationObserver: VDPlayerOrientationObserver = {
         let orientationObserver = VDPlayerOrientationObserver()
         orientationObserver.delegate = self
@@ -74,7 +76,8 @@ class VDPlayer: NSObject {
                 currentPlayerControl.playerView.frame = containerView.bounds
                 currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
                 currentPlayerControl.playbackStateDidChanged = { player, state in
-                    
+                    self.playbackStateDidChanged?(self, state)
+                    self.controlView?.playerPlayStateChanged(player: self, playState: state)
                 }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                     self.layoutPlayer()
@@ -112,26 +115,11 @@ class VDPlayer: NSObject {
             containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
             currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
             currentPlayerControl.playbackStateDidChanged = { player, state in
-                if state == .playing {
-                    self.layoutPlayer()
-                }
-                if state == .stopped {
-                    self.resetControlView()
-                }
+                self.playbackStateDidChanged?(self, state)
+                self.controlView?.playerPlayStateChanged(player: self, playState: state)
             }
             currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                 self.layoutPlayer()
-//                self.controlView = VDPlayerControlView(frame: containerView.bounds)
-//                self.controlView.player = self
-//                self.currentPlayerControl.playerView.addSubview(self.controlView)
-//
-//                if self.gestureControl == nil {
-//                    self.gestureControl = VDPlayerGestureControl()
-//                    guard let gestureControl = self.gestureControl else { return }
-//                    gestureControl.delegate = self
-//                    gestureControl.addGesture(to: self.controlView)
-//                    return
-//                }
             }
             currentPlayerControl.mediaPlayerTimeChanged = { player, currentTime, totalTime in
                 guard let controlView = self.controlView else { return }

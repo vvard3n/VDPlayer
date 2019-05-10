@@ -242,4 +242,17 @@ extension VDPlayerControlView {
     internal func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {
         
     }
+    
+    internal func playerPlayStateChanged(player: VDPlayer, playState: VDPlayerPlaybackState) {
+        switch playState {
+        case .playing:
+            portraitControlView.playPauseBtn.isSelected = true
+            landScapeControlView.playPauseBtn.isSelected = true
+        case .pause:
+            portraitControlView.playPauseBtn.isSelected = false
+            landScapeControlView.playPauseBtn.isSelected = false
+        default:
+            break
+        }
+    }
 }

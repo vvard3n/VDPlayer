@@ -373,7 +373,7 @@ extension VDLandScapeControlView {
         if !progressSliderIsDragging {
             currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
             totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
-            progressSlider.value = Float(player.currentTime)
+            progressSlider.value = Float(player.currentTime ?? 0)
             progressSlider.maximumValue = Float(player.totalTime)
         }
     }
