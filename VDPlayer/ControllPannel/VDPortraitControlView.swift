@@ -14,6 +14,11 @@ class VDPortraitControlView: UIView {
     private var progressSliderIsDragging: Bool = false
     var sliderValueChanging: ((_ percent: Float, _ forward: Bool) -> ())?
     var didEndSlidingProgressSlider: ((_ percent: Float) -> ())?
+    var backBtnClickCallback: (() -> ())? {
+        didSet {
+            layoutSubviews()
+        }
+    }
     
     private var startTouchMovePoint :CGPoint = .zero
     private var allowPanGesture: Bool = false
@@ -26,7 +31,7 @@ class VDPortraitControlView: UIView {
         let layer = CAGradientLayer()
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 0.5, y: 1)
-        layer.colors = [UIColor(white: 0, alpha: 1).cgColor, UIColor.clear.cgColor]
+        layer.colors = [UIColor(white: 0, alpha: 0.8).cgColor, UIColor.clear.cgColor]
         layer.locations = [0.0, 1.0]
         layer.shouldRasterize = true
         topView.layer.addSublayer(layer)
@@ -59,7 +64,7 @@ class VDPortraitControlView: UIView {
         let layer = CAGradientLayer()
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 0.5, y: 1)
-        layer.colors = [UIColor.clear.cgColor, UIColor(white: 0, alpha: 1).cgColor]
+        layer.colors = [UIColor.clear.cgColor, UIColor(white: 0, alpha: 0.8).cgColor]
         layer.locations = [0.0, 1.0]
         layer.shouldRasterize = true
         bottomView.layer.addSublayer(layer)
@@ -89,7 +94,7 @@ class VDPortraitControlView: UIView {
     /// 全屏按钮
     var fullScreenBtn: UIButton = {
         let fullScreenBtn = UIButton()
-        fullScreenBtn.setImage(UIImage(vd_named: "fullscreen"), for: .normal)
+        fullScreenBtn.setImage(UIImage(vd_named: "fullscreen_enter"), for: .normal)
         fullScreenBtn.imageView?.contentMode = .scaleAspectFill
         return fullScreenBtn
     }()
@@ -160,7 +165,7 @@ class VDPortraitControlView: UIView {
     }
     
     private let kTopViewHeight: CGFloat = 80
-    private let kBottomViewHeight: CGFloat = 73
+    private let kBottomViewHeight: CGFloat = 50
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -184,8 +189,9 @@ class VDPortraitControlView: UIView {
         w = 44
         h = w
         backBtn.frame = CGRect(x: x, y: y, width: w, height: h)
+        backBtn.isHidden = backBtnClickCallback == nil
         
-        x = backBtn.frame.maxX + 5
+        x = (backBtnClickCallback == nil ? 15 : backBtn.frame.maxX) + 5
         y = 15
         w = maxWidth - x - 15
         h = 30
@@ -206,13 +212,13 @@ class VDPortraitControlView: UIView {
         
         w = 44
         h = w
-        x = maxWidth - 10 - w
+        x = maxWidth - w
         y = 0
         fullScreenBtn.frame = CGRect(x: x, y: y, width: w, height: h)
         fullScreenBtn.center.y = currentTimeLabel.center.y
         
         w = 62
-        x = fullScreenBtn.frame.minX - 5 - w
+        x = fullScreenBtn.frame.minX - w
         h = 28
         y = (kBottomViewHeight - h) / 2
         totalTimeLabel.frame = CGRect(x: x, y: y, width: w, height: h)

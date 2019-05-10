@@ -15,7 +15,7 @@ class VDPlayerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        backgroundColor = .black
         mediaContainer = UIView()
         addSubview(mediaContainer)
     }

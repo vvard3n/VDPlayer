@@ -10,34 +10,44 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let width = UIScreen.main.bounds.size.width - 20 * 2
+    let height = (UIScreen.main.bounds.size.width - 20 * 2) / 16.0 * 9.0
+    let assetURLs: [URL] = [URL(string: "https://mpv.videocc.net/cc84e44bdb/8/cc84e44bdbcd2e2996584c3e59f13558_3.mp4")!]
+    
     var player: VDPlayer?
+    lazy var videoContainer: UIView = {
+        return UIView(frame: CGRect(x: 20, y: 100, width:width, height:height))
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let assetURLs: [URL] = [URL(string: "https://mpv.videocc.net/cc84e44bdb/8/cc84e44bdbcd2e2996584c3e59f13558_3.mp4")!]
-        
-        let width = UIScreen.main.bounds.size.width - 20 * 2
-        let height = (UIScreen.main.bounds.size.width - 20 * 2) / 16.0 * 9.0
-        
-        let videoContainer = UIView(frame: CGRect(x: 20, y: 100, width:width, height:height))
         videoContainer.backgroundColor = .black
         view.addSubview(videoContainer)
+        let coverImageView = UIImageView(frame: videoContainer.bounds)
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.layer.masksToBounds = true
+        coverImageView.image = UIImage(named: "cover")
+        videoContainer.addSubview(coverImageView)
         
 //        let config = VDPlayerConfig(playerType: .VLCPlayer)
 //        config.assetURLs = assetURLs
 //        config.container = videoContainer
         
+        let playBtn = UIButton(frame: videoContainer.bounds)
+        playBtn.setImage(UIImage(vd_named: "play"), for: .normal)
+        videoContainer.addSubview(playBtn)
+        playBtn.addTarget(self, action: #selector(playBtnClick(_:)), for: .touchUpInside)
+    }
+    
+    @objc private func playBtnClick(_ sender: UIButton) {
         let playerControl = VDVLCPlayerControl()
         let playerControlView = VDPlayerControlView()
         playerControlView.setTitle("来一个视频标题", coverURL: nil)
+        playerControlView.coverImage = UIImage(named: "cover")
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
         player?.controlView = playerControlView
         player?.assetURLs = assetURLs
-        player?.autoPlayWhenPrepareToPlay = false
-//        player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
-//            
-//        }
         player?.fullScreenStateDidChange = { [weak self](player, isFullScreen) in
             self?.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {

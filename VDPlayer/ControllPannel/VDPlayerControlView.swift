@@ -9,6 +9,12 @@
 import UIKit
 
 class VDPlayerControlView: UIView, VDPlayerControlProtocol {
+    var backBtnClickCallback: (() -> ())? {
+        didSet {
+            
+        }
+    }
+    
     var player: VDPlayer! {
         didSet {
             portraitControlView.player = self.player
@@ -46,12 +52,24 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         let bottomProgress = UIView()
         return bottomProgress
     }()
+    /// 封面
+    var coverImageView: UIImageView = {
+        let coverImageView = UIImageView()
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.layer.masksToBounds = true
+        return coverImageView
+    }()
+    var coverImage: UIImage? {
+        didSet {
+            coverImageView.image = coverImage
+        }
+    }
     /// Loading视图
     var activity: UIActivityIndicatorView = {
-        let activityView = UIActivityIndicatorView()
-        activityView.startAnimating()
-        activityView.isHidden = true
-        return activityView
+        let activity = UIActivityIndicatorView()
+        activity.startAnimating()
+        activity.isHidden = true
+        return activity
     }()
     /// 展示控制面板后隐藏时间，default is 5
     var autoHiddenTimeInterval: TimeInterval = 5
@@ -73,6 +91,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     }
     
     private func addSubviews() {
+        addSubview(coverImageView)
         addSubview(portraitControlView)
         addSubview(landScapeControlView)
         addSubview(activity)
@@ -89,8 +108,9 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         let maxHeight = bounds.height
         let maxWidth = bounds.width
         
-        portraitControlView.frame = self.bounds;
-        landScapeControlView.frame = self.bounds;
+        coverImageView.frame = bounds
+        portraitControlView.frame = bounds;
+        landScapeControlView.frame = bounds;
         
         x = 0
         y = maxHeight - 2
@@ -273,6 +293,7 @@ extension VDPlayerControlView {
     internal func playerPlayStateChanged(player: VDPlayer, playState: VDPlayerPlaybackState) {
         switch playState {
         case .playing:
+            coverImageView.isHidden = true
             portraitControlView.playPauseBtn.isSelected = true
             landScapeControlView.playPauseBtn.isSelected = true
         case .pause:
@@ -280,6 +301,7 @@ extension VDPlayerControlView {
             landScapeControlView.playPauseBtn.isSelected = false
         case .stopped:
             reset()
+            coverImageView.isHidden = false
         default:
             break
         }
@@ -288,9 +310,15 @@ extension VDPlayerControlView {
     internal func playerLoadStateChanged(player: VDPlayer, loadState: VDPlayerLoadState) {
         if (loadState == .stalled || loadState == .prepare) && player.currentPlayerControl.isPlaying {
             activity.isHidden = false
+            activity.startAnimating()
         }
         else {
             activity.isHidden = true
+            activity.stopAnimating()
         }
+    }
+    
+    internal func playerPrepareToPlay(player: VDPlayer) {
+        hideControlView(animated: false)
     }
 }

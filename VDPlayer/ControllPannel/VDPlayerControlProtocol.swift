@@ -19,6 +19,7 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
     func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver)
     func playerPlayStateChanged(player: VDPlayer, playState: VDPlayerPlaybackState)
     func playerLoadStateChanged(player: VDPlayer, loadState: VDPlayerLoadState)
+    func playerPrepareToPlay(player: VDPlayer)
     
     func updateTime(current: TimeInterval, total: TimeInterval)
     func reset()
@@ -32,6 +33,7 @@ extension VDPlayerControlProtocol {
     func playerOrientationDidChanged(player: VDPlayer, observer: VDPlayerOrientationObserver) {}
     func playerPlayStateChanged(player: VDPlayer, playState: VDPlayerPlaybackState) {}
     func playerLoadStateChanged(player: VDPlayer, loadState: VDPlayerLoadState) {}
+    func playerPrepareToPlay(player: VDPlayer) {}
     
     func updateTime(current: TimeInterval, total: TimeInterval) {}
     func reset() {}

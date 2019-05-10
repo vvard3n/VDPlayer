@@ -26,7 +26,7 @@ class VDLandScapeControlView: UIView {
         let layer = CAGradientLayer()
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 0.5, y: 1)
-        layer.colors = [UIColor(white: 0, alpha: 1).cgColor, UIColor.clear.cgColor]
+        layer.colors = [UIColor(white: 0, alpha: 0.8).cgColor, UIColor.clear.cgColor]
         layer.locations = [0.0, 1.0]
         layer.shouldRasterize = true
         topView.layer.addSublayer(layer)
@@ -46,7 +46,7 @@ class VDLandScapeControlView: UIView {
         let titleLabel = UILabel()
 //        titleLabel.backgroundColor = .random
         titleLabel.text = "标题标题标题标题标题标题标题标题"
-        titleLabel.font = .systemFont(ofSize: 18)
+        titleLabel.font = .systemFont(ofSize: 17)
         titleLabel.textColor = .white
         return titleLabel
     }()
@@ -58,7 +58,7 @@ class VDLandScapeControlView: UIView {
         let layer = CAGradientLayer()
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 0.5, y: 1)
-        layer.colors = [UIColor.clear.cgColor, UIColor(white: 0, alpha: 1).cgColor]
+        layer.colors = [UIColor.clear.cgColor, UIColor(white: 0, alpha: 0.8).cgColor]
         layer.locations = [0.0, 1.0]
         layer.shouldRasterize = true
         bottomView.layer.addSublayer(layer)
@@ -101,7 +101,7 @@ class VDLandScapeControlView: UIView {
     /// 当前播放时间
     var currentTimeLabel: UILabel = {
         let currentTimeLabel = UILabel()
-        currentTimeLabel.font = .systemFont(ofSize: 10)
+        currentTimeLabel.font = .systemFont(ofSize: 12)
         currentTimeLabel.textAlignment = .center
         currentTimeLabel.textColor = .white
         return currentTimeLabel
@@ -110,7 +110,7 @@ class VDLandScapeControlView: UIView {
     /// 媒体总时长
     var totalTimeLabel: UILabel = {
         let totalTimeLabel = UILabel()
-        totalTimeLabel.font = .systemFont(ofSize: 10)
+        totalTimeLabel.font = .systemFont(ofSize: 12)
         totalTimeLabel.textAlignment = .center
         totalTimeLabel.textColor = .white
         return totalTimeLabel
@@ -177,10 +177,10 @@ class VDLandScapeControlView: UIView {
         h = w
         backBtn.frame = CGRect(x: x, y: y, width: w, height: h)
         
-        x = backBtn.frame.maxX + 5
+        x = backBtn.frame.maxX
         y = 15
         w = maxWidth - x - VDUIManager.shared().safeAreaInset.right
-        h = 30
+        h = 44
         titleLabel.frame = CGRect(x: x, y: y, width: w, height: h)
         
         x = 0

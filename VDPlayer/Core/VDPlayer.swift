@@ -72,7 +72,8 @@ class VDPlayer: NSObject {
             }
             guard let currentPlayerControl = currentPlayerControl else { return }
             if let containerView = self.containerView {
-                containerView.insertSubview(currentPlayerControl.playerView, at: 1)
+//                containerView.insertSubview(currentPlayerControl.playerView, at: 1)
+                containerView.addSubview(currentPlayerControl.playerView)
                 currentPlayerControl.playerView.frame = containerView.bounds
                 currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
                 currentPlayerControl.playbackStateDidChanged = { player, state in
@@ -84,6 +85,11 @@ class VDPlayer: NSObject {
                 }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                     self.layoutPlayer()
+                    self.controlView?.playerPrepareToPlay(player: self)
+                }
+                currentPlayerControl.mediaPlayerTimeChanged = { player, currentTime, totalTime in
+                    guard let controlView = self.controlView else { return }
+                    controlView.updateTime(current: currentTime, total: totalTime)
                 }
             }
             
@@ -95,15 +101,15 @@ class VDPlayer: NSObject {
         didSet {
             guard let assetURLs = assetURLs else { return }
             if assetURLs.isEmpty { return }
-            currentPlayerControl.assetURL = assetURLs[0]
-            if autoPlayWhenPrepareToPlay {
+//            currentPlayerControl.assetURL = assetURLs[0]
+//            if autoPlayWhenPrepareToPlay {
                 play()
-            }
+//            }
         }
     }
     
     /// 是否自动播放
-    var autoPlayWhenPrepareToPlay: Bool = false
+//    var autoPlayWhenPrepareToPlay: Bool = false
     
     override private init() {
         super.init()
@@ -121,8 +127,8 @@ class VDPlayer: NSObject {
         self.containerView = container
         self.currentPlayerControl = playerControl
         if let containerView = self.containerView {
-//            containerView.addSubview(self.currentPlayerControl.playerView)
-            containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
+            containerView.addSubview(self.currentPlayerControl.playerView)
+//            containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
             currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
             currentPlayerControl.playbackStateDidChanged = { player, state in
                 self.playbackStateDidChanged?(self, state)
@@ -133,6 +139,7 @@ class VDPlayer: NSObject {
             }
             currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                 self.layoutPlayer()
+                self.controlView?.playerPrepareToPlay(player: self)
             }
             currentPlayerControl.mediaPlayerTimeChanged = { player, currentTime, totalTime in
                 guard let controlView = self.controlView else { return }
@@ -206,13 +213,15 @@ extension VDPlayer {
         // --
         
         if isFullScreen {
+            fullScreenContainerView?.backgroundColor = .clear
             UIView.animate(withDuration: 0.5, animations: {
                 self.currentPlayerControl.playerView.transform = CGAffineTransform.identity
                 self.currentPlayerControl.playerView.frame = self.fullScreenContainerView?.convert(self.containerView?.frame ?? .zero, to: self.fullScreenContainerView) ?? CGRect.zero
                 self.fullScreenContainerView?.layoutIfNeeded()
             }) { (complate) in
                 self.currentPlayerControl.playerView.removeFromSuperview()
-                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
+//                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
+                self.containerView?.addSubview(self.currentPlayerControl.playerView)
                 self.currentPlayerControl.playerView.frame = self.containerView?.bounds ?? CGRect.zero
                 self.fullScreenContainerView?.removeFromSuperview()
             }
@@ -221,7 +230,6 @@ extension VDPlayer {
         else {
             if fullScreenContainerView == nil {
                 fullScreenContainerView = UIView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
-//                fullScreenContainerView?.backgroundColor = .green
             }
             guard let fullScreenContainerView = fullScreenContainerView else { return }
             currentPlayerControl.playerView.removeFromSuperview()
@@ -235,7 +243,7 @@ extension VDPlayer {
                 self.currentPlayerControl.playerView.frame = CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
                 self.fullScreenContainerView?.layoutIfNeeded()
             }) { (complate) in
-                
+                fullScreenContainerView.backgroundColor = .black
             }
             orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
         }
