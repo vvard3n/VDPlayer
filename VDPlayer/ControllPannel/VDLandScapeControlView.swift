@@ -87,7 +87,7 @@ class VDLandScapeControlView: UIView {
     /// 全屏按钮
     var fullScreenBtn: UIButton = {
         let fullScreenBtn = UIButton()
-        fullScreenBtn.setImage(UIImage(vd_named: "fullscreen"), for: .normal)
+        fullScreenBtn.setImage(UIImage(vd_named: "fullscreen_exit"), for: .normal)
         return fullScreenBtn
     }()
     
