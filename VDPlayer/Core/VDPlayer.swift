@@ -23,6 +23,7 @@ class VDPlayer: NSObject {
     
     var isFullScreen: Bool { get { return orientationObserver.isFullScreen } }
     var fullScreenStateWillChange: ((VDPlayer, Bool) -> ())?
+    var fullScreenStateDidChange: ((VDPlayer, Bool) -> ())?
     lazy private var orientationObserver: VDPlayerOrientationObserver = {
         let orientationObserver = VDPlayerOrientationObserver()
         orientationObserver.delegate = self
@@ -244,11 +245,13 @@ extension VDPlayer: VDPlayerOrientationObserverDelegate {
     internal func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {
         delegate?.playerOrientationWillChange(player: self, isFullScreen: isFullScreen)
         controlView?.playerOrientationWillChanged(player: self, observer: observer)
+        fullScreenStateWillChange?(self, isFullScreen)
     }
     
     internal func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {
         delegate?.playerOrientationDidChange(player: self, isFullScreen: isFullScreen)
         controlView?.playerOrientationDidChanged(player: self, observer: observer)
+        fullScreenStateDidChange?(self, isFullScreen)
     }
 }
 

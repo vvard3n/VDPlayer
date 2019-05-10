@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         let height = (UIScreen.main.bounds.size.width - 20 * 2) / 16.0 * 9.0
         
         let videoContainer = UIView(frame: CGRect(x: 20, y: 100, width:width, height:height))
-        videoContainer.backgroundColor = .red
+        videoContainer.backgroundColor = .black
         view.addSubview(videoContainer)
         
 //        let config = VDPlayerConfig(playerType: .VLCPlayer)
@@ -33,6 +33,9 @@ class ViewController: UIViewController {
         player?.controlView = VDPlayerControlView()
         player?.assetURLs = assetURLs
         player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
+            
+        }
+        player?.fullScreenStateDidChange = { [weak self](player, isFullScreen) in
             self?.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {
                 self?.setNeedsUpdateOfHomeIndicatorAutoHidden()
@@ -61,14 +64,14 @@ class ViewController: UIViewController {
     }
 
     /// 隐藏状态栏
-//    override var prefersStatusBarHidden: Bool {
-//        return player?.isFullScreen ?? false
-//    }
+    override var prefersStatusBarHidden: Bool {
+        return player?.isFullScreen ?? false
+    }
     
     /// 状态栏隐藏动画
-//    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-//        return .fade
-//    }
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
+    }
     
     /// 自动旋转屏幕
     override var shouldAutorotate: Bool {
