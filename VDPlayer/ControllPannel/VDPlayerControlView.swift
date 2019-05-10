@@ -49,6 +49,8 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     /// Loading视图
     var activity: UIActivityIndicatorView = {
         let activityView = UIActivityIndicatorView()
+        activityView.startAnimating()
+        activityView.isHidden = true
         return activityView
     }()
     /// 展示控制面板后隐藏时间，default is 5
@@ -95,6 +97,8 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         w = maxWidth
         h = 2
         bottomProgress.frame = CGRect(x: x, y: y, width: w, height: h)
+        
+        activity.center = center
     }
     
     private func addNotifications() {
@@ -278,6 +282,15 @@ extension VDPlayerControlView {
             reset()
         default:
             break
+        }
+    }
+    
+    internal func playerLoadStateChanged(player: VDPlayer, loadState: VDPlayerLoadState) {
+        if (loadState == .stalled || loadState == .prepare) && player.currentPlayerControl.isPlaying {
+            activity.isHidden = false
+        }
+        else {
+            activity.isHidden = true
         }
     }
 }

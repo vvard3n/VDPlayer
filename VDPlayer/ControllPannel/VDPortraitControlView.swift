@@ -426,7 +426,7 @@ extension VDPortraitControlView {
         if !progressSliderIsDragging {
             currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
             totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
-            print("playback current time:\(player.currentTime)s")
+//            print("playback current time:\(player.currentTime)s")
             progressSlider.value = Float(player.currentTime ?? 0)
             progressSlider.maximumValue = Float(player.totalTime)
             UIView.animate(withDuration: 0.25) {

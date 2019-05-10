@@ -68,13 +68,15 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     var scalingMode : VDPlayerScalingMode   = .aspectFit
     var assetURL    : URL? {
         didSet {
-            guard let assetURL = assetURL else { return }
+//            guard let assetURL = assetURL else { return }
             if player != nil { player?.stop() }
 //            let media = VLCMedia(url: assetURL)
 //            player?.media = media
             prepareToPlay()
         }
     }
+    
+    private var cancelBufferingWorkItem: DispatchWorkItem?
     
     override init() {
         super.init()
@@ -83,7 +85,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     func initPlayer() {
         guard let assetURL = assetURL else { return }
         let media = VLCMedia(url: assetURL)
-//        media.delegate = self
+        media.delegate = self
         player = VLCMediaPlayer()
         player?.delegate = self
         player?.media = media
@@ -136,6 +138,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         player = nil
         assetURL = nil
         playState = .stopped
+        loadState = .unknow
     }
     
     func seek(to time: TimeInterval?, completionHandler: ((Bool) -> ())?) {
@@ -149,27 +152,51 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
 
 extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
-        print("\(player!.state.rawValue)")
         guard let player = aNotification.object as? VLCMediaPlayer else { return }
         switch player.state {
         case .stopped:
+            print("stopped")
             playState = .stopped
+            loadState = .unknow
             isPreparedToPlay = false
-        case .opening, .buffering:
-            break
+        case .opening:
+            print("opening")
+            loadState = .prepare
+        case .buffering:
+            print("buffering, player state:\(player.isPlaying)")
+//            if player.isPlaying { loadState = .playable }
+//            else { loadState = .prepare }
+            loadState = .prepare
+            if let cancelBufferingWorkItem = cancelBufferingWorkItem {
+                cancelBufferingWorkItem.cancel()
+                self.cancelBufferingWorkItem = nil
+            }
+            cancelBufferingWorkItem = DispatchWorkItem {
+                self.loadState = .playable
+                print(player.state.rawValue)
+            }
+            guard let cancelBufferingWorkItem = cancelBufferingWorkItem else { return }
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: cancelBufferingWorkItem)
         case .ended:
-            break
+            print("ended")
         case .playing:
+            print("playing")
             playState = .playing
+            loadState = .playable
         case .error:
+            print("error")
             playState = .error
+            loadState = .unknow
             isPreparedToPlay = false
         case .paused:
+            print("paused")
             playState = .pause
         case .esAdded:///< Elementary Stream added
-            playState = .unknow
+            print("esAdded")
+//            playState = .unknow
+//            loadState = .prepare
         }
-        if let playbackStateDidChanged = playbackStateDidChanged { playbackStateDidChanged(self, playState) }
+//        if let playbackStateDidChanged = playbackStateDidChanged { playbackStateDidChanged(self, playState) }
     }
     
     func mediaPlayerTimeChanged(_ aNotification: Notification!) {
@@ -179,5 +206,19 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
             mediaPlayerTimeChanged(self, TimeInterval(player.time.value.doubleValue / 1000),
                                    TimeInterval((player.time.value.doubleValue + fabs(player.remainingTime.value?.doubleValue ?? 1)) / 1000))
         }
+    }
+    
+    func mediaPlayerChapterChanged(_ aNotification: Notification!) {
+        print("mediaPlayerChapterChanged")
+    }
+}
+
+extension VDVLCPlayerControl: VLCMediaDelegate {
+    func mediaDidFinishParsing(_ aMedia: VLCMedia) {
+        print("mediaDidFinishParsing")
+    }
+    
+    func mediaMetaDataDidChange(_ aMedia: VLCMedia) {
+        print("mediaMetaDataDidChange")
     }
 }

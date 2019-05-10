@@ -19,7 +19,8 @@ enum VDPlayerPlaybackState {
 enum VDPlayerLoadState {
     case unknow
     case prepare
-    case ended
+    case playable
+    case stalled
 }
 
 enum VDPlayerScalingMode {

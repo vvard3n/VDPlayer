@@ -79,6 +79,9 @@ class VDPlayer: NSObject {
                     self.playbackStateDidChanged?(self, state)
                     self.controlView?.playerPlayStateChanged(player: self, playState: state)
                 }
+                currentPlayerControl.loadStateDidChanged = { player, state in
+                    self.controlView?.playerLoadStateChanged(player: self, loadState: state)
+                }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                     self.layoutPlayer()
                 }
@@ -124,6 +127,9 @@ class VDPlayer: NSObject {
             currentPlayerControl.playbackStateDidChanged = { player, state in
                 self.playbackStateDidChanged?(self, state)
                 self.controlView?.playerPlayStateChanged(player: self, playState: state)
+            }
+            currentPlayerControl.loadStateDidChanged = { player, state in
+                self.controlView?.playerLoadStateChanged(player: self, loadState: state)
             }
             currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                 self.layoutPlayer()

@@ -34,6 +34,7 @@ class ViewController: UIViewController {
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
         player?.controlView = playerControlView
         player?.assetURLs = assetURLs
+        player?.autoPlayWhenPrepareToPlay = false
 //        player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
 //            
 //        }
