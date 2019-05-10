@@ -90,10 +90,17 @@ class VDPlayer: NSObject {
     /// 数据源
     var assetURLs: [URL]? {
         didSet {
-            play()
+            guard let assetURLs = assetURLs else { return }
+            if assetURLs.isEmpty { return }
+            currentPlayerControl.assetURL = assetURLs[0]
+            if autoPlayWhenPrepareToPlay {
+                play()
+            }
         }
     }
-//    weak var delegate
+    
+    /// 是否自动播放
+    var autoPlayWhenPrepareToPlay: Bool = false
     
     override private init() {
         super.init()

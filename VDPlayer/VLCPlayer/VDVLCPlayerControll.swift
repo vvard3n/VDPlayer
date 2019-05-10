@@ -70,8 +70,8 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         didSet {
             guard let assetURL = assetURL else { return }
             if player != nil { player?.stop() }
-            let media = VLCMedia(url: assetURL)
-            player?.media = media
+//            let media = VLCMedia(url: assetURL)
+//            player?.media = media
             prepareToPlay()
         }
     }
@@ -108,9 +108,14 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     }
     
     func play() {
-        player?.play()
-        isPlaying = true
-        playState = .playing
+        if !isPreparedToPlay {
+            prepareToPlay()
+        }
+        else {
+            player?.play()
+            isPlaying = true
+            playState = .playing
+        }
     }
     
     func pause() {
@@ -134,7 +139,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     }
     
     func seek(to time: TimeInterval?, completionHandler: ((Bool) -> ())?) {
-        guard let time = time else { return }
+        guard let time = time, time is TimeInterval else { return }
         player?.time = VLCTime(int: Int32(time * 1000))
         if let completionHandler = completionHandler {
             completionHandler(true)
@@ -149,6 +154,7 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
         switch player.state {
         case .stopped:
             playState = .stopped
+            isPreparedToPlay = false
         case .opening, .buffering:
             break
         case .ended:
@@ -157,6 +163,7 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
             playState = .playing
         case .error:
             playState = .error
+            isPreparedToPlay = false
         case .paused:
             playState = .pause
         case .esAdded:///< Elementary Stream added

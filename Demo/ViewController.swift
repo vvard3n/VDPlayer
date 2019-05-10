@@ -29,8 +29,10 @@ class ViewController: UIViewController {
 //        config.container = videoContainer
         
         let playerControl = VDVLCPlayerControl()
+        let playerControlView = VDPlayerControlView()
+        playerControlView.setTitle("来一个视频标题", coverURL: nil)
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
-        player?.controlView = VDPlayerControlView()
+        player?.controlView = playerControlView
         player?.assetURLs = assetURLs
 //        player?.fullScreenStateWillChange = { [weak self](player, isFullScreen) in
 //            

@@ -61,8 +61,9 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         super.init(frame: frame)
         addSubviews()
         addNotifications()
+        reset()
         
-        startAutoHiddenControlView()
+        startAutoHiddenControlView()        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -177,6 +178,28 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         portraitControlView.reset()
         landScapeControlView.reset()
     }
+    
+    func setTitle(_ title : String?, coverURL: URL?) {
+        if !(title?.isEmpty ?? true) {
+            portraitControlView.titleLabel.text = title
+            landScapeControlView.titleLabel.text = title
+        }
+        else {
+            portraitControlView.titleLabel.text = ""
+            landScapeControlView.titleLabel.text = ""
+        }
+    }
+    
+    func setTitle(_ title : String?, coverImage: UIImage?) {
+        if !(title?.isEmpty ?? true) {
+            portraitControlView.titleLabel.text = title
+            landScapeControlView.titleLabel.text = title
+        }
+        else {
+            portraitControlView.titleLabel.text = ""
+            landScapeControlView.titleLabel.text = ""
+        }
+    }
 }
 
 // MARK: - Time
@@ -251,6 +274,8 @@ extension VDPlayerControlView {
         case .pause:
             portraitControlView.playPauseBtn.isSelected = false
             landScapeControlView.playPauseBtn.isSelected = false
+        case .stopped:
+            reset()
         default:
             break
         }
