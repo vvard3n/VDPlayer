@@ -138,6 +138,7 @@ class VDPlayer: NSObject {
     private func layoutPlayer() {
         guard let controlView = controlView, let containerView = containerView else { return }
         
+        controlView.removeFromSuperview()
         currentPlayerControl.playerView.addSubview(controlView)
         if isFullScreen {
             currentPlayerControl.playerView.frame = fullScreenContainerView?.bounds ?? .zero

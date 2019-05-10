@@ -98,6 +98,7 @@ class VDPortraitControlView: UIView {
     var bottomProgressView: UIView = {
         let bottomProgressView = UIView()
         bottomProgressView.backgroundColor = UIColor(hex: "E63130")
+        bottomProgressView.alpha = 0
         return bottomProgressView
     }()
     
@@ -230,6 +231,9 @@ class VDPortraitControlView: UIView {
         h = w
         playPauseBtn.frame = CGRect(x: x, y: y, width: w, height: h)
         playPauseBtn.center = center
+        
+        bottomProgressView.frame.origin.x = 0
+        bottomProgressView.frame.origin.y = maxHeight - 2
 //        playPauseBtn.translatesAutoresizingMaskIntoConstraints = false
 //        addConstraints([NSLayoutConstraint(item: playPauseBtn,
 //                                           attribute: .centerX,
@@ -409,6 +413,12 @@ extension VDPortraitControlView {
         }
         if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
     }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        allowPanGesture = false
+        progressSliderIsDragging = false
+    }
 }
 
 extension VDPortraitControlView {
@@ -416,7 +426,7 @@ extension VDPortraitControlView {
         if !progressSliderIsDragging {
             currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
             totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
-            print(player.currentTime)
+            print("playback current time:\(player.currentTime)s")
             progressSlider.value = Float(player.currentTime ?? 0)
             progressSlider.maximumValue = Float(player.totalTime)
             UIView.animate(withDuration: 0.25) {

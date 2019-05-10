@@ -366,6 +366,12 @@ extension VDLandScapeControlView {
         }
         if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
     }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        allowPanGesture = false
+        progressSliderIsDragging = false
+    }
 }
 
 extension VDLandScapeControlView {
