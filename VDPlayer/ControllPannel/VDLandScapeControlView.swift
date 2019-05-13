@@ -18,6 +18,7 @@ class VDLandScapeControlView: UIView {
     private var startTouchMovePoint :CGPoint = .zero
     private var allowPanGesture: Bool = false
     private var sliderStartValue: Float = 0
+    private var controlPanelIsAppear: Bool = false
     
     /// 顶部View
     var topView: UIView = {
@@ -69,8 +70,8 @@ class VDLandScapeControlView: UIView {
     /// 播放暂停按钮
     var playPauseBtn: UIButton = {
         let playPauseBtn = UIButton()
-        playPauseBtn.setImage(UIImage(vd_named: "play_s"), for: .normal)
-        playPauseBtn.setImage(UIImage(vd_named: "pause_s"), for: .selected)
+        playPauseBtn.setImage(UIImage(vd_named: "play_full_screen"), for: .normal)
+        playPauseBtn.setImage(UIImage(vd_named: "pause_full_screen"), for: .selected)
         playPauseBtn.adjustsImageWhenHighlighted = false
         playPauseBtn.isSelected = true
         return playPauseBtn
@@ -306,71 +307,114 @@ extension VDLandScapeControlView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        let point = touches.first?.location(in: self) ?? .zero
-        if point.y < 100 || point.y > SCREEN_HEIGHT - 100 {
-            print("超出滑动区域")
-            allowPanGesture = false
-        }
-        else {
-            allowPanGesture = true
-            progressSliderIsDragging = true
+        if event?.allTouches?.count == 2 {
+            print("双指滑动开始")
+            let point = touches.first?.location(in: self) ?? .zero
             startTouchMovePoint = point
+            return
+        }
+        if event?.allTouches?.count == 1 {
+            let point = touches.first?.location(in: self) ?? .zero
+            if (point.y < 100 || point.y > SCREEN_HEIGHT - 100) && controlPanelIsAppear {
+                print("超出滑动区域")
+                allowPanGesture = false
+            }
+            else {
+                allowPanGesture = true
+                progressSliderIsDragging = true
+                startTouchMovePoint = point
+            }
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         
-        if !allowPanGesture { return }
-        let point = touches.first?.location(in: self) ?? .zero
-        let progressInSec: Float = 2
-        if abs(point.x - startTouchMovePoint.x) > 10 {
-            if point.x > startTouchMovePoint.x {
-                var current = Double(progressSlider.value + progressInSec)
-                print(current)
-                let total = player.totalTime
-                if current > total { current = total }
-                currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
-                totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
-                progressSlider.value = Float(current)
-                
-                if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+        if event?.allTouches?.count == 2 {
+            
+        }
+        if event?.allTouches?.count == 1 {
+            if !allowPanGesture { return }
+            let point = touches.first?.location(in: self) ?? .zero
+            let progressInSec: Float = 2
+            if abs(point.x - startTouchMovePoint.x) > 10 {
+                if point.x > startTouchMovePoint.x {
+                    var current = Double(progressSlider.value + progressInSec)
+                    print(current)
+                    let total = player.totalTime
+                    if current > total { current = total }
+                    currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+                    totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+                    progressSlider.value = Float(current)
+                    
+                    if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+                }
+                else {
+                    var current = Double(progressSlider.value - progressInSec)
+                    if current < 0 { current = 0 }
+                    print(current)
+                    let total = player.totalTime
+                    currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
+                    totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
+                    progressSlider.value = Float(current)
+                    
+                    if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+                }
+                startTouchMovePoint = point
             }
-            else {
-                var current = Double(progressSlider.value - progressInSec)
-                if current < 0 { current = 0 }
-                print(current)
-                let total = player.totalTime
-                currentTimeLabel.text = vd_formateTime(current, customFormateStr: nil)
-                totalTimeLabel.text = vd_formateTime(total, customFormateStr: nil)
-                progressSlider.value = Float(current)
-                
-                if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
-            }
-            startTouchMovePoint = point
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
-        allowPanGesture = false
-        progressSliderIsDragging = false
-        
-        let seekTime = TimeInterval(progressSlider.value)
-        let percent = progressSlider.value / progressSlider.maximumValue
-        player.seek(to: seekTime) { (success) in
-            if success {
-                self.progressSliderIsDragging = false
+        if event?.allTouches?.count == 2 {
+            let point = touches.first?.location(in: self) ?? .zero
+            let currentRate = player.currentPlayerControl.rate
+            var targetRate = currentRate
+            if abs(point.x - startTouchMovePoint.x) > 10 {
+                if point.x > startTouchMovePoint.x {
+                    if currentRate < 2 {
+                        targetRate += 0.25
+                        print("加速\(targetRate)")
+                    }
+                }
+                else {
+                    if currentRate > 0.5 {
+                        targetRate -= 0.25
+                        print("减速\(targetRate)")
+                    }
+                }
             }
+            player.currentPlayerControl.changeRate(targetRate) { (success) in
+                if success {
+                    print("当前速度\(self.player.currentPlayerControl.rate)")
+                }
+            }
+            return
         }
-        if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+        if event?.allTouches?.count == 1 {
+            allowPanGesture = false
+            progressSliderIsDragging = false
+            
+            let seekTime = TimeInterval(progressSlider.value)
+            let percent = progressSlider.value / progressSlider.maximumValue
+            player.seek(to: seekTime) { (success) in
+                if success {
+                    self.progressSliderIsDragging = false
+                }
+            }
+            if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
+        }
+        
+        startTouchMovePoint = .zero
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         allowPanGesture = false
         progressSliderIsDragging = false
+        startTouchMovePoint = .zero
     }
 }
 
@@ -389,10 +433,12 @@ extension VDLandScapeControlView {
     func showControlPanel(){
         self.topView.alpha = 1
         self.bottomView.alpha = 1
+        controlPanelIsAppear = true
     }
     
     func hideControlPanel(){
         self.topView.alpha = 0
         self.bottomView.alpha = 0
+        controlPanelIsAppear = false
     }
 }

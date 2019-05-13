@@ -44,6 +44,7 @@ protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     var isPreparedToPlay: Bool { get }
     var playState: VDPlayerPlaybackState { get }
     var loadState: VDPlayerLoadState { get }
+    var rate: Float { get }
     
     /// info
     var scalingMode: VDPlayerScalingMode { get }
@@ -52,6 +53,7 @@ protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     /// Handle
     var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())? { get set }
     var loadStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerLoadState) -> ())? { get set }
+    var playerReadyToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set}
     var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set}
     var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())? { get set }
     
@@ -77,8 +79,11 @@ protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     
     /// Seek to a specified time
     func seek(to time: TimeInterval?, completionHandler:((_ finished: Bool)->())?)
+    
+    /// chagne current play rate
+    func changeRate(_ rate: Float, completionHandler:((_ finished: Bool)->())?)
 }
 
 extension VDPlayerPlayBackProtocol {
-    
+    func changeRate(_ rate: Float, completionHandler:((_ finished: Bool)->())?) {}
 }

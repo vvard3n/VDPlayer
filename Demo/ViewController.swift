@@ -12,7 +12,11 @@ class ViewController: UIViewController {
 
     let width = UIScreen.main.bounds.size.width - 20 * 2
     let height = (UIScreen.main.bounds.size.width - 20 * 2) / 16.0 * 9.0
-    let assetURLs: [URL] = [URL(string: "https://mpv.videocc.net/cc84e44bdb/8/cc84e44bdbcd2e2996584c3e59f13558_3.mp4")!]
+    let assetURLs: [URL] = [URL(string: "http://plvod01.videocc.net/cc84e44bdb/a/cc84e44bdb87af025cc3b6f1fd83b1da_3.flv")!]
+    //    https://mpv.videocc.net/cc84e44bdb/8/cc84e44bdbcd2e2996584c3e59f13558_3.mp4
+    //    http://plvod01.videocc.net/cc84e44bdb/a/cc84e44bdb87af025cc3b6f1fd83b1da_3.flv
+    //    http://plvod01.videocc.net/cc84e44bdb/2/cc84e44bdb7849e24e5ae856c2187282_3.flv
+    //    http://plvod01.videocc.net/cc84e44bdb/9/cc84e44bdbcdd229b44318576e857209_3.flv
     
     var player: VDPlayer?
     lazy var videoContainer: UIView = {

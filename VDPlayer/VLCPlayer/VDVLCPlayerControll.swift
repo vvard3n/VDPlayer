@@ -11,6 +11,7 @@ import UIKit
 class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())?
     var loadStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerLoadState) -> ())?
+    var playerReadyToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
     var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
     var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())?
     
@@ -66,6 +67,8 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         }
     }
     var scalingMode : VDPlayerScalingMode   = .aspectFit
+    var rate        : Float                 { get { return player?.rate ?? 0 } }
+    
     var assetURL    : URL? {
         didSet {
 //            guard let assetURL = assetURL else { return }
@@ -87,6 +90,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         let media = VLCMedia(url: assetURL)
         media.delegate = self
         player = VLCMediaPlayer()
+        player?.rate = 1.0
         player?.delegate = self
         player?.media = media
         player?.drawable = self.playerView.mediaContainer
@@ -148,6 +152,11 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
             completionHandler(true)
         }
     }
+    
+    func changeRate(_ rate: Float, completionHandler: ((Bool) -> ())?) {
+        player?.rate = rate
+        completionHandler?(true)
+    }
 }
 
 extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
@@ -195,6 +204,7 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
             print("esAdded")
 //            playState = .unknow
 //            loadState = .prepare
+            if let assetURL = assetURL { playerReadyToPlay?(self, assetURL) }
         }
 //        if let playbackStateDidChanged = playbackStateDidChanged { playbackStateDidChanged(self, playState) }
     }

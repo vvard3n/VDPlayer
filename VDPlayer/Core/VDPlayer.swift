@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 
 protocol VDPlayerDelegate: NSObjectProtocol {
     func playerOrientationWillChange(player: VDPlayer, isFullScreen: Bool)
@@ -82,6 +83,10 @@ class VDPlayer: NSObject {
                 }
                 currentPlayerControl.loadStateDidChanged = { player, state in
                     self.controlView?.playerLoadStateChanged(player: self, loadState: state)
+                }
+                currentPlayerControl.playerReadyToPlay = { player, assetURL in
+                    do { try AVAudioSession.sharedInstance().setCategory(.playback, options: .allowBluetooth) } catch { }
+                    do { try AVAudioSession.sharedInstance().setActive(true, options: []) } catch { }
                 }
                 currentPlayerControl.playerPrepareToPlay = { player, assetURL in
                     self.layoutPlayer()
