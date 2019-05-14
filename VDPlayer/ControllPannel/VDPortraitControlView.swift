@@ -7,8 +7,25 @@
 //
 
 import UIKit
+import MediaPlayer
+
+enum VDPortraitGestureType {
+    case none
+    case progress
+    case rate
+    case volume
+    case light
+}
 
 class VDPortraitControlView: UIView {
+    
+    lazy var volumeView: MPVolumeView = {
+        let volumeView = MPVolumeView(frame: CGRect(x: 0, y: -100, width: 320, height: 100))
+        if let superview = self.superview {
+            superview.addSubview(volumeView)
+        }
+        return volumeView
+    }()
 
     weak var player: VDPlayer!
     private var progressSliderIsDragging: Bool = false
@@ -20,10 +37,14 @@ class VDPortraitControlView: UIView {
         }
     }
     
-    private var startTouchMovePoint :CGPoint = .zero
+    private var startTouchMovePoint: CGPoint = .zero
+    private var progressPoint: CGPoint = .zero
+    
     private var allowPanGesture: Bool = false
+    private var allowChangeGestureType: Bool = true
     private var sliderStartValue: Float = 0
     private var controlPanelIsAppear: Bool = false
+    private var currentGestureType: VDPortraitGestureType = .none
     
     /// 顶部View
     var topView: UIView = {
@@ -348,39 +369,119 @@ extension VDPortraitControlView {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        if event?.allTouches?.count == 2 {
-            print("双指滑动开始")
-            let point = touches.first?.location(in: self) ?? .zero
+        let point = touches.first?.location(in: self) ?? .zero
+        if (point.y < 50 || point.y > bounds.height - 50) && controlPanelIsAppear {
+//            super.touchesBegan(touches, with: event)
+            allowPanGesture = false
+            currentGestureType = .none
+        }
+        else {
             startTouchMovePoint = point
-            return
-        }
-        if event?.allTouches?.count == 1 {
-            let point = touches.first?.location(in: self) ?? .zero
-            if (point.y < 50 || point.y > bounds.height - 50) && controlPanelIsAppear {
-                print("超出滑动区域")
-                allowPanGesture = false
+            if event?.allTouches?.count == 2 {
+                print("双指滑动开始")
+//                allowPanGesture = false
+//                progressSliderIsDragging = false
+//                currentGestureType = .rate
             }
-            else {
-                allowPanGesture = true
-                progressSliderIsDragging = true
-                startTouchMovePoint = point
+            if event?.allTouches?.count == 1 {
+//                progressPoint = point
+//                allowPanGesture = true
+//                progressSliderIsDragging = true
+//                currentGestureType = .progress
             }
         }
-        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        if event?.allTouches?.count == 2 {
+//        super.touchesMoved(touches, with: event)
+        let point = touches.first?.location(in: self) ?? .zero
+        if abs(point.x - startTouchMovePoint.x) <= 30 && abs(point.y - startTouchMovePoint.y) <= 20 && allowChangeGestureType {
+            print("current use \(event?.allTouches?.count ?? 0) points")
+            allowPanGesture = false
+            progressSliderIsDragging = false
             
+            let moveX = abs(point.x - startTouchMovePoint.x)
+            let moveY = abs(point.y - startTouchMovePoint.y)
+            print("moveX \(moveX) moveY \(moveY)")
+            
+            let pointCount = event?.allTouches?.count ?? 0
+            if pointCount == 2 {
+                currentGestureType = .rate
+            }
+            if pointCount == 1 {
+                progressPoint = point
+                if moveX >= moveY {
+                    allowPanGesture = true
+                    progressSliderIsDragging = true
+                    currentGestureType = .progress
+                }
+                else {
+                    if startTouchMovePoint.x <= bounds.size.width * 0.5 {
+                        currentGestureType = .light
+                    }
+                    else {
+                        currentGestureType = .volume
+                    }
+                }
+            }
+            return
         }
-        if event?.allTouches?.count == 1 {
+        
+        allowChangeGestureType = false
+        if currentGestureType == .light {
+            print("light changing")
+            if abs(point.y - progressPoint.y) > bounds.size.height / 100.0 {
+                print(bounds.size.height / 100.0 / 100.0)
+                print("current screen light \(UIScreen.main.brightness)")
+                if point.y < progressPoint.y {
+                    UIScreen.main.brightness += bounds.size.height / 100.0 / 100.0 * 2
+                }
+                else {
+                    UIScreen.main.brightness -= bounds.size.height / 100.0 / 100.0 * 2
+                }
+                guard let superview = self.superview else { return }
+                VDHUDLabel.show(text: String(format: "亮度%d%%", Int(UIScreen.main.brightness * 100)), in: superview)
+                
+                progressPoint = point
+            }
+        }
+        if currentGestureType == .volume {
+            print("volume changing")
+//            let volumeView = MPVolumeView(frame: CGRect(x: 0, y: 100, width: 320, height: 100))
+//            volumeView.isHidden = true
+            
+            var slider: UISlider? = nil
+            for subview in volumeView.subviews {
+                if subview.isKind(of: UISlider.self) {
+                    slider = subview as? UISlider
+                    break
+                }
+            }
+            if abs(point.y - progressPoint.y) > bounds.size.height / 100.0 {
+                let changeValue: Float = Float(bounds.size.height) / 100.0 / 100.0 * 2
+                if point.y < progressPoint.y {
+                    slider?.setValue((slider?.value ?? 0) + changeValue, animated: false)
+                }
+                else {
+                    slider?.setValue((slider?.value ?? 0) - changeValue, animated: false)
+                }
+                slider?.sendActions(for: .touchUpInside)
+                
+                guard let superview = self.superview else { return }
+                VDHUDLabel.show(text: String(format: "音量%d%%", Int((slider?.value ?? 0) * 100)), in: superview)
+                
+                progressPoint = point
+            }
+        }
+        if currentGestureType == .rate {
+            print("rate changing")
+        }
+        if currentGestureType == .progress {
+            print("progress changing")
             if !allowPanGesture { return }
-            let point = touches.first?.location(in: self) ?? .zero
             let progressInSec: Float = 2
-            if abs(point.x - startTouchMovePoint.x) > 10 {
-                if point.x > startTouchMovePoint.x {
+            if abs(point.x - progressPoint.x) > 5 {
+                if point.x > progressPoint.x {
                     var current = Double(progressSlider.value + progressInSec)
                     print(current)
                     let total = player.totalTime
@@ -390,6 +491,9 @@ extension VDPortraitControlView {
                     progressSlider.value = Float(current)
                     
                     if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
+                    
+                    guard let superview = self.superview else { return }
+                    VDHUDLabel.show(text: "\(vd_formateTime(current, customFormateStr: nil))/\(vd_formateTime(player.totalTime, customFormateStr: nil))", in: superview)
                     
                     UIView.animate(withDuration: 0.25) {
                         self.bottomProgressView.frame = CGRect(x: 0, y: self.bounds.height - 2, width: self.bounds.width * CGFloat(current / total), height: 2)
@@ -406,23 +510,33 @@ extension VDPortraitControlView {
                     
                     if let sliderValueChanging = sliderValueChanging { sliderValueChanging(Float(current / total), true) }
                     
+                    guard let superview = self.superview else { return }
+                    VDHUDLabel.show(text: "\(vd_formateTime(current, customFormateStr: nil))/\(vd_formateTime(player.totalTime, customFormateStr: nil))", in: superview)
+                    
                     UIView.animate(withDuration: 0.25) {
                         self.bottomProgressView.frame = CGRect(x: 0, y: self.bounds.height - 2, width: self.bounds.width * CGFloat(current / total), height: 2)
                     }
                 }
-                startTouchMovePoint = point
+                progressPoint = point
             }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        
-        if event?.allTouches?.count == 2 {
+        if currentGestureType == .none {
+//            super.touchesEnded(touches, with: event)
+        }
+        if currentGestureType == .volume {
+            VDHUDLabel.hide()
+        }
+        if currentGestureType == .light {
+            VDHUDLabel.hide()
+        }
+        if currentGestureType == .rate {
             let point = touches.first?.location(in: self) ?? .zero
             let currentRate = player.currentPlayerControl.rate
             var targetRate = currentRate
-            if abs(point.x - startTouchMovePoint.x) > 10 {
+            if abs(point.x - startTouchMovePoint.x) > 20 {
                 if point.x > startTouchMovePoint.x {
                     if currentRate < 2 {
                         targetRate += 0.25
@@ -439,16 +553,22 @@ extension VDPortraitControlView {
             player.currentPlayerControl.changeRate(targetRate) { (success) in
                 if success {
                     print("当前速度\(self.player.currentPlayerControl.rate)")
+                    guard let superview = self.superview else { return }
+                    VDHUDLabel.show(text: "\(self.player.currentPlayerControl.rate)X", in: superview).hide(after: 2)
                 }
             }
-            return
         }
-        if event?.allTouches?.count == 1 {
+        if currentGestureType == .progress {
+            if !allowPanGesture { return }
             allowPanGesture = false
             progressSliderIsDragging = false
             
             let seekTime = TimeInterval(progressSlider.value)
             let percent = progressSlider.value / progressSlider.maximumValue
+            
+            guard let superview = self.superview else { return }
+            VDHUDLabel.show(text: "\(vd_formateTime(seekTime, customFormateStr: nil))/\(vd_formateTime(player.totalTime, customFormateStr: nil))", in: superview).hide(after: 0)
+            
             player.seek(to: seekTime) { (success) in
                 if success {
                     self.progressSliderIsDragging = false
@@ -457,14 +577,22 @@ extension VDPortraitControlView {
             if let didEndSlidingProgressSlider = didEndSlidingProgressSlider { didEndSlidingProgressSlider(percent) }
         }
         
+        allowPanGesture = false
+        allowChangeGestureType = true
+        progressSliderIsDragging = false
         startTouchMovePoint = .zero
+        currentGestureType = .none
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
+//        super.touchesCancelled(touches, with: event)
         allowPanGesture = false
+        allowChangeGestureType = true
         progressSliderIsDragging = false
         startTouchMovePoint = .zero
+        currentGestureType = .none
+        
+        VDHUDLabel.hide()
     }
 }
 

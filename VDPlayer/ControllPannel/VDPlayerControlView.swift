@@ -79,6 +79,9 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        layer.masksToBounds = true
+        
         addSubviews()
         addNotifications()
         reset()
@@ -237,7 +240,9 @@ extension VDPlayerControlView {
 // MARK: - Private Methon
 extension VDPlayerControlView {
     @objc private func systemVolumeChanged(noti: Notification) {
-        
+//        print("system volume changed\(noti.object)")
+        guard let value = noti.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? Float else { return }
+        VDHUDLabel.show(text: String(format: "音量%d%%", Int(value * 100)), in: self).hide(after: 2)
     }
 }
 
