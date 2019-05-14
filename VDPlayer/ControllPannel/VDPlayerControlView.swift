@@ -240,9 +240,10 @@ extension VDPlayerControlView {
 // MARK: - Private Methon
 extension VDPlayerControlView {
     @objc private func systemVolumeChanged(noti: Notification) {
-//        print("system volume changed\(noti.object)")
-        guard let value = noti.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? Float else { return }
-        VDHUDLabel.show(text: String(format: "音量%d%%", Int(value * 100)), in: self).hide(after: 2)
+        if noti.userInfo?["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String == "ExplicitVolumeChange" {
+            guard let value = noti.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? Float else { return }
+            VDHUDLabel.show(text: String(format: "音量%d%%", Int(value * 100)), in: self).hide(after: 2)
+        }
     }
 }
 
