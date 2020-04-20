@@ -23,6 +23,13 @@ class VDPlayerOrientationObserver: NSObject {
     weak var delegate: VDPlayerOrientationObserverDelegate?
     var isFullScreen: Bool = false
     var animateDuration: TimeInterval = 0.3
+    var fullScreenContainerView: UIView? {
+        get {
+            return UIApplication.shared.keyWindow
+        }
+    }
+    private weak var view: UIView?
+    weak var containerView: UIView?
     
     func addDeviceOrientationObserver() {
         if UIDevice.current.isGeneratingDeviceOrientationNotifications {
@@ -48,23 +55,59 @@ extension VDPlayerOrientationObserver {
 
 extension VDPlayerOrientationObserver {
     func enterLandscapeFullScreen(orientation: UIInterfaceOrientation, animate: Bool) {
-        isFullScreen = true
+//        isFullScreen = true
+//        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
+//        UIViewController.attemptRotationToDeviceOrientation()
+//        if animate {
+//            UIView.animate(withDuration: animateDuration, animations: {
+//                self.interfaceOrientation(orientation: orientation)
+//            }) { (complate) in
+//                self.delegate?.orientationDidChange(observer: self, isFullScreen: self.isFullScreen)
+//            }
+//        }
+//        else {
+//            UIView.performWithoutAnimation {
+//                self.interfaceOrientation(orientation: orientation)
+//            }
+//            delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
+//        }
+//        //        UIApplication.shared.statusBarOrientation = orientation
+////        UIApplication.shared.setStatusBarOrientation(orientation, animated: animate)
+        
+        var superview: UIView? = nil
+        guard let view = view else { return }
+        if isFullScreen {
+            superview = fullScreenContainerView
+            view.frame = view.convert(view.frame, to: superview)
+            superview?.addSubview(view)
+            isFullScreen = true
+        } else {
+//            if roateType == ZFRotateTypeCell {
+//                superview = cell.viewWithTag(playerViewTag)
+//            } else {
+                superview = containerView
+//            }
+            isFullScreen = false
+        }
         delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
+        UIViewController.attemptRotationToDeviceOrientation()
+        
+        guard let frame = superview?.convert(superview?.bounds ?? CGRect.zero, to: fullScreenContainerView) else { return }
         if animate {
             UIView.animate(withDuration: animateDuration, animations: {
-                self.interfaceOrientation(orientation: orientation)
-            }) { (complate) in
+                view.frame = frame
+                view.layoutIfNeeded()
+            }) { finished in
+                superview?.addSubview(view)
+                view.frame = superview?.bounds ?? .zero
                 self.delegate?.orientationDidChange(observer: self, isFullScreen: self.isFullScreen)
             }
-        }
-        else {
-            UIView.performWithoutAnimation {
-                self.interfaceOrientation(orientation: orientation)
-            }
+        } else {
+            superview?.addSubview(view)
+            view.frame = superview?.bounds ?? .zero
+            view.layoutIfNeeded()
             delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
         }
-        //        UIApplication.shared.statusBarOrientation = orientation
-        UIApplication.shared.setStatusBarOrientation(orientation, animated: animate)
     }
     
     func enterPortraitMode(fullScreen: Bool, animate: Bool) {
@@ -90,7 +133,7 @@ extension VDPlayerOrientationObserver {
             delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
         }
         //        UIApplication.shared.statusBarOrientation = .portrait
-        UIApplication.shared.setStatusBarOrientation(.portrait, animated: animate)
+//        UIApplication.shared.setStatusBarOrientation(.portrait, animated: animate)
     }
     
     func exitFullScreen(animate: Bool) {

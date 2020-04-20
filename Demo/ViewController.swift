@@ -75,7 +75,7 @@ class ViewController: UIViewController {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if player?.isFullScreen ?? false {
-            return .landscapeRight
+            return .landscape
         }
         return .portrait
     }

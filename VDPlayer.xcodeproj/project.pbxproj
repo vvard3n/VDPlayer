@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		397E6B7B4732978FCD8FC630 /* Pods_VDPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */; };
 		76276707228A5B7600DA7C52 /* VDHUDLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76276706228A5B7600DA7C52 /* VDHUDLabel.swift */; };
+		763BA4C0244D4298007B748E /* VDPlayerFullScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763BA4BF244D4298007B748E /* VDPlayerFullScreenVC.swift */; };
 		76428E69225497260070E5F8 /* VDPortraitControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76428E68225497260070E5F8 /* VDPortraitControlView.swift */; };
 		76428E6B225497830070E5F8 /* VDPlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76428E6A225497830070E5F8 /* VDPlayerControlView.swift */; };
 		76714799228A51610044A0D9 /* VDPlayerHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76714798228A51610044A0D9 /* VDPlayerHUD.swift */; };
@@ -36,6 +37,7 @@
 		48FA1F6FAAACDB662B2698A4 /* Pods_VDPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VDPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76276706228A5B7600DA7C52 /* VDHUDLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDHUDLabel.swift; sourceTree = "<group>"; };
 		76346157225CE31200EA2C48 /* VDPlayer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VDPlayer-Bridging-Header.h"; sourceTree = "<group>"; };
+		763BA4BF244D4298007B748E /* VDPlayerFullScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerFullScreenVC.swift; sourceTree = "<group>"; };
 		76428E68225497260070E5F8 /* VDPortraitControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPortraitControlView.swift; sourceTree = "<group>"; };
 		76428E6A225497830070E5F8 /* VDPlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControlView.swift; sourceTree = "<group>"; };
 		76714798228A51610044A0D9 /* VDPlayerHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerHUD.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */,
 				76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */,
 				76B3BF522253C2810043F8FB /* VDPlayer.swift */,
+				763BA4BF244D4298007B748E /* VDPlayerFullScreenVC.swift */,
 				76B3BF3522539FF20043F8FB /* VDPlayerView.swift */,
 				76346157225CE31200EA2C48 /* VDPlayer-Bridging-Header.h */,
 			);
@@ -295,6 +298,7 @@
 				76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */,
 				76B3BF3D2253A2880043F8FB /* VDPlayerExtensions.swift in Sources */,
 				76714799228A51610044A0D9 /* VDPlayerHUD.swift in Sources */,
+				763BA4C0244D4298007B748E /* VDPlayerFullScreenVC.swift in Sources */,
 				76B3BF432253ADD30043F8FB /* VDVLCPlayerControll.swift in Sources */,
 				76B3BF3222539F840043F8FB /* VDPlayerConfig.swift in Sources */,
 				76B3BF3422539F8C0043F8FB /* VDPlayerManager.swift in Sources */,
