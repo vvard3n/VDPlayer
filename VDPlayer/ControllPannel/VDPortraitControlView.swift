@@ -73,7 +73,6 @@ class VDPortraitControlView: UIView {
     var titleLabel: UILabel = {
         let titleLabel = UILabel()
 //        titleLabel.backgroundColor = .random
-        titleLabel.text = "标题标题标题标题标题标题标题标题"
         titleLabel.font = .systemFont(ofSize: 18)
         titleLabel.textColor = .white
         return titleLabel

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-enum VDPlayerPlaybackState {
+@objc enum VDPlayerPlaybackState: Int {
     case unknow
     case stopped
     case playing
@@ -16,21 +16,21 @@ enum VDPlayerPlaybackState {
     case faild
 }
 
-enum VDPlayerLoadState {
+@objc enum VDPlayerLoadState: Int {
     case unknow
     case prepare
     case playable
     case stalled
 }
 
-enum VDPlayerScalingMode {
+@objc enum VDPlayerScalingMode: Int {
     case none
     case aspectFit
     case aspectFill
     case fill
 }
 
-protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
+@objc protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     var playerView: VDPlayerView { get set }
     
     /// time
@@ -78,7 +78,7 @@ protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
     func stop()
     
     /// Seek to a specified time
-    func seek(to time: TimeInterval?, completionHandler:((_ finished: Bool)->())?)
+    func seek(to time: TimeInterval, completionHandler:((_ finished: Bool)->())?)
     
     /// chagne current play rate
     func changeRate(_ rate: Float, completionHandler:((_ finished: Bool)->())?)

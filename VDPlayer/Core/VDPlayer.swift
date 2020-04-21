@@ -19,6 +19,7 @@ extension VDPlayerDelegate {
     private func playerOrientationDidChange(player: VDPlayer, isFullScreen: Bool) {}
 }
 
+@objcMembers
 class VDPlayer: NSObject {
     weak var delegate: VDPlayerDelegate?
     
@@ -56,9 +57,6 @@ class VDPlayer: NSObject {
             return UIApplication.shared.keyWindow
         }
     }
-    var fullScreenVC: VDPlayerFullScreenVC?
-    var fullScreenWindow: UIWindow?
-    weak var currentWindow: UIWindow?
     
     /// 媒体控制面板
     var controlView: (UIView & VDPlayerControlProtocol)? {
@@ -66,6 +64,11 @@ class VDPlayer: NSObject {
             guard let controlView = controlView else { return }
             controlView.player = self
             layoutPlayer()
+        }
+    }
+    @objc func setControlView(_ controlView: UIView) {
+        if let controlView = controlView as? (UIView & VDPlayerControlProtocol) {
+            self.controlView = controlView
         }
     }
     /// 手势控制器
@@ -114,14 +117,14 @@ class VDPlayer: NSObject {
             guard let assetURLs = assetURLs else { return }
             if assetURLs.isEmpty { return }
 //            currentPlayerControl.assetURL = assetURLs[0]
-//            if autoPlayWhenPrepareToPlay {
+            if autoPlayWhenPrepareToPlay {
                 play()
-//            }
+            }
         }
     }
     
     /// 是否自动播放
-//    var autoPlayWhenPrepareToPlay: Bool = false
+    var autoPlayWhenPrepareToPlay: Bool = true
     
     override private init() {
         super.init()
@@ -133,7 +136,7 @@ class VDPlayer: NSObject {
 //        self.init()
 //    }
     
-    convenience init(playerControl: VDPlayerPlayBackProtocol, container: UIView) {
+    @objc convenience init(playerControl: VDPlayerPlayBackProtocol, container: UIView) {
         self.init()
 //        self.controlView = VDPlayerControlView()
         self.containerView = container
@@ -142,19 +145,23 @@ class VDPlayer: NSObject {
             containerView.addSubview(self.currentPlayerControl.playerView)
 //            containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
             currentPlayerControl.playerView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
-            currentPlayerControl.playbackStateDidChanged = { player, state in
-                self.playbackStateDidChanged?(self, state)
-                self.controlView?.playerPlayStateChanged(player: self, playState: state)
+            currentPlayerControl.playbackStateDidChanged = { [weak self] player, state in
+                guard let weakSelf = self else { return }
+                weakSelf.playbackStateDidChanged?(weakSelf, state)
+                weakSelf.controlView?.playerPlayStateChanged(player: weakSelf, playState: state)
             }
-            currentPlayerControl.loadStateDidChanged = { player, state in
-                self.controlView?.playerLoadStateChanged(player: self, loadState: state)
+            currentPlayerControl.loadStateDidChanged = { [weak self] player, state in
+                guard let weakSelf = self else { return }
+                weakSelf.controlView?.playerLoadStateChanged(player: weakSelf, loadState: state)
             }
-            currentPlayerControl.playerPrepareToPlay = { player, assetURL in
-                self.layoutPlayer()
-                self.controlView?.playerPrepareToPlay(player: self)
+            currentPlayerControl.playerPrepareToPlay = { [weak self] player, assetURL in
+                guard let weakSelf = self else { return }
+                weakSelf.layoutPlayer()
+                weakSelf.controlView?.playerPrepareToPlay(player: weakSelf)
             }
-            currentPlayerControl.mediaPlayerTimeChanged = { player, currentTime, totalTime in
-                guard let controlView = self.controlView else { return }
+            currentPlayerControl.mediaPlayerTimeChanged = { [weak self] player, currentTime, totalTime in
+                guard let weakSelf = self else { return }
+                guard let controlView = weakSelf.controlView else { return }
                 controlView.updateTime(current: currentTime, total: totalTime)
             }
         }

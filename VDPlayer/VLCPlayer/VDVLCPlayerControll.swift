@@ -81,6 +81,10 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     
     private var cancelBufferingWorkItem: DispatchWorkItem?
     
+    deinit {
+        stop()
+    }
+    
     override init() {
         super.init()
     }
@@ -145,8 +149,8 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         loadState = .unknow
     }
     
-    func seek(to time: TimeInterval?, completionHandler: ((Bool) -> ())?) {
-        guard let time = time, time is TimeInterval else { return }
+    func seek(to time: TimeInterval, completionHandler: ((Bool) -> ())?) {
+//        guard let time = time, time is TimeInterval else { return }
         player?.time = VLCTime(int: Int32(time * 1000))
         if let completionHandler = completionHandler {
             completionHandler(true)

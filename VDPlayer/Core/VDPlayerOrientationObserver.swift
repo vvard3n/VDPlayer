@@ -298,3 +298,21 @@ extension VDPlayerOrientationObserver {
         UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
     }
 }
+
+class VDPlayerFullScreenVC: UIViewController {
+    
+    var interfaceOrientationMask: UIInterfaceOrientationMask = .allButUpsideDown
+    
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return interfaceOrientationMask
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+    }
+}

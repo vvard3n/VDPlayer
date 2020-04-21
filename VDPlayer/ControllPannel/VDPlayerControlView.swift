@@ -15,7 +15,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         }
     }
     
-    var player: VDPlayer! {
+    weak var player: VDPlayer! {
         didSet {
             portraitControlView.player = self.player
             landScapeControlView.player = self.player
@@ -67,6 +67,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     /// Loading视图
     var activity: UIActivityIndicatorView = {
         let activity = UIActivityIndicatorView()
+        activity.color = .white
         activity.startAnimating()
         activity.isHidden = true
         return activity
