@@ -175,6 +175,9 @@ class VDPlayer: NSObject {
         controlView.frame = currentPlayerControl.playerView.bounds
         controlView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         
+        orientationObserver.containerView = containerView
+        orientationObserver.playerView = currentPlayerControl.playerView
+        
         if self.gestureControl == nil {
             self.gestureControl = VDPlayerGestureControl()
             guard let gestureControl = self.gestureControl else { return }
@@ -218,98 +221,12 @@ extension VDPlayer {
         control.controlViewAppeared = false
         control.hideControlView(animated: true)
         
-//        isFullScreen = !isFullScreen
-        
-        // TODO 移入监听者
-//        要监听一下全屏事件才行
-        // --
-//        if isFullScreen {
-//            fullScreenVC?.isFullScreen = false
-//            fullScreenVC?.exitFullScreen()
-//            fullScreenVC?.fullScreenContainerView.backgroundColor = .clear
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform.identity
-//                self.currentPlayerControl.playerView.frame = self.fullScreenVC?.fullScreenContainerView.convert(self.containerView?.frame ?? .zero, to: self.fullScreenVC?.fullScreenContainerView) ?? CGRect.zero
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                self.currentPlayerControl.playerView.removeFromSuperview()
-//                //                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
-//                self.containerView?.addSubview(self.currentPlayerControl.playerView)
-//                self.currentPlayerControl.playerView.frame = self.containerView?.bounds ?? CGRect.zero
-////                self.fullScreenVC?.fullScreenContainerView.removeFromSuperview()
-//                self.fullScreenWindow?.isHidden = true
-//                self.fullScreenWindow = nil
-//
-////                guard let currentWindow = self.currentWindow else { return }
-////                currentWindow.makeKeyAndVisible()
-//            }
-//            orientationObserver.exitFullScreen(animate: true)
-//        }
-//        else {
-//            if fullScreenVC == nil {
-//                fullScreenVC = VDPlayerFullScreenVC()
-//            }
-//            fullScreenVC?.isFullScreen = true
-////            currentWindow = UIApplication.shared.keyWindow
-//            guard let fullScreenContainerView = fullScreenVC?.fullScreenContainerView else { return }
-//            currentPlayerControl.playerView.removeFromSuperview()
-////            UIApplication.shared.keyWindow?.addSubview(fullScreenContainerView)
-//            let rect = containerView?.convert(currentPlayerControl.playerView.frame, to: fullScreenContainerView) ?? CGRect.zero
-//            fullScreenContainerView.addSubview(currentPlayerControl.playerView)
-//            currentPlayerControl.playerView.frame = rect
-//
-//            fullScreenWindow = UIWindow(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
-//            fullScreenWindow?.rootViewController = fullScreenVC
-//            fullScreenWindow?.isHidden = false
-//
-//            fullScreenVC?.enterFullScreen()
-//
-//            UIView.animate(withDuration: 0.5, animations: {
-////                self.currentPlayerControl.playerView.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 90 / 360.0 * 2)
-//                self.currentPlayerControl.playerView.frame = CGRect(x: 0, y: 0, width: SCREEN_HEIGHT, height: SCREEN_WIDTH)
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                fullScreenContainerView.backgroundColor = .black
-//            }
-//            orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
-//        }
-        
-        
-//        if isFullScreen {
-//            fullScreenContainerView?.backgroundColor = .clear
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform.identity
-//                self.currentPlayerControl.playerView.frame = self.fullScreenContainerView?.convert(self.containerView?.frame ?? .zero, to: self.fullScreenContainerView) ?? CGRect.zero
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                self.currentPlayerControl.playerView.removeFromSuperview()
-////                self.containerView?.insertSubview(self.currentPlayerControl.playerView, at: 1)
-//                self.containerView?.addSubview(self.currentPlayerControl.playerView)
-//                self.currentPlayerControl.playerView.frame = self.containerView?.bounds ?? CGRect.zero
-//                self.fullScreenContainerView?.removeFromSuperview()
-//            }
-//            orientationObserver.exitFullScreen(animate: true)
-//        }
-//        else {
-//            if fullScreenContainerView == nil {
-//                fullScreenContainerView = UIView(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
-//            }
-//            guard let fullScreenContainerView = fullScreenContainerView else { return }
-//            currentPlayerControl.playerView.removeFromSuperview()
-//            UIApplication.shared.keyWindow?.addSubview(fullScreenContainerView)
-//            let rect = containerView?.convert(currentPlayerControl.playerView.frame, to: fullScreenContainerView) ?? CGRect.zero
-//            fullScreenContainerView.addSubview(currentPlayerControl.playerView)
-//            currentPlayerControl.playerView.frame = rect
-//
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.currentPlayerControl.playerView.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 90 / 360.0 * 2)
-//                self.currentPlayerControl.playerView.frame = CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
-//                self.fullScreenContainerView?.layoutIfNeeded()
-//            }) { (complate) in
-//                fullScreenContainerView.backgroundColor = .black
-//            }
-//            orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
-//        }
+        if isFullScreen {
+            orientationObserver.exitFullScreen(animate: true)
+        }
+        else {
+            orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
+        }
     }
 }
 

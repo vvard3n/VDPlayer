@@ -10,21 +10,20 @@ import UIKit
 
 class VDPlayerFullScreenVC: UIViewController {
     
-    var isFullScreen: Bool = false
+    var interfaceOrientationMask: UIInterfaceOrientationMask = .allButUpsideDown
+//    var isFullScreen: Bool = false
+//    var animateDuration: TimeInterval = 0.3
     
     override var shouldAutorotate: Bool {
         return true
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if isFullScreen {
-            return .landscape
-        }
-        return .portrait
+        return interfaceOrientationMask
     }
     
     /// 全屏容器
-    var fullScreenContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: SCREEN_HEIGHT, height: SCREEN_WIDTH))
+//    var fullScreenContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: SCREEN_HEIGHT, height: SCREEN_WIDTH))
 
 //    override func viewWillLayoutSubviews() {
 //        super.viewWillLayoutSubviews()
@@ -33,28 +32,18 @@ class VDPlayerFullScreenVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.addSubview(fullScreenContainerView)
+        view.backgroundColor = .white
+//        view.addSubview(fullScreenContainerView)
     }
     
-    func enterFullScreen() {
-        isFullScreen = true
-        setNeedsStatusBarAppearanceUpdate()
-    }
-    
-    func exitFullScreen() {
-        isFullScreen = false
-        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-        setNeedsStatusBarAppearanceUpdate()
-    }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+//    func enterFullScreen() {
+//        isFullScreen = true
+//        setNeedsStatusBarAppearanceUpdate()
+//    }
+//
+//    func exitFullScreen() {
+//        isFullScreen = false
+//        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+//        setNeedsStatusBarAppearanceUpdate()
+//    }
 }
