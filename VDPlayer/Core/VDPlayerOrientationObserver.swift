@@ -50,6 +50,15 @@ class VDPlayerOrientationObserver: NSObject {
         return UIWindow(frame: CGRect.zero)
     }()
     
+    deinit {
+        removeDeviceOrientationObserver()
+    }
+    
+    override init() {
+        super.init()
+        addDeviceOrientationObserver()
+    }
+    
     func addDeviceOrientationObserver() {
         if UIDevice.current.isGeneratingDeviceOrientationNotifications {
             UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -68,7 +77,27 @@ class VDPlayerOrientationObserver: NSObject {
 // MARK: - Handel
 extension VDPlayerOrientationObserver {
     @objc private func deviceOrientationDidChange(_ notification: Notification) {
+        var currentOrientation = UIInterfaceOrientation.unknown
+        if UIDevice.current.orientation.isValidInterfaceOrientation {
+            currentOrientation = UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue) ?? .unknown
+        }
+        else {
+            return
+        }
+
+        // Determine that if the current direction is the same as the direction you want to rotate, do nothing
+//        if (currentOrientation == _currentOrientation && !self.forceDeviceOrientation) return;
         
+        switch currentOrientation {
+        case .portrait:
+            enterLandscapeFullScreen(orientation: .portrait, animate: true)
+        case .landscapeLeft:
+            enterLandscapeFullScreen(orientation: .landscapeLeft, animate: true)
+        case .landscapeRight:
+            enterLandscapeFullScreen(orientation: .landscapeRight, animate: true)
+        default:
+            break
+        }
     }
 }
 
@@ -119,7 +148,7 @@ extension VDPlayerOrientationObserver {
         var superview: UIView? = nil
         var frame: CGRect
         guard let playerView = playerView else { return }
-        if orientation == .landscapeLeft || orientation == .landscapeRight {
+        if orientation.isLandscape {
             superview = fullScreenContainerView
             /// It's not set from the other side of the screen to this side
             if !isFullScreen {
