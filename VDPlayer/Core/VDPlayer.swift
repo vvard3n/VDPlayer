@@ -126,6 +126,10 @@ class VDPlayer: NSObject {
     /// 是否自动播放
     var autoPlayWhenPrepareToPlay: Bool = true
     
+    deinit {
+        currentPlayerControl.stop()
+    }
+    
     override private init() {
         super.init()
         let control = VDVLCPlayerControl()
