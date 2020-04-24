@@ -137,6 +137,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     func showControlView(animated: Bool) {
         controlViewAppeared = true
         startAutoHiddenControlView()
+        if self.player == nil { return }
         if animated {
             UIView.animate(withDuration: autoFadeAnimateTime, animations: {
                 if self.player.isFullScreen {
@@ -162,6 +163,7 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     
     func hideControlView(animated: Bool) {
         controlViewAppeared = false
+        if self.player == nil { return }
         if animated {
             UIView.animate(withDuration: autoFadeAnimateTime, animations: {
                 if self.player.isFullScreen {
