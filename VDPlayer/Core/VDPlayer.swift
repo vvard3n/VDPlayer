@@ -23,6 +23,11 @@ extension VDPlayerDelegate {
 class VDPlayer: NSObject {
     weak var delegate: VDPlayerDelegate?
     
+    var allowAutorotate: Bool = true {
+        didSet {
+            orientationObserver.allowAutorotate = allowAutorotate
+        }
+    }
     var isFullScreen: Bool { get { return orientationObserver.isFullScreen } }
     var fullScreenStateWillChange: ((VDPlayer, Bool) -> ())?
     var fullScreenStateDidChange: ((VDPlayer, Bool) -> ())?
@@ -225,6 +230,10 @@ extension VDPlayer {
     
     func playPrevious() {
         
+    }
+    
+    @objc func pause() {
+        currentPlayerControl.pause()
     }
     
     func fullScreenStateChange(animated: Bool) {

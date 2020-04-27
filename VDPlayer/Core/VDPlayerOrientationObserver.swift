@@ -20,6 +20,7 @@ extension VDPlayerOrientationObserverDelegate {
 
 class VDPlayerOrientationObserver: NSObject {
     
+    var allowAutorotate: Bool = true
     weak var delegate: VDPlayerOrientationObserverDelegate?
     var isFullScreen: Bool = false
     var animateDuration: TimeInterval = 0.3
@@ -87,6 +88,7 @@ extension VDPlayerOrientationObserver {
 
         // Determine that if the current direction is the same as the direction you want to rotate, do nothing
 //        if (currentOrientation == _currentOrientation && !self.forceDeviceOrientation) return;
+        if !allowAutorotate { return }
         
         switch currentOrientation {
         case .portrait:
