@@ -237,175 +237,19 @@ extension VDPlayerOrientationObserver {
 }
 
 extension VDPlayerOrientationObserver {
-    func forceDeviceOrientation(orientation: UIInterfaceOrientation, animate: Bool) {
-        
-        var superview: UIView? = nil
-        guard let playerView = playerView else { return }
-        if !isFullScreen {
-            superview = fullScreenContainerView
-            playerView.frame = playerView.convert(playerView.frame, to: superview)
-            superview?.addSubview(playerView)
-            isFullScreen = true
-        } else {
-//            if roateType == ZFRotateTypeCell {
-//                superview = cell.viewWithTag(playerViewTag)
-//            } else {
-                superview = containerView
-//            }
-            isFullScreen = false
-        }
-        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
-        UIViewController.attemptRotationToDeviceOrientation()
-        
-        guard let frame = superview?.convert(superview?.bounds ?? CGRect.zero, to: fullScreenContainerView) else { return }
-        if animate {
-            UIView.animate(withDuration: duration, animations: {
-                playerView.frame = frame
-                playerView.layoutIfNeeded()
-                self.interfaceOrientation(orientation: orientation)
-            }) { finished in
-                superview?.addSubview(playerView)
-                playerView.frame = superview?.bounds ?? .zero
-                self.delegate?.orientationDidChange(observer: self, isFullScreen: self.isFullScreen)
-            }
-        } else {
-            superview?.addSubview(playerView)
-            playerView.frame = superview?.bounds ?? .zero
-            playerView.layoutIfNeeded()
-            UIView.performWithoutAnimation {
-                self.interfaceOrientation(orientation: orientation)
-            }
-            delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
-        }
-    }
-    
-    func normalOrientation(orientation: UIInterfaceOrientation, animate: Bool) {
-        var superview: UIView? = nil
-        var frame: CGRect
-        guard let playerView = playerView else { return }
-        if orientation.isLandscape {
-            superview = fullScreenContainerView
-            /// It's not set from the other side of the screen to this side
-            if !isFullScreen {
-                playerView.frame = playerView.convert(playerView.frame, to: superview)
-            }
-            superview?.addSubview(playerView)
-            isFullScreen = true
-            delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
-
-            let fullVC = VDPlayerFullScreenVC()
-            if orientation == .landscapeLeft {
-                fullVC.interfaceOrientationMask = UIInterfaceOrientationMask.landscapeLeft
-            } else {
-                fullVC.interfaceOrientationMask = UIInterfaceOrientationMask.landscapeRight
-            }
-            fullScreenWindow.rootViewController = fullVC
-        } else {
-            isFullScreen = false
-            delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
-            let fullVC = VDPlayerFullScreenVC()
-            fullVC.interfaceOrientationMask = UIInterfaceOrientationMask.portrait
-            fullScreenWindow.rootViewController = fullVC
-
-//            if roateType == ZFRotateTypeCell {
-//                superview = cell.viewWithTag(playerViewTag)
-//            } else {
-                superview = containerView
-//            }
-//            if blackView.superview != nil {
-//                blackView.removeFromSuperview()
-            //            }
-        }
-        frame = superview?.convert(superview?.bounds ?? CGRect.zero, to: fullScreenContainerView) ?? CGRect.zero
-        
-        if animate {
-            UIView.animate(withDuration: duration, animations: {
-                playerView.transform = self.getTransformRotationAngle(orientation)
-                UIView.animate(withDuration: self.duration, animations: {
-                    playerView.frame = frame
-                    playerView.layoutIfNeeded()
-                })
-            }) { finished in
-                superview?.addSubview(playerView)
-                playerView.frame = superview?.bounds ?? .zero
-                if self.isFullScreen {
-                    //                    superview?.insertSubview(self.blackView, belowSubview: self.view)
-                    //                    self.blackView.frame = superview?.bounds
-                }
-            }
-            delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
-        } else {
-            playerView.transform = self.getTransformRotationAngle(orientation)
-            superview?.addSubview(playerView)
-            playerView.frame = superview?.bounds ?? .zero
-            playerView.layoutIfNeeded()
-            if self.isFullScreen {
-                //                    superview?.insertSubview(self.blackView, belowSubview: self.view)
-                //                    self.blackView.frame = superview?.bounds
-            }
-            delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
-        }
-    }
     
     func enterPortraitMode(fullScreen: Bool, animated: Bool, completion:((_ completion: Bool)->())? = nil) {
-////        if fullScreen {
-////
-////        }
-////        else {
-////
-////        }
-////        isFullScreen = fullScreen
-////        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
-////        if animate {
-////            UIView.animate(withDuration: animateDuration, animations: {
-////                self.interfaceOrientation(orientation: .portrait)
-////            }) { (complate) in
-////                self.delegate?.orientationDidChange(observer: self, isFullScreen: self.isFullScreen)
-////            }
-////        }
-////        else {
-////            UIView.performWithoutAnimation {
-////                self.interfaceOrientation(orientation: .portrait)
-////            }
-////            delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
-////        }
-////        //        UIApplication.shared.statusBarOrientation = .portrait
-//////        UIApplication.shared.setStatusBarOrientation(.portrait, animated: animate)
-//        var superview: UIView? = nil
-//        guard let playerView = playerView else { return }
-//        if fullScreen {
-//            superview = fullScreenContainerView
-//            playerView.frame = playerView.convert(playerView.frame, to: superview)
-//            superview?.addSubview(playerView)
-//            isFullScreen = true
-//        } else {
-////            if roateType == ZFRotateTypeCell {
-////                superview = cell.viewWithTag(playerViewTag)
-////            } else {
-//                superview = containerView
-////            }
-//            isFullScreen = false
-//        }
-//        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
-//        let frame = superview?.convert(superview?.bounds ?? CGRect.zero, to: fullScreenContainerView)
-//        if animated {
-//            UIView.animate(withDuration: duration, animations: {
-//                playerView.frame = frame ?? .zero
-//                playerView.layoutIfNeeded()
-//            }) { finished in
-//                superview?.addSubview(playerView)
-//                playerView.frame = superview?.bounds ?? .zero
-//                self.delegate?.orientationDidChange(observer: self, isFullScreen: self.isFullScreen)
-//            }
-//        } else {
-//            superview?.addSubview(playerView)
-//            playerView.frame = superview?.bounds ?? .zero
-//            playerView.layoutIfNeeded()
-//            delegate?.orientationDidChange(observer: self, isFullScreen: isFullScreen)
-//        }
         isFullScreen = fullScreen
         if isFullScreen {
-            
+            guard let portraitViewController = portraitViewController else { return }
+            portraitViewController.contentView = playerView
+            portraitViewController.containerView = containerView
+            portraitViewController.duration = duration
+            portraitViewController.presentationSize = CGSize(width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
+            portraitViewController.fullScreenAnimation = animated
+            UIWindow.vd_currentViewController()?.present(portraitViewController, animated: animated, completion: {
+                completion?(true)
+            })
         }
         else {
             portraitViewController?.fullScreenAnimation = animated
@@ -413,16 +257,6 @@ extension VDPlayerOrientationObserver {
                 completion?(true)
             })
         }
-    }
-        
-    func enterLandscapeFullScreen(orientation: UIInterfaceOrientation, animated: Bool, completion:((_ completion: Bool)->())? = nil) {
-        normalOrientation(orientation: orientation, animate: animated)
-//        enterPortraitMode(fullScreen: true, animate: animate)
-    }
-    
-    func exitFullScreen(animate: Bool) {
-        normalOrientation(orientation: .portrait, animate: animate)
-//        enterPortraitMode(fullScreen: false, animate: true)
     }
     
     func rotate(to orientation: UIInterfaceOrientation, animated: Bool, completion: ((_ completion: Bool)->())? = nil) {
@@ -514,13 +348,14 @@ extension VDPlayerOrientationObserver: VDLandscapeViewControllerDelegate {
     
     func vd_willRotateToOrientation(orientation: UIInterfaceOrientation) {
         isFullScreen = orientation.isLandscape
-        orientationWillChange?(self, isFullScreen)
+//        orientationWillChange?(self, isFullScreen)
+        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
     }
     
     func vd_didRotateFromOrientation(orientation: UIInterfaceOrientation) {
         orientationDidChange?(self, isFullScreen)
         if !isFullScreen {
-            _rotation(toLandscapeOrientation: .portrait)
+            _rotation(toPortraitOrientation: .portrait)
         }
     }
     
@@ -581,31 +416,20 @@ extension VDPlayerOrientationObserver {
         }
     }
     
-//    - (void)_rotationToPortraitOrientation:(UIInterfaceOrientation)orientation {
-//        if (orientation == UIInterfaceOrientationPortrait && !self.window.hidden) {
-//            UIView *containerView = nil;
-//            if (self.rotateType == ZFRotateTypeCell) {
-//                containerView = [self.cell viewWithTag:self.playerViewTag];
-//            } else {
-//                containerView = self.containerView;
-//            }
-//            UIView *snapshot = [self.view snapshotViewAfterScreenUpdates:NO];
-//            snapshot.frame = containerView.bounds;
-//            [containerView addSubview:snapshot];
-//            [self performSelector:@selector(_contentViewAdd:) onThread:NSThread.mainThread withObject:containerView waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];
-//            [self performSelector:@selector(_makeKeyAndVisible:) onThread:NSThread.mainThread withObject:snapshot waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];
-//        }
-//    }
     private func _rotation(toPortraitOrientation orientation: UIInterfaceOrientation) {
         if orientation.isPortrait && !(window?.isHidden ?? true) {
-            var containerView: UIView?
-            containerView = self.containerView
-            if let snapshot = playerView?.snapshotView(afterScreenUpdates: false) {
-                snapshot.frame = containerView?.bounds ?? .zero
-                containerView?.addSubview(snapshot)
+            if let snapshot = playerView?.snapshotView(afterScreenUpdates: false), let containerView = self.containerView {
+                snapshot.frame = containerView.bounds
+                containerView.addSubview(snapshot)
+                
+                DispatchQueue.main.async {
+                    self._contentViewAdd(containerView: containerView)
+                    self._makeKeyAndVisible(snapshot: snapshot)
+                }
             }
-            perform(#selector(_contentViewAdd(containerView:)))
-            perform(#selector(_makeKeyAndVisible(snapshot:)))
+//            perform(#selector(_contentViewAdd(containerView:)))
+//            perform(#selector(_makeKeyAndVisible(snapshot:)))
+            
         }
     }
     
@@ -622,23 +446,5 @@ extension VDPlayerOrientationObserver {
         previousKeyWindow?.makeKeyAndVisible()
         self.previousKeyWindow = nil
         window?.isHidden = true
-    }
-}
-
-class VDPlayerFullScreenVC: UIViewController {
-    
-    var interfaceOrientationMask: UIInterfaceOrientationMask = .allButUpsideDown
-    
-    override var shouldAutorotate: Bool {
-        return true
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return interfaceOrientationMask
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
     }
 }

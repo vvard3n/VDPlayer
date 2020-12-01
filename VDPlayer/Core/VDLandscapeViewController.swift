@@ -38,14 +38,6 @@ class VDLandscapeViewController: UIViewController {
     public var statusBarAnimation: UIStatusBarAnimation = .slide
     public var rotatingCompleted: (()->())?
     
-//    public init() {
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         isRotating = true
         super.viewWillTransition(to: size, with: coordinator)
