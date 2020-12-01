@@ -11,7 +11,7 @@ import UIKit
 class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     var backBtnClickCallback: (() -> ())? {
         didSet {
-            
+            portraitControlView.backBtnClickCallback = backBtnClickCallback
         }
     }
     
@@ -268,11 +268,11 @@ extension VDPlayerControlView {
     
     internal func gestureDoubleTapped() {
         if player == nil { return }
-        if player.currentPlayerControl.isPlaying {
-            player.currentPlayerControl.pause()
+        if player.currentPlayerManager.isPlaying {
+            player.currentPlayerManager.pause()
         }
         else {
-            player.currentPlayerControl.play()
+            player.currentPlayerManager.play()
         }
     }
     
@@ -317,7 +317,7 @@ extension VDPlayerControlView {
     }
     
     internal func playerLoadStateChanged(player: VDPlayer, loadState: VDPlayerLoadState) {
-        if (loadState == .stalled || loadState == .prepare) && player.currentPlayerControl.isPlaying {
+        if (loadState == .stalled || loadState == .prepare) && player.currentPlayerManager.isPlaying {
             activity.isHidden = false
             activity.startAnimating()
         }

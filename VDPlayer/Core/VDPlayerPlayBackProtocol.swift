@@ -31,7 +31,7 @@ import Foundation
 }
 
 @objc protocol VDPlayerPlayBackProtocol: NSObjectProtocol {
-    var playerView: VDPlayerView { get set }
+    var view: VDPlayerView { get set }
     
     /// time
     var currentTime: TimeInterval { get }

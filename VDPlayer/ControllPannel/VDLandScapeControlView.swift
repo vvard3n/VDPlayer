@@ -46,7 +46,7 @@ class VDLandScapeControlView: UIView {
     var titleLabel: UILabel = {
         let titleLabel = UILabel()
 //        titleLabel.backgroundColor = .random
-        titleLabel.text = "标题标题标题标题标题标题标题标题"
+//        titleLabel.text = "标题标题标题标题标题标题标题标题"
         titleLabel.font = .systemFont(ofSize: 17)
         titleLabel.textColor = .white
         return titleLabel
@@ -246,15 +246,18 @@ extension VDLandScapeControlView {
     @objc private func playPauseBtnDidClick(_ sender: UIButton) {
         self.playPauseBtn.isSelected = !self.playPauseBtn.isSelected
         if playPauseBtn.isSelected {
-            player.currentPlayerControl.play()
+            player.currentPlayerManager.play()
         }
         else {
-            player.currentPlayerControl.pause()
+            player.currentPlayerManager.pause()
         }
     }
     
     @objc private func fullScreenBtnDidClick(_ sender: UIButton) {
-        player.fullScreenStateChange(animated: true)
+//        if player.orientationObserver.supportInterfaceOrientation.contains(.portrait) {
+            player.enterFullScreen(false, animated: true, completion: nil)
+//            player.fullScreenStateChange(animated: true)
+//        }
     }
     
     @objc private func didSliderTouchDown(_ sender: UISlider) {
@@ -370,7 +373,7 @@ extension VDLandScapeControlView {
         
         if event?.allTouches?.count == 2 {
             let point = touches.first?.location(in: self) ?? .zero
-            let currentRate = player.currentPlayerControl.rate
+            let currentRate = player.currentPlayerManager.rate
             var targetRate = currentRate
             if abs(point.x - startTouchMovePoint.x) > 10 {
                 if point.x > startTouchMovePoint.x {
@@ -386,9 +389,9 @@ extension VDLandScapeControlView {
                     }
                 }
             }
-            player.currentPlayerControl.changeRate(targetRate) { (success) in
+            player.currentPlayerManager.changeRate(targetRate) { (success) in
                 if success {
-                    print("当前速度\(self.player.currentPlayerControl.rate)")
+                    print("当前速度\(self.player.currentPlayerManager.rate)")
                 }
             }
             return

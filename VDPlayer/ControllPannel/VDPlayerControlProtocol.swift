@@ -12,6 +12,7 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
 
     var player: VDPlayer! { get set }
     
+    func hideControlView(animated: Bool)
     func gestureSingleTapped()
     func gestureDoubleTapped()
     func gesturePan(_ panGesture: UIPanGestureRecognizer)
@@ -26,6 +27,8 @@ protocol VDPlayerControlProtocol: NSObjectProtocol {
 }
 
 extension VDPlayerControlProtocol {
+    
+    func hideControlView(animated: Bool) {}
     func gestureSingleTapped() {}
     func gestureDoubleTapped() {}
     func gesturePan(_ panGesture: UIPanGestureRecognizer) {}

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
+class VDVLCPlayerManager: NSObject, VDPlayerPlayBackProtocol {
     var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())?
     var loadStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerLoadState) -> ())?
     var playerReadyToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
@@ -47,7 +47,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     
     var player      : VLCMediaPlayer?
     /// 播放器容器（VDPlayerView -> 渲染层 -> ControlView）
-    var playerView  : VDPlayerView          = VDPlayerView()
+    var view        : VDPlayerView          = VDPlayerView()
     
     var currentTime : TimeInterval          { get { return TimeInterval((player?.time.value.doubleValue ?? 0) / 1000) } }
     var totalTime   : TimeInterval          { get { return TimeInterval(((player?.time.value.doubleValue ?? 0) + fabs(player?.remainingTime.value?.doubleValue ?? 0)) / 1000) } }
@@ -97,7 +97,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
         player?.rate = 1.0
         player?.delegate = self
         player?.media = media
-        player?.drawable = self.playerView.mediaContainer
+        player?.drawable = self.view.playerView
     }
     
     private func setupPlayerObserver() {
@@ -163,7 +163,7 @@ class VDVLCPlayerControl: NSObject, VDPlayerPlayBackProtocol {
     }
 }
 
-extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
+extension VDVLCPlayerManager: VLCMediaPlayerDelegate {
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
         guard let player = aNotification.object as? VLCMediaPlayer else { return }
         switch player.state {
@@ -227,7 +227,7 @@ extension VDVLCPlayerControl: VLCMediaPlayerDelegate {
     }
 }
 
-extension VDVLCPlayerControl: VLCMediaDelegate {
+extension VDVLCPlayerManager: VLCMediaDelegate {
     func mediaDidFinishParsing(_ aMedia: VLCMedia) {
         print("mediaDidFinishParsing")
     }

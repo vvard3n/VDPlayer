@@ -174,6 +174,7 @@ class VDPortraitControlView: UIView {
     }
     
     private func addSubviewActions() {
+        backBtn.addTarget(self, action: #selector(backBtnDidClick(_:)), for: .touchUpInside)
         playPauseBtn.addTarget(self, action: #selector(playPauseBtnDidClick(_:)), for: .touchUpInside)
         fullScreenBtn.addTarget(self, action: #selector(fullScreenBtnDidClick(_:)), for: .touchUpInside)
         
@@ -305,15 +306,20 @@ extension VDPortraitControlView {
     @objc private func playPauseBtnDidClick(_ sender: UIButton) {
         self.playPauseBtn.isSelected = !self.playPauseBtn.isSelected
         if playPauseBtn.isSelected {
-            player.currentPlayerControl.play()
+            player.currentPlayerManager.play()
         }
         else {
-            player.currentPlayerControl.pause()
+            player.currentPlayerManager.pause()
         }
     }
     
     @objc private func fullScreenBtnDidClick(_ sender: UIButton) {
-        player.fullScreenStateChange(animated: true)
+//        player.fullScreenStateChange(animated: true)
+        player.enterFullScreen(true, animated: true, completion: nil)
+    }
+    
+    @objc private func backBtnDidClick(_ sender: UIButton) {
+        backBtnClickCallback?()
     }
     
     @objc private func didSliderTouchDown(_ sender: UISlider) {
@@ -533,7 +539,7 @@ extension VDPortraitControlView {
         }
         if currentGestureType == .rate {
             let point = touches.first?.location(in: self) ?? .zero
-            let currentRate = player.currentPlayerControl.rate
+            let currentRate = player.currentPlayerManager.rate
             var targetRate = currentRate
             if abs(point.x - startTouchMovePoint.x) > 20 {
                 if point.x > startTouchMovePoint.x {
@@ -549,11 +555,11 @@ extension VDPortraitControlView {
                     }
                 }
             }
-            player.currentPlayerControl.changeRate(targetRate) { (success) in
+            player.currentPlayerManager.changeRate(targetRate) { (success) in
                 if success {
-                    print("当前速度\(self.player.currentPlayerControl.rate)")
+                    print("当前速度\(self.player.currentPlayerManager.rate)")
                     guard let superview = self.superview else { return }
-                    VDHUDLabel.show(text: "\(self.player.currentPlayerControl.rate)X", in: superview).hide(after: 2)
+                    VDHUDLabel.show(text: "\(self.player.currentPlayerManager.rate)X", in: superview).hide(after: 2)
                 }
             }
         }

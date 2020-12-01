@@ -11,6 +11,10 @@
 		76276707228A5B7600DA7C52 /* VDHUDLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76276706228A5B7600DA7C52 /* VDHUDLabel.swift */; };
 		76428E69225497260070E5F8 /* VDPortraitControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76428E68225497260070E5F8 /* VDPortraitControlView.swift */; };
 		76428E6B225497830070E5F8 /* VDPlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76428E6A225497830070E5F8 /* VDPlayerControlView.swift */; };
+		766233A4257485F90001EDE9 /* VDLandscapeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766233A3257485F90001EDE9 /* VDLandscapeWindow.swift */; };
+		766233A72574863C0001EDE9 /* VDLandscapeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766233A62574863C0001EDE9 /* VDLandscapeViewController.swift */; };
+		766233AF2574D66E0001EDE9 /* VDPortraitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766233AE2574D66E0001EDE9 /* VDPortraitViewController.swift */; };
+		766233B22574D7ED0001EDE9 /* VDPresentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766233B12574D7ED0001EDE9 /* VDPresentTransition.swift */; };
 		76714799228A51610044A0D9 /* VDPlayerHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76714798228A51610044A0D9 /* VDPlayerHUD.swift */; };
 		76AE064622544950005081D5 /* VDPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76AE064522544950005081D5 /* VDPlayer.bundle */; };
 		76AE06482254554F005081D5 /* VDPlayerControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AE06472254554F005081D5 /* VDPlayerControlProtocol.swift */; };
@@ -38,6 +42,10 @@
 		76346157225CE31200EA2C48 /* VDPlayer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VDPlayer-Bridging-Header.h"; sourceTree = "<group>"; };
 		76428E68225497260070E5F8 /* VDPortraitControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPortraitControlView.swift; sourceTree = "<group>"; };
 		76428E6A225497830070E5F8 /* VDPlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControlView.swift; sourceTree = "<group>"; };
+		766233A3257485F90001EDE9 /* VDLandscapeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDLandscapeWindow.swift; sourceTree = "<group>"; };
+		766233A62574863C0001EDE9 /* VDLandscapeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDLandscapeViewController.swift; sourceTree = "<group>"; };
+		766233AE2574D66E0001EDE9 /* VDPortraitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPortraitViewController.swift; sourceTree = "<group>"; };
+		766233B12574D7ED0001EDE9 /* VDPresentTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPresentTransition.swift; sourceTree = "<group>"; };
 		76714798228A51610044A0D9 /* VDPlayerHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerHUD.swift; sourceTree = "<group>"; };
 		76AE064522544950005081D5 /* VDPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VDPlayer.bundle; sourceTree = "<group>"; };
 		76AE06472254554F005081D5 /* VDPlayerControlProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControlProtocol.swift; sourceTree = "<group>"; };
@@ -156,6 +164,10 @@
 			children = (
 				76B3BF402253A4AA0043F8FB /* VDPlayerPlayBackProtocol.swift */,
 				76B3BF372253A0410043F8FB /* VDPlayerGestureControl.swift */,
+				766233A3257485F90001EDE9 /* VDLandscapeWindow.swift */,
+				766233A62574863C0001EDE9 /* VDLandscapeViewController.swift */,
+				766233AE2574D66E0001EDE9 /* VDPortraitViewController.swift */,
+				766233B12574D7ED0001EDE9 /* VDPresentTransition.swift */,
 				76E69BA2225A5D4600205D4B /* VDPlayerOrientationObserver.swift */,
 				76B3BF3322539F8C0043F8FB /* VDPlayerManager.swift */,
 				76B3BF3122539F840043F8FB /* VDPlayerConfig.swift */,
@@ -212,7 +224,7 @@
 			attributes = {
 				CLASSPREFIX = VD;
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = vvard3n;
 				TargetAttributes = {
 					76B3BF1A22539DEC0043F8FB = {
@@ -285,16 +297,20 @@
 			files = (
 				76428E6B225497830070E5F8 /* VDPlayerControlView.swift in Sources */,
 				76B3BF2122539DEC0043F8FB /* ViewController.swift in Sources */,
+				766233A72574863C0001EDE9 /* VDLandscapeViewController.swift in Sources */,
 				76428E69225497260070E5F8 /* VDPortraitControlView.swift in Sources */,
 				76B3BF532253C2810043F8FB /* VDPlayer.swift in Sources */,
 				76AE06482254554F005081D5 /* VDPlayerControlProtocol.swift in Sources */,
+				766233B22574D7ED0001EDE9 /* VDPresentTransition.swift in Sources */,
 				76E69BA3225A5D4600205D4B /* VDPlayerOrientationObserver.swift in Sources */,
+				766233AF2574D66E0001EDE9 /* VDPortraitViewController.swift in Sources */,
 				76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */,
 				76B3BF552253C3560043F8FB /* VDLandScapeControlView.swift in Sources */,
 				76276707228A5B7600DA7C52 /* VDHUDLabel.swift in Sources */,
 				76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */,
 				76B3BF3D2253A2880043F8FB /* VDPlayerExtensions.swift in Sources */,
 				76714799228A51610044A0D9 /* VDPlayerHUD.swift in Sources */,
+				766233A4257485F90001EDE9 /* VDLandscapeWindow.swift in Sources */,
 				76B3BF432253ADD30043F8FB /* VDVLCPlayerControll.swift in Sources */,
 				76B3BF3222539F840043F8FB /* VDPlayerConfig.swift in Sources */,
 				76B3BF3422539F8C0043F8FB /* VDPlayerManager.swift in Sources */,
@@ -352,6 +368,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -413,6 +430,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -450,7 +468,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_LINK_OBJC_RUNTIME = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1000;
 				DEVELOPMENT_TEAM = NNBDF3Y47L;
 				ENABLE_BITCODE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -460,8 +480,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nvar.VDPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "VDPlayer/Core/VDPlayer-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "VDPlayer/VDPlayer-Swift.h";
@@ -479,7 +501,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_LINK_OBJC_RUNTIME = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1000;
 				DEVELOPMENT_TEAM = NNBDF3Y47L;
 				ENABLE_BITCODE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -489,8 +513,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.nvar.VDPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "VDPlayer/Core/VDPlayer-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "VDPlayer/VDPlayer-Swift.h";

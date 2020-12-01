@@ -45,13 +45,18 @@ class ViewController: UIViewController {
     }
     
     @objc private func playBtnClick(_ sender: UIButton) {
-        let playerControl = VDVLCPlayerControl()
+        let playerControl = VDVLCPlayerManager()
         let playerControlView = VDPlayerControlView()
         playerControlView.setTitle("来一个视频标题", coverURL: nil)
         playerControlView.coverImage = UIImage(named: "cover")
         player = VDPlayer(playerControl: playerControl, container: videoContainer)
         player?.controlView = playerControlView
         player?.assetURLs = assetURLs
+        player?.fullScreenStateWillChange = { (player, isFullScreen) in
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.allowOrentitaionRotation = isFullScreen
+            }
+        }
         player?.fullScreenStateDidChange = { [weak self](player, isFullScreen) in
             self?.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {
