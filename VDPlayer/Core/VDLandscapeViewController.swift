@@ -40,7 +40,6 @@ class VDLandscapeViewController: UIViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         isRotating = true
-        super.viewWillTransition(to: size, with: coordinator)
         if !UIDevice.current.orientation.isValidInterfaceOrientation {
             return
         }
@@ -82,7 +81,8 @@ class VDLandscapeViewController: UIViewController {
             self.disableAnimations = false
             self.isRotating = false
         }
-
+        
+        super.viewWillTransition(to: size, with: coordinator)
     }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {

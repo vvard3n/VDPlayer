@@ -184,8 +184,9 @@ extension VDVLCPlayerManager: VLCMediaPlayerDelegate {
                 cancelBufferingWorkItem.cancel()
                 self.cancelBufferingWorkItem = nil
             }
-            cancelBufferingWorkItem = DispatchWorkItem {
-                self.loadState = .playable
+            cancelBufferingWorkItem = DispatchWorkItem { [weak self] in
+                guard let weakSelf = self else { return }
+                weakSelf.loadState = .playable
                 print(player.state.rawValue)
             }
             guard let cancelBufferingWorkItem = cancelBufferingWorkItem else { return }

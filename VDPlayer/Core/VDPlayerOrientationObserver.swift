@@ -14,15 +14,15 @@ enum VDFullScreenMode: Int {
     case portrait
 }
 
-protocol VDPlayerOrientationObserverDelegate: NSObjectProtocol {
-    func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool)
-    func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool)
-}
-
-extension VDPlayerOrientationObserverDelegate {
-    func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {}
-    func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {}
-}
+//protocol VDPlayerOrientationObserverDelegate: NSObjectProtocol {
+//    func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool)
+//    func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool)
+//}
+//
+//extension VDPlayerOrientationObserverDelegate {
+//    func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {}
+//    func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {}
+//}
 
 /// extension UIWindow CurrentViewController
 extension UIWindow {
@@ -129,7 +129,7 @@ class VDPlayerOrientationObserver: NSObject {
     private var previousKeyWindow: UIWindow?
     private var window: VDLandscapeWindow?
     var allowAutorotate: Bool = true
-    weak var delegate: VDPlayerOrientationObserverDelegate?
+//    weak var delegate: VDPlayerOrientationObserverDelegate?
     private var isRotating: Bool = false
     private var forceRotaion: Bool = false
     /// Container view of a full screen state player.
@@ -296,8 +296,8 @@ extension VDPlayerOrientationObserver {
                 window.landscapeViewController?.containerView = containerView
                 isFullScreen = true
             }
-//            orientationWillChange?(self, isFullScreen)
-            delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
+            orientationWillChange?(self, isFullScreen)
+//            delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
             
         } else {
             isFullScreen = false
@@ -348,8 +348,8 @@ extension VDPlayerOrientationObserver: VDLandscapeViewControllerDelegate {
     
     func vd_willRotateToOrientation(orientation: UIInterfaceOrientation) {
         isFullScreen = orientation.isLandscape
-//        orientationWillChange?(self, isFullScreen)
-        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
+        orientationWillChange?(self, isFullScreen)
+//        delegate?.orientationWillChange(observer: self, isFullScreen: isFullScreen)
     }
     
     func vd_didRotateFromOrientation(orientation: UIInterfaceOrientation) {
@@ -422,9 +422,10 @@ extension VDPlayerOrientationObserver {
                 snapshot.frame = containerView.bounds
                 containerView.addSubview(snapshot)
                 
-                DispatchQueue.main.async {
-                    self._contentViewAdd(containerView: containerView)
-                    self._makeKeyAndVisible(snapshot: snapshot)
+                DispatchQueue.main.async { [weak self] in
+                    guard let weakSelf = self else { return }
+                    weakSelf._contentViewAdd(containerView: containerView)
+                    weakSelf._makeKeyAndVisible(snapshot: snapshot)
                 }
             }
 //            perform(#selector(_contentViewAdd(containerView:)))

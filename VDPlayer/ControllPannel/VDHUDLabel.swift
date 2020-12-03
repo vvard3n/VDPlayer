@@ -80,8 +80,9 @@ class VDHUDLabel: UILabel {
     func startAutoHiddenHUD(after: TimeInterval = 2) {
         cancelAutoHiddenHUD()
         
-        autoHiddenWorkItem = DispatchWorkItem {
-            self.hideHUD(animated: true)
+        autoHiddenWorkItem = DispatchWorkItem { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.hideHUD(animated: true)
         }
         guard let autoHiddenWorkItem = autoHiddenWorkItem else { return }
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + after, execute: autoHiddenWorkItem)

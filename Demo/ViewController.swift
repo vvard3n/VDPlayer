@@ -10,8 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    let width = UIScreen.main.bounds.size.width - 20 * 2
-    let height = (UIScreen.main.bounds.size.width - 20 * 2) / 16.0 * 9.0
+    let width = UIScreen.main.bounds.size.width
+    let height = UIScreen.main.bounds.size.width / 16.0 * 9.0
     let assetURLs: [URL] = [URL(string: "http://plvod01.videocc.net/cc84e44bdb/a/cc84e44bdb87af025cc3b6f1fd83b1da_3.flv")!]
     //    https://mpv.videocc.net/cc84e44bdb/8/cc84e44bdbcd2e2996584c3e59f13558_3.mp4
     //    http://plvod01.videocc.net/cc84e44bdb/a/cc84e44bdb87af025cc3b6f1fd83b1da_3.flv
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     
     var player: VDPlayer?
     lazy var videoContainer: UIView = {
-        return UIView(frame: CGRect(x: 20, y: 100, width:width, height:height))
+        return UIView(frame: CGRect(x: 0, y: 0, width:width, height:height))
     }()
     
     override func viewDidLoad() {
@@ -83,6 +83,7 @@ class ViewController: UIViewController {
             return .landscape
         }
         return .portrait
+//        return .allButUpsideDown
     }
 
     /// 隐藏状态栏
@@ -98,6 +99,7 @@ class ViewController: UIViewController {
     /// 自动旋转屏幕
     override var shouldAutorotate: Bool {
         return false
+//        return player?.isFullScreen ?? false
     }
     
 //    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {

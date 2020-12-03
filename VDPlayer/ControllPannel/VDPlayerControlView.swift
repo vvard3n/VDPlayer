@@ -24,11 +24,13 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     /// 竖屏播放器控制面板
     private lazy var portraitControlView: VDPortraitControlView = {
         let portraitControlView = VDPortraitControlView()
-        portraitControlView.sliderValueChanging = { (time, forward) in
-            self.cancelAutoHiddenControlView()
+        portraitControlView.sliderValueChanging = { [weak self] (time, forward) in
+            guard let weakSelf = self else { return }
+            weakSelf.cancelAutoHiddenControlView()
         }
-        portraitControlView.didEndSlidingProgressSlider = { (percent) in
-            self.startAutoHiddenControlView()
+        portraitControlView.didEndSlidingProgressSlider = { [weak self] (percent) in
+            guard let weakSelf = self else { return }
+            weakSelf.startAutoHiddenControlView()
         }
         return portraitControlView
     }()
@@ -37,11 +39,13 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
         let landScapeControlView = VDLandScapeControlView()
         landScapeControlView.isHidden = true
         landScapeControlView.hideControlPanel()
-        landScapeControlView.sliderValueChanging = { (time, forward) in
-            self.cancelAutoHiddenControlView()
+        landScapeControlView.sliderValueChanging = { [weak self] (time, forward) in
+            guard let weakSelf = self else { return }
+            weakSelf.cancelAutoHiddenControlView()
         }
-        landScapeControlView.didEndSlidingProgressSlider = { (percent) in
-            self.startAutoHiddenControlView()
+        landScapeControlView.didEndSlidingProgressSlider = { [weak self] (percent) in
+            guard let weakSelf = self else { return }
+            weakSelf.startAutoHiddenControlView()
         }
         return landScapeControlView
     }()
@@ -190,8 +194,9 @@ class VDPlayerControlView: UIView, VDPlayerControlProtocol {
     func startAutoHiddenControlView() {
         cancelAutoHiddenControlView()
         
-        autoHiddenWorkItem = DispatchWorkItem {
-            self.hideControlView(animated: true)
+        autoHiddenWorkItem = DispatchWorkItem { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.hideControlView(animated: true)
         }
         guard let autoHiddenWorkItem = autoHiddenWorkItem else { return }
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + autoHiddenTimeInterval, execute: autoHiddenWorkItem)

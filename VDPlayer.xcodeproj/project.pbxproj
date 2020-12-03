@@ -16,6 +16,8 @@
 		766233AF2574D66E0001EDE9 /* VDPortraitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766233AE2574D66E0001EDE9 /* VDPortraitViewController.swift */; };
 		766233B22574D7ED0001EDE9 /* VDPresentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766233B12574D7ED0001EDE9 /* VDPresentTransition.swift */; };
 		76714799228A51610044A0D9 /* VDPlayerHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76714798228A51610044A0D9 /* VDPlayerHUD.swift */; };
+		76AC6A2325773B6800649CB6 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AC6A2225773B6800649CB6 /* NavigationController.swift */; };
+		76AC6A2625773B8F00649CB6 /* DemoListTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AC6A2525773B8F00649CB6 /* DemoListTableVC.swift */; };
 		76AE064622544950005081D5 /* VDPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76AE064522544950005081D5 /* VDPlayer.bundle */; };
 		76AE06482254554F005081D5 /* VDPlayerControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AE06472254554F005081D5 /* VDPlayerControlProtocol.swift */; };
 		76B3BF1F22539DEC0043F8FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */; };
@@ -47,6 +49,8 @@
 		766233AE2574D66E0001EDE9 /* VDPortraitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPortraitViewController.swift; sourceTree = "<group>"; };
 		766233B12574D7ED0001EDE9 /* VDPresentTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPresentTransition.swift; sourceTree = "<group>"; };
 		76714798228A51610044A0D9 /* VDPlayerHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerHUD.swift; sourceTree = "<group>"; };
+		76AC6A2225773B6800649CB6 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		76AC6A2525773B8F00649CB6 /* DemoListTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoListTableVC.swift; sourceTree = "<group>"; };
 		76AE064522544950005081D5 /* VDPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VDPlayer.bundle; sourceTree = "<group>"; };
 		76AE06472254554F005081D5 /* VDPlayerControlProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VDPlayerControlProtocol.swift; sourceTree = "<group>"; };
 		76B3BF1B22539DEC0043F8FB /* VDPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VDPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +111,8 @@
 			isa = PBXGroup;
 			children = (
 				76B3BF1E22539DEC0043F8FB /* AppDelegate.swift */,
+				76AC6A2225773B6800649CB6 /* NavigationController.swift */,
+				76AC6A2525773B8F00649CB6 /* DemoListTableVC.swift */,
 				76B3BF2022539DEC0043F8FB /* ViewController.swift */,
 				76B3BF2222539DEC0043F8FB /* Main.storyboard */,
 				76B3BF2522539DEC0043F8FB /* Assets.xcassets */,
@@ -305,11 +311,13 @@
 				76E69BA3225A5D4600205D4B /* VDPlayerOrientationObserver.swift in Sources */,
 				766233AF2574D66E0001EDE9 /* VDPortraitViewController.swift in Sources */,
 				76B3BF3622539FF20043F8FB /* VDPlayerView.swift in Sources */,
+				76AC6A2625773B8F00649CB6 /* DemoListTableVC.swift in Sources */,
 				76B3BF552253C3560043F8FB /* VDLandScapeControlView.swift in Sources */,
 				76276707228A5B7600DA7C52 /* VDHUDLabel.swift in Sources */,
 				76B3BF382253A0410043F8FB /* VDPlayerGestureControl.swift in Sources */,
 				76B3BF3D2253A2880043F8FB /* VDPlayerExtensions.swift in Sources */,
 				76714799228A51610044A0D9 /* VDPlayerHUD.swift in Sources */,
+				76AC6A2325773B6800649CB6 /* NavigationController.swift in Sources */,
 				766233A4257485F90001EDE9 /* VDLandscapeWindow.swift in Sources */,
 				76B3BF432253ADD30043F8FB /* VDVLCPlayerControll.swift in Sources */,
 				76B3BF3222539F840043F8FB /* VDPlayerConfig.swift in Sources */,
