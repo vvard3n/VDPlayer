@@ -21,6 +21,12 @@ extension VDPlayerDelegate {
 
 @objcMembers
 class VDPlayer: NSObject {
+    
+    var orientationWillChange: ((VDPlayer, Bool) -> ())?
+    var orientationDidChange: ((VDPlayer, Bool) -> ())?
+    var playerDidToEnd: ((_ player: VDPlayer) -> ())?
+    var playerPrepareToPlay: ((_ player: VDPlayer, URL) -> ())?
+    
     weak var delegate: VDPlayerDelegate?
     
     var allowAutorotate: Bool = true {
@@ -29,8 +35,6 @@ class VDPlayer: NSObject {
         }
     }
     var isFullScreen: Bool { get { return orientationObserver.isFullScreen } }
-    var fullScreenStateWillChange: ((VDPlayer, Bool) -> ())?
-    var fullScreenStateDidChange: ((VDPlayer, Bool) -> ())?
     var playbackStateDidChanged: ((VDPlayer, VDPlayerPlaybackState) -> ())?
     var loadStateDidChanged: ((VDPlayer, VDPlayerLoadState) -> ())?
     lazy public var orientationObserver: VDPlayerOrientationObserver = {
@@ -40,7 +44,7 @@ class VDPlayer: NSObject {
             guard let weakSelf = self else { return }
             weakSelf.delegate?.playerOrientationWillChange(player: weakSelf, isFullScreen: isFullScreen)
             weakSelf.controlView?.playerOrientationWillChanged(player: weakSelf, observer: observer)
-            weakSelf.fullScreenStateWillChange?(weakSelf, isFullScreen)
+            weakSelf.orientationWillChange?(weakSelf, isFullScreen)
             weakSelf.controlView?.setNeedsLayout()
             weakSelf.controlView?.layoutIfNeeded()
         }
@@ -49,7 +53,7 @@ class VDPlayer: NSObject {
             guard let weakSelf = self else { return }
             weakSelf.delegate?.playerOrientationDidChange(player: weakSelf, isFullScreen: isFullScreen)
             weakSelf.controlView?.playerOrientationDidChanged(player: weakSelf, observer: observer)
-            weakSelf.fullScreenStateDidChange?(weakSelf, isFullScreen)
+            weakSelf.orientationDidChange?(weakSelf, isFullScreen)
         }
         return orientationObserver
     }()
@@ -64,19 +68,14 @@ class VDPlayer: NSObject {
     var totalTime: TimeInterval { get { return currentPlayerManager.totalTime } }
     
     /// 播放器的容器
-    var containerView: UIView? {
-        didSet {
-            guard let containerView = containerView else { return }
-            containerView.addSubview(self.currentPlayerManager.view)
-        }
-    }
+    var containerView: UIView?
     
-    /// 全屏容器
-    var fullScreenContainerView: UIView? {
-        get {
-            return UIApplication.shared.keyWindow
-        }
-    }
+//    /// 全屏容器
+//    var fullScreenContainerView: UIView? {
+//        get {
+//            return UIApplication.shared.keyWindow
+//        }
+//    }
     
     /// 媒体控制面板
     var controlView: (UIView & VDPlayerControlProtocol)? {
@@ -92,7 +91,11 @@ class VDPlayer: NSObject {
         }
     }
     /// 手势控制器
-    var gestureControl: VDPlayerGestureControl?
+    lazy var gestureControl: VDPlayerGestureControl? = {
+        let gestureControl = VDPlayerGestureControl()
+        gestureControl.delegate = self
+        return gestureControl
+    }()
     
     /// 当前播放器内核
     var currentPlayerManager: VDPlayerPlayBackProtocol! {
@@ -100,38 +103,42 @@ class VDPlayer: NSObject {
             if oldValue?.isPreparedToPlay ?? false {
                 oldValue?.stop()
                 oldValue?.view.removeFromSuperview()
+                removeDeviceOrientationObserver()
+//                gestureControl?.removeGesture(from: currentPlayerManager.view)
             }
             guard let currentPlayerManager = currentPlayerManager else { return }
-            if let containerView = self.containerView {
-//                containerView.insertSubview(currentPlayerControl.playerView, at: 1)
-                containerView.addSubview(currentPlayerManager.view)
-                currentPlayerManager.view.frame = containerView.bounds
-                currentPlayerManager.view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
-                currentPlayerManager.playbackStateDidChanged = { [weak self] player, state in
-                    guard let weakSelf = self else { return }
-                    weakSelf.playbackStateDidChanged?(weakSelf, state)
-                    weakSelf.controlView?.playerPlayStateChanged(player: weakSelf, playState: state)
-                }
-                currentPlayerManager.loadStateDidChanged = { [weak self] player, state in
-                    guard let weakSelf = self else { return }
-                    weakSelf.controlView?.playerLoadStateChanged(player: weakSelf, loadState: state)
-                }
-                currentPlayerManager.playerReadyToPlay = { player, assetURL in
-                    do { try AVAudioSession.sharedInstance().setCategory(.playback, options: .allowBluetooth) } catch { }
-                    do { try AVAudioSession.sharedInstance().setActive(true, options: []) } catch { }
-                }
-                currentPlayerManager.playerPrepareToPlay = { [weak self] player, assetURL in
-                    guard let weakSelf = self else { return }
-                    weakSelf.layoutPlayerSubViews()
-                    weakSelf.controlView?.playerPrepareToPlay(player: weakSelf)
-                }
-                currentPlayerManager.mediaPlayerTimeChanged = { [weak self] player, currentTime, totalTime in
-                    guard let weakSelf = self else { return }
-                    guard let controlView = weakSelf.controlView else { return }
-                    controlView.updateTime(current: currentTime, total: totalTime)
-                }
+            guard let containerView = self.containerView else { return }
+//            gestureControl?.addGesture(to: currentPlayerManager.view)
+            containerView.addSubview(currentPlayerManager.view)
+            currentPlayerManager.playbackStateDidChanged = { [weak self] player, state in
+                guard let weakSelf = self else { return }
+                weakSelf.playbackStateDidChanged?(weakSelf, state)
+                weakSelf.controlView?.playerPlayStateChanged(player: weakSelf, playState: state)
             }
-            
+            currentPlayerManager.loadStateDidChanged = { [weak self] player, state in
+                guard let weakSelf = self else { return }
+                weakSelf.controlView?.playerLoadStateChanged(player: weakSelf, loadState: state)
+            }
+            currentPlayerManager.playerReadyToPlay = { player, assetURL in
+                do { try AVAudioSession.sharedInstance().setCategory(.playback, options: .allowBluetooth) } catch { }
+                do { try AVAudioSession.sharedInstance().setActive(true, options: []) } catch { }
+            }
+            currentPlayerManager.playerPrepareToPlay = { [weak self] player, assetURL in
+                guard let weakSelf = self else { return }
+                weakSelf.layoutPlayerSubViews()
+                weakSelf.controlView?.playerPrepareToPlay(player: weakSelf)
+            }
+            currentPlayerManager.mediaPlayerTimeChanged = { [weak self] player, currentTime, totalTime in
+                guard let weakSelf = self else { return }
+                guard let controlView = weakSelf.controlView else { return }
+                controlView.updateTime(current: currentTime, total: totalTime)
+            }
+            controlView?.player = self
+            layoutPlayerSubViews()
+            if currentPlayerManager.isPreparedToPlay {
+                addDeviceOrientationObserver()
+            }
+            orientationObserver.update(rotateView: currentPlayerManager.view, containerView: containerView)
         }
     }
     
@@ -150,78 +157,54 @@ class VDPlayer: NSObject {
     /// 是否自动播放
     var autoPlayWhenPrepareToPlay: Bool = true
     
+    /// 播放结束是否退出全屏
+    var exitFullScreenWhenStop: Bool = false
+    
     deinit {
         currentPlayerManager.stop()
-        
     }
     
     override private init() {
         super.init()
-        let control = VDVLCPlayerManager()
-        self.currentPlayerManager = control
     }
     
-//    convenience init(config: VDPlayerConfig) {
-//        self.init()
-//    }
+    @objc public init(playerControl: VDPlayerPlayBackProtocol, container: UIView) {
+        super.init()
+        setContainerView(container)
+        setPlayerControl(playerControl)
+    }
     
-    @objc convenience init(playerControl: VDPlayerPlayBackProtocol, container: UIView) {
-        self.init()
-//        self.controlView = VDPlayerControlView()
-        self.containerView = container
+    private func setPlayerControl(_ playerControl: VDPlayerPlayBackProtocol) {
         self.currentPlayerManager = playerControl
-        if let containerView = self.containerView {
-            containerView.addSubview(self.currentPlayerManager.view)
-//            containerView.insertSubview(self.currentPlayerControl.playerView, at: 1)
-            currentPlayerManager.view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
-            currentPlayerManager.playbackStateDidChanged = { [weak self] player, state in
-                guard let weakSelf = self else { return }
-                weakSelf.playbackStateDidChanged?(weakSelf, state)
-                weakSelf.controlView?.playerPlayStateChanged(player: weakSelf, playState: state)
-            }
-            currentPlayerManager.loadStateDidChanged = { [weak self] player, state in
-                guard let weakSelf = self else { return }
-                weakSelf.controlView?.playerLoadStateChanged(player: weakSelf, loadState: state)
-            }
-            currentPlayerManager.playerPrepareToPlay = { [weak self] player, assetURL in
-                guard let weakSelf = self else { return }
-                weakSelf.layoutPlayerSubViews()
-                weakSelf.controlView?.playerPrepareToPlay(player: weakSelf)
-            }
-            currentPlayerManager.mediaPlayerTimeChanged = { [weak self] player, currentTime, totalTime in
-                guard let weakSelf = self else { return }
-                guard let controlView = weakSelf.controlView else { return }
-                controlView.updateTime(current: currentTime, total: totalTime)
-            }
-        }
+    }
+    
+    
+    private func setContainerView(_ containerView: UIView) {
+        self.containerView = containerView
+        self.containerView?.isUserInteractionEnabled = true
     }
     
     private func layoutPlayerSubViews() {
         guard let controlView = controlView, let containerView = containerView else { return }
         
+        gestureControl?.removeGesture(from: controlView)
+        gestureControl?.addGesture(to: controlView)
+        
         controlView.removeFromSuperview()
         currentPlayerManager.view.addSubview(controlView)
         if isFullScreen {
-            currentPlayerManager.view.frame = fullScreenContainerView?.bounds ?? .zero
+            currentPlayerManager.view.frame = orientationObserver.fullScreenContainerView?.bounds ?? .zero
+            orientationObserver.fullScreenContainerView?.addSubview(currentPlayerManager.view)
         }
         else {
             currentPlayerManager.view.frame = containerView.bounds
+            containerView.addSubview(currentPlayerManager.view)
         }
-
+        currentPlayerManager.view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         controlView.frame = currentPlayerManager.view.bounds
         controlView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         
-//        orientationObserver.containerView = containerView
-//        orientationObserver.playerView = currentPlayerManager.view
         orientationObserver.update(rotateView: currentPlayerManager.view, containerView: containerView)
-        
-        if self.gestureControl == nil {
-            self.gestureControl = VDPlayerGestureControl()
-            guard let gestureControl = self.gestureControl else { return }
-            gestureControl.delegate = self
-            gestureControl.addGesture(to: controlView)
-            return
-        }
     }
     
     private func resetControlView() {
@@ -257,28 +240,34 @@ extension VDPlayer {
         currentPlayerManager.pause()
     }
     
+    func stop() {
+        if isFullScreen && exitFullScreenWhenStop {
+            orientationObserver.enterFullScreen(false, animated: true) { (complete) in
+                self.currentPlayerManager.stop()
+                self.currentPlayerManager.view.removeFromSuperview()
+            }
+        }
+        currentPlayerManager.stop()
+        currentPlayerManager.view.removeFromSuperview()
+        orientationObserver.removeDeviceOrientationObserver()
+    }
+}
+
+// MARK: - Rotate
+extension VDPlayer {
+    
+    func addDeviceOrientationObserver() {
+        orientationObserver.addDeviceOrientationObserver()
+    }
+    
+    func removeDeviceOrientationObserver() {
+        orientationObserver.removeDeviceOrientationObserver()
+    }
+    
     func fullScreenStateChange(animated: Bool) {
         let control = controlView as! VDPlayerControlView
         control.controlViewAppeared = false
         control.hideControlView(animated: true)
-        
-//        if isFullScreen {
-//            orientationObserver.exitFullScreen(animate: true)
-//        }
-//        else {
-//            orientationObserver.enterLandscapeFullScreen(orientation: .landscapeRight, animated: true)
-//        }
-//        if orientationObserver.fullScreenMode == .portrait {
-//            orientationObserver.enterPortraitMode(fullScreen: isFullScreen, animated: animated, completion: nil)
-//        }
-//        else {
-////            UIInterfaceOrientation orientation = UIInterfaceOrientationUnknown;
-////            orientation = fullScreen? UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait;
-////            [self.orientationObserver rotateToOrientation:orientation animated:animated completion:completion];
-//            var orientation = UIInterfaceOrientation.unknown
-//            orientation = isFullScreen ? .landscapeRight : .portrait
-//            orientationObserver.rotate(to: orientation, animated: animated, completion: nil)
-//        }
     }
     
     func rotateToOrientation(_ orientation: UIInterfaceOrientation, animated: Bool, completion:((_ completion: Bool)->())? = nil) {
@@ -294,7 +283,6 @@ extension VDPlayer {
         else {
             var orientation = UIInterfaceOrientation.unknown
             orientation = fullScreen ? .landscapeRight : .portrait
-//            orientationObserver.enterLandscapeFullScreen(orientation: orientation, animated: animated, completion: completion)
             orientationObserver.rotate(to: orientation, animated: animated, completion: completion)
         }
     }
@@ -304,23 +292,6 @@ extension VDPlayer {
         orientationObserver.enterPortraitMode(fullScreen: fullScreen, animated: animated, completion: completion)
     }
 }
-
-//// MARK: - OrientationObserverDelegate
-//extension VDPlayer: VDPlayerOrientationObserverDelegate {
-//    internal func orientationWillChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {
-//        delegate?.playerOrientationWillChange(player: self, isFullScreen: isFullScreen)
-//        controlView?.playerOrientationWillChanged(player: self, observer: observer)
-//        fullScreenStateWillChange?(self, isFullScreen)
-//        controlView?.setNeedsLayout()
-//        controlView?.layoutIfNeeded()
-//    }
-//
-//    internal func orientationDidChange(observer: VDPlayerOrientationObserver, isFullScreen: Bool) {
-//        delegate?.playerOrientationDidChange(player: self, isFullScreen: isFullScreen)
-//        controlView?.playerOrientationDidChanged(player: self, observer: observer)
-//        fullScreenStateDidChange?(self, isFullScreen)
-//    }
-//}
 
 // MARK: - Gesture
 extension VDPlayer: VDPlayerGestureControlDelegate {

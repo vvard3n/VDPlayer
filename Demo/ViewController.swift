@@ -23,6 +23,13 @@ class ViewController: UIViewController {
         return UIView(frame: CGRect(x: 0, y: 0, width:width, height:height))
     }()
     
+    lazy var playerControlView: VDPlayerControlView = {
+        let playerControlView = VDPlayerControlView()
+        playerControlView.setTitle("来一个视频标题", coverURL: nil)
+        playerControlView.coverImage = UIImage(named: "cover")
+        return playerControlView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,23 +52,24 @@ class ViewController: UIViewController {
     }
     
     @objc private func playBtnClick(_ sender: UIButton) {
-        let playerControl = VDVLCPlayerManager()
-        let playerControlView = VDPlayerControlView()
-        playerControlView.setTitle("来一个视频标题", coverURL: nil)
-        playerControlView.coverImage = UIImage(named: "cover")
-        player = VDPlayer(playerControl: playerControl, container: videoContainer)
+        let playerManager = VDVLCPlayerManager()
+        player = VDPlayer(playerControl: playerManager, container: videoContainer)
         player?.controlView = playerControlView
         player?.assetURLs = assetURLs
-        player?.fullScreenStateWillChange = { (player, isFullScreen) in
+        
+        player?.orientationWillChange = { (player, isFullScreen) in
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                 appDelegate.allowOrentitaionRotation = isFullScreen
             }
         }
-        player?.fullScreenStateDidChange = { [weak self](player, isFullScreen) in
+        player?.orientationDidChange = { [weak self](player, isFullScreen) in
             self?.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {
                 self?.setNeedsUpdateOfHomeIndicatorAutoHidden()
             }
+        }
+        player?.playerDidToEnd = { [weak self] (player) in
+            self?.player?.stop()
         }
     }
     

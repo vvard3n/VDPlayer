@@ -236,6 +236,7 @@ extension VDPlayerOrientationObserver {
     }
 }
 
+// MARK: - Public
 extension VDPlayerOrientationObserver {
     
     func enterPortraitMode(fullScreen: Bool, animated: Bool, completion:((_ completion: Bool)->())? = nil) {
@@ -256,6 +257,16 @@ extension VDPlayerOrientationObserver {
             portraitViewController?.dismiss(animated: animated, completion: {
                 completion?(true)
             })
+        }
+    }
+    
+    func enterFullScreen(_ fullScreen: Bool, animated: Bool, completion:((_ completion: Bool)->())? = nil) {
+        if fullScreenMode == .portrait {
+            enterPortraitMode(fullScreen: fullScreen, animated: animated, completion: completion)
+        }
+        else {
+            let orientation = isFullScreen ? UIInterfaceOrientation.landscapeRight : UIInterfaceOrientation.portrait
+            rotate(to: orientation, animated: animated, completion: completion)
         }
     }
     
@@ -422,15 +433,14 @@ extension VDPlayerOrientationObserver {
                 snapshot.frame = containerView.bounds
                 containerView.addSubview(snapshot)
                 
-                DispatchQueue.main.async { [weak self] in
-                    guard let weakSelf = self else { return }
-                    weakSelf._contentViewAdd(containerView: containerView)
-                    weakSelf._makeKeyAndVisible(snapshot: snapshot)
-                }
+//                DispatchQueue.main.async { [weak self] in
+//                    guard let weakSelf = self else { return }
+//                    weakSelf._contentViewAdd(containerView: containerView)
+//                    weakSelf._makeKeyAndVisible(snapshot: snapshot)
+//                }
+                performSelector(onMainThread: #selector(_contentViewAdd(containerView:)), with: containerView, waitUntilDone: false, modes: [RunLoop.Mode.default.rawValue])
+                performSelector(onMainThread: #selector(_makeKeyAndVisible(snapshot:)), with: snapshot, waitUntilDone: false, modes: [RunLoop.Mode.default.rawValue])
             }
-//            perform(#selector(_contentViewAdd(containerView:)))
-//            perform(#selector(_makeKeyAndVisible(snapshot:)))
-            
         }
     }
     
