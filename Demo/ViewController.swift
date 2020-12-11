@@ -33,6 +33,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackgroundNotification), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         videoContainer.backgroundColor = .black
         view.addSubview(videoContainer)
         let coverImageView = UIImageView(frame: videoContainer.bounds)
@@ -113,5 +116,13 @@ class ViewController: UIViewController {
 //    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
 //        return .landscapeRight
 //    }
+    
+    @objc private func applicationDidEnterBackgroundNotification() {
+        if let player = player {
+            if player.isFullScreen {
+                player.enterFullScreen(false, animated: false)
+            }
+        }
+    }
 }
 

@@ -97,7 +97,7 @@ class VDPlayerOrientationObserver: NSObject {
         }
     }
     
-    public var fullScreenMode: VDFullScreenMode = .automatic
+    public var fullScreenMode: VDFullScreenMode = .landscape
     
     public var portraitViewController: VDPortraitViewController?
     

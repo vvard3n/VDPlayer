@@ -14,6 +14,7 @@ class VDVLCPlayerManager: NSObject, VDPlayerPlayBackProtocol {
     var playerReadyToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
     var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())?
     var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())?
+    var playerDidToEnd: ((VDPlayerPlayBackProtocol, URL) -> ())?
     
 //    var option: [String : Any] = [kVLCSettingPasscodeAllowFaceID : 1,
 //                                  kVLCSettingPasscodeAllowTouchID : 1,
@@ -142,6 +143,9 @@ class VDVLCPlayerManager: NSObject, VDPlayerPlayBackProtocol {
     }
     
     func stop() {
+        if playState == .stopped {
+            return
+        }
         player?.stop()
         player = nil
         assetURL = nil
@@ -172,6 +176,7 @@ extension VDVLCPlayerManager: VLCMediaPlayerDelegate {
             playState = .stopped
             loadState = .unknow
             isPreparedToPlay = false
+            if let assetURL = assetURL { playerDidToEnd?(self, assetURL) }
         case .opening:
             print("opening")
             loadState = .prepare
@@ -210,8 +215,12 @@ extension VDVLCPlayerManager: VLCMediaPlayerDelegate {
 //            playState = .unknow
 //            loadState = .prepare
             if let assetURL = assetURL { playerReadyToPlay?(self, assetURL) }
+        default:
+            print("other status")
+            playState = .unknow
+            loadState = .unknow
         }
-//        if let playbackStateDidChanged = playbackStateDidChanged { playbackStateDidChanged(self, playState) }
+        playbackStateDidChanged?(self, playState)
     }
     
     func mediaPlayerTimeChanged(_ aNotification: Notification!) {

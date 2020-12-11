@@ -44,7 +44,7 @@ class VDLandscapeViewController: UIViewController {
             return
         }
         guard let contentView = contentView else { return }
-        guard let containerView = containerView else { return }
+//        guard let containerView = containerView else { return }
         let newOrientation = UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue) ?? .unknown
         let oldOrientation = currentOrientation
         if newOrientation.isLandscape {
@@ -75,7 +75,7 @@ class VDLandscapeViewController: UIViewController {
             CATransaction.commit()
             self.delegate?.vd_didRotateFromOrientation?(orientation: self.currentOrientation)
             if !isFullscreen {
-                contentView.frame = containerView.bounds
+//                contentView.frame = containerView.bounds
                 contentView.layoutIfNeeded()
             }
             self.disableAnimations = false

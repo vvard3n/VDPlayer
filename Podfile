@@ -6,6 +6,6 @@ target 'VDPlayer' do
   use_frameworks!
 
   # Pods for VDPlayer
-  pod 'MobileVLCKit', '3.3.1'
+  pod 'MobileVLCKit', '3.3.14'
 
 end

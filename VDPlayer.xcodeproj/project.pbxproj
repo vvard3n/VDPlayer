@@ -149,9 +149,9 @@
 				76428E6A225497830070E5F8 /* VDPlayerControlView.swift */,
 				76428E68225497260070E5F8 /* VDPortraitControlView.swift */,
 				76B3BF542253C3560043F8FB /* VDLandScapeControlView.swift */,
-				76AE064522544950005081D5 /* VDPlayer.bundle */,
 				76714798228A51610044A0D9 /* VDPlayerHUD.swift */,
 				76276706228A5B7600DA7C52 /* VDHUDLabel.swift */,
+				76AE064522544950005081D5 /* VDPlayer.bundle */,
 			);
 			path = ControllPannel;
 			sourceTree = "<group>";

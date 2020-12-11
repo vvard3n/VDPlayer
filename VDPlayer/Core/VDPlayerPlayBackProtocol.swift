@@ -53,9 +53,10 @@ import Foundation
     /// Handle
     var playbackStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerPlaybackState) -> ())? { get set }
     var loadStateDidChanged: ((VDPlayerPlayBackProtocol, VDPlayerLoadState) -> ())? { get set }
-    var playerReadyToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set}
-    var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set}
+    var playerReadyToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set }
+    var playerPrepareToPlay: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set }
     var mediaPlayerTimeChanged: ((VDPlayerPlayBackProtocol, TimeInterval, TimeInterval) -> ())? { get set }
+    var playerDidToEnd: ((VDPlayerPlayBackProtocol, URL) -> ())? { get set }
     
     /// funcs
     

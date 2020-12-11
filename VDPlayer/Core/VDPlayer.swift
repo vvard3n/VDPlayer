@@ -9,25 +9,17 @@
 import UIKit
 import AVKit
 
-protocol VDPlayerDelegate: NSObjectProtocol {
-    func playerOrientationWillChange(player: VDPlayer, isFullScreen: Bool)
-    func playerOrientationDidChange(player: VDPlayer, isFullScreen: Bool)
-}
-
-extension VDPlayerDelegate {
-    private func playerOrientationWillChange(player: VDPlayer, isFullScreen: Bool) {}
-    private func playerOrientationDidChange(player: VDPlayer, isFullScreen: Bool) {}
-}
-
 @objcMembers
 class VDPlayer: NSObject {
     
+    /// 即将旋转屏幕方向
     var orientationWillChange: ((VDPlayer, Bool) -> ())?
+    /// 已旋转屏幕方向
     var orientationDidChange: ((VDPlayer, Bool) -> ())?
+    /// 播放结束
     var playerDidToEnd: ((_ player: VDPlayer) -> ())?
+    /// 准备播放
     var playerPrepareToPlay: ((_ player: VDPlayer, URL) -> ())?
-    
-    weak var delegate: VDPlayerDelegate?
     
     var allowAutorotate: Bool = true {
         didSet {
@@ -42,18 +34,18 @@ class VDPlayer: NSObject {
 //        orientationObserver.delegate = self
         orientationObserver.orientationWillChange = { [weak self] (observer, isFullScreen) in
             guard let weakSelf = self else { return }
-            weakSelf.delegate?.playerOrientationWillChange(player: weakSelf, isFullScreen: isFullScreen)
-            weakSelf.controlView?.playerOrientationWillChanged(player: weakSelf, observer: observer)
+//            weakSelf.delegate?.playerOrientationWillChange(player: weakSelf, isFullScreen: isFullScreen)
             weakSelf.orientationWillChange?(weakSelf, isFullScreen)
+            weakSelf.controlView?.playerOrientationWillChanged(player: weakSelf, observer: observer)
             weakSelf.controlView?.setNeedsLayout()
             weakSelf.controlView?.layoutIfNeeded()
         }
         
         orientationObserver.orientationDidChange = { [weak self] (observer, isFullScreen) in
             guard let weakSelf = self else { return }
-            weakSelf.delegate?.playerOrientationDidChange(player: weakSelf, isFullScreen: isFullScreen)
-            weakSelf.controlView?.playerOrientationDidChanged(player: weakSelf, observer: observer)
+//            weakSelf.delegate?.playerOrientationDidChange(player: weakSelf, isFullScreen: isFullScreen)
             weakSelf.orientationDidChange?(weakSelf, isFullScreen)
+            weakSelf.controlView?.playerOrientationDidChanged(player: weakSelf, observer: observer)
         }
         return orientationObserver
     }()
@@ -112,6 +104,9 @@ class VDPlayer: NSObject {
             containerView.addSubview(currentPlayerManager.view)
             currentPlayerManager.playbackStateDidChanged = { [weak self] player, state in
                 guard let weakSelf = self else { return }
+                if state == .stopped {
+                    weakSelf.stop()
+                }
                 weakSelf.playbackStateDidChanged?(weakSelf, state)
                 weakSelf.controlView?.playerPlayStateChanged(player: weakSelf, playState: state)
             }
@@ -125,8 +120,10 @@ class VDPlayer: NSObject {
             }
             currentPlayerManager.playerPrepareToPlay = { [weak self] player, assetURL in
                 guard let weakSelf = self else { return }
+                weakSelf.addDeviceOrientationObserver()
                 weakSelf.layoutPlayerSubViews()
                 weakSelf.controlView?.playerPrepareToPlay(player: weakSelf)
+                weakSelf.playerPrepareToPlay?(weakSelf, assetURL)
             }
             currentPlayerManager.mediaPlayerTimeChanged = { [weak self] player, currentTime, totalTime in
                 guard let weakSelf = self else { return }
@@ -247,9 +244,14 @@ extension VDPlayer {
                 self.currentPlayerManager.view.removeFromSuperview()
             }
         }
-        currentPlayerManager.stop()
-        currentPlayerManager.view.removeFromSuperview()
-        orientationObserver.removeDeviceOrientationObserver()
+        else if isFullScreen {
+            currentPlayerManager.stop()
+        }
+        else {
+            currentPlayerManager.stop()
+            currentPlayerManager.view.removeFromSuperview()
+        }
+        removeDeviceOrientationObserver()
     }
 }
 
